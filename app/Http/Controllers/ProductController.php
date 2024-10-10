@@ -14,8 +14,11 @@ class ProductController extends Controller
      */
     public function index(): View
     {
+        $products = Product::query()->paginate(10);
+
+//        dd($products);
         return view('pages.products.index', [
-            'products' => Product::where('is_active', true)->simplePaginate(30)
+            'products' => $products
         ]);
     }
 

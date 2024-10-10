@@ -12,7 +12,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                serif: ['Poppins', ...defaultTheme.fontFamily.serif],
+                serif: ['Public Sans', ...defaultTheme.fontFamily.serif],
             },
             screens: {
                 lg: '1050px',

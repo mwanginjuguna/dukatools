@@ -12,8 +12,8 @@
         <div class="text-sm grid md:grid-cols-2">
             <p class="font-medium py-1">Price: <span class="text-orange-700 dark:text-orange-300">{{ config('app.currency_symbol') .' '. $product->price }}</span></p>
 
-            <p class="py-1">Brand: <span class="text-orange-700 dark:text-orange-300">{{ $product->brand }}</span> </p>
-            <p class="py-1">Category: <span class="text-orange-700 dark:text-orange-300">{{ $product->category }}</span> </p>
+            <p class="py-1">Brand: <span class="text-orange-700 dark:text-orange-300">{{ $product->brand->name }}</span> </p>
+            <p class="py-1">Category: <span class="text-orange-700 dark:text-orange-300">{{ $product->category->name }}</span> </p>
             <p class="py-1">Viewed: <span class="text-orange-700 dark:text-orange-300">{{ $product->views }} times</span> </p>
             <p class="py-1">Remaining items: <span class="text-orange-700 dark:text-orange-300">{{ $product->stock_quantity }}</span> </p>
         </div>

@@ -31,6 +31,8 @@ class Product extends Model
      */
     protected $guarded = ['id'];
 
+    protected $with = ['productVariations', 'supplier', 'manufacturer', 'category', 'subCategory', 'brand'];
+
     /**
      * The attributes that should be cast to native types.
      */
@@ -123,6 +125,38 @@ class Product extends Model
     public function supplier(): BelongsTo
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    /**
+     * Manufacturer of this product
+     */
+    public function manufacturer(): BelongsTo
+    {
+        return $this->belongsTo(Manufacturer::class);
+    }
+
+    /**
+     * Brand of this product
+     */
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    /**
+     * Category of this product
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Sub-Category of this product.
+     */
+    public function subCategory(): BelongsTo
+    {
+        return $this->belongsTo(SubCategory::class);
     }
 
     /**
