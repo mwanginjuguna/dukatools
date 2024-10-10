@@ -21,7 +21,7 @@ class Category extends Model
     protected static function booted()
     {
         self::creating(function (Category $category) {
-            $category->slug = SlugGenerator::generate($category->title, $category);
+            $category->slug = SlugGenerator::generate($category->name, $category);
         });
     }
 

@@ -13,7 +13,18 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('reference')->unique();
+            $table->string('username')->nullable()->unique();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('second_name')->nullable();
+            $table->json('phone_numbers')->nullable();
+            $table->string('website')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('x')->nullable();
+            $table->string('whatsapp')->nullable();
+            $table->json('others')->nullable();
             $table->foreignId('location_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();

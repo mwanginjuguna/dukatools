@@ -18,8 +18,6 @@ return new class extends Migration
             $table->string('email')->unique();
 
             // profile
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
             $table->string('phone_number')->unique()->nullable();
             $table->json('location')->nullable();
 
@@ -48,6 +46,32 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        Schema::create('admins', function (Blueprint $table) {
+            $table->id();
+            $table->string('username')->nullable()->unique();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('second_name')->nullable();
+            $table->json('phone_numbers')->nullable();
+            $table->string('website')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('x')->nullable();
+            $table->string('whatsapp')->nullable();
+            $table->json('others')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        // settings table
+        Schema::create('settings', function (Blueprint $table) {
+            $table->id();
+            $table->string('key');
+            $table->text('value');
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -58,5 +82,7 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('admins');
+        Schema::dropIfExists('settings');
     }
 };

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Actions\SlugGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -17,7 +18,7 @@ class SubCategory extends Model
     protected static function booted()
     {
         self::creating(function (SubCategory $subCategory) {
-            $subCategory->slug = SlugGenerator::generate($subCategory->title, $subCategory);
+            $subCategory->slug = SlugGenerator::generate($subCategory->name, $subCategory);
         });
     }
 

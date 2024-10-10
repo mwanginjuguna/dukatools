@@ -19,7 +19,7 @@ class Business extends Model
         static::creating(function (Business $business) {
             do {
                 // random ref
-                $ref = 'PR' . substr(
+                $ref = 'BIZ' . substr(
                         str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'),
                         0, 8);
 
@@ -28,7 +28,7 @@ class Business extends Model
             $business->reference = $ref;
 
             // generate unique slug
-            $business->slug = SlugGenerator::generate($business->title, $business);
+            $business->slug = SlugGenerator::generate($business->name, $business);
         });
     }
 

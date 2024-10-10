@@ -10,9 +10,7 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id', 'order_id', 'paypal_transaction_id', 'stripe_session_id', 'paypal_payer_id', 'paypal_facilitator_access_token_id', 'total_paid', 'user_name', 'payer_country_code', 'transaction_status', 'transaction_debug_id', 'transaction_message', 'transaction_name'
-    ];
+    protected $guarded = ['id'];
 
     public function order(): BelongsTo
     {

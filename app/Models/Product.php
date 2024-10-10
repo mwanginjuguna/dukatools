@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Actions\SlugGenerator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
+/**
+ * App/Models/Product
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property string $reference
+ * @property string $sku
+ * @property string $description
+ */
 class Product extends Model
 {
     use HasFactory, SoftDeletes;
@@ -33,7 +44,7 @@ class Product extends Model
         static::creating(function (Product $product) {
             do {
                 // random ref
-                $ref = 'PR' . substr(
+                $ref = 'PD' . substr(
                         str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'),
                         0, 8);
 
@@ -42,7 +53,8 @@ class Product extends Model
             $product->reference = $ref;
 
             // generate unique slug
-            $product->slug = SlugGenerator::generate($product->title, $product);
+            $product->slug = SlugGenerator::generate($product->name, $product);
+            //$product->sku = $product->sku !== null ? $product->sku : Str::lower($product->reference);
         });
     }
 
@@ -98,9 +110,25 @@ class Product extends Model
     }
 
     /**
+     * Product variations e.g color, size, material
+     */
+    public function productVariations(): HasMany
+    {
+        return $this->hasMany(ProductVariation::class);
+    }
+
+    /**
+     * Supplier of this product
+     */
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+    /**
      * Scope a query to only include active products.
      */
-    public function scopeActive($query): \Illuminate\Database\Eloquent\Builder
+    public function scopeActive($query): Builder
     {
         return $query->where('is_active', true);
     }

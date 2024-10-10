@@ -27,7 +27,9 @@ return new class extends Migration
             $table->string('reference')->unique();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('sku')->nullable()->unique();
+            $table->string('sku')->nullable();
+            $table->string('supplier_sku')->nullable();
+            $table->string('barcode')->nullable();
             $table->text('description');
             $table->decimal('price', 10, 2);
 
@@ -39,7 +41,7 @@ return new class extends Migration
 
             $table->foreignId('brand_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('subcategory_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('sub_category_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('return_policy_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('supplier_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('manufacturer_id')->nullable()->constrained()->nullOnDelete();

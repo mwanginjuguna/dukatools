@@ -2,35 +2,23 @@
 
 namespace App\Models;
 
+use App\Actions\SlugGenerator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are not mass assignable.
      */
-    protected $fillable = [
-        'user_id',
-        'customer_name',
-        'customer_email',
-        'customer_phone',
-        'order_number',
-        'address',
-        'discount_id',
-        'shipping_address_id',
-        'subtotal',
-        'total',
-        'status',
-        'is_paid',
-        'tracking_number',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be cast to native types.
@@ -40,6 +28,22 @@ class Order extends Model
         'subtotal' => 'decimal:2',
         'is_paid' => 'boolean'
     ];
+
+
+    protected static function booted()
+    {
+        self::creating(function (Order $order) {
+            do {
+                // random ref
+                $ref = 'O' . substr(
+                        str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'),
+                        0, 8);
+
+            } while(Order::where('reference', $ref)->exists());
+
+            $order->reference = $ref;
+        });
+    }
 
     /**
      * Get the order items associated with this order.

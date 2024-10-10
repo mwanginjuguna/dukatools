@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('subcategories', function (Blueprint $table) {
+        Schema::create('sub_categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->string('name');
@@ -41,7 +41,6 @@ return new class extends Migration
 
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string('reference');
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('excerpt')->nullable();
@@ -81,5 +80,6 @@ return new class extends Migration
         Schema::dropIfExists('subcategories');
         Schema::dropIfExists('tags');
         Schema::dropIfExists('post_tag');
+        Schema::dropIfExists('taggables');
     }
 };

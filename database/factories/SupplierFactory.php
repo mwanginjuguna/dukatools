@@ -20,7 +20,8 @@ class SupplierFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'first_name' => $this->faker->firstName,
+            'last_name' => $this->faker->lastName,
             'location_id' => Location::factory(),
             'business_id' => Business::factory(),
             'type' => $this->faker->word

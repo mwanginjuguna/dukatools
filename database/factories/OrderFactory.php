@@ -23,7 +23,6 @@ class OrderFactory extends Factory
         $user = User::factory()->create();
         return [
             'user_id' => $user,
-            'order_number' => strtoupper(Str::random(11)),
             'customer_name' => $user->name,
             'customer_email' => $user->email,
             'customer_phone' => $this->faker->phoneNumber(),

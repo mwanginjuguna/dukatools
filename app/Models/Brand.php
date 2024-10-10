@@ -18,7 +18,7 @@ class Brand extends Model
     protected static function booted()
     {
         self::creating(function (Brand $brand) {
-            $brand->slug = SlugGenerator::generate($brand->title, $brand);
+            $brand->slug = SlugGenerator::generate($brand->name, $brand);
         });
     }
 

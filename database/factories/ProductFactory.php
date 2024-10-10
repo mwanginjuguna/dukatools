@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\ReturnPolicy;
+use App\Models\SubCategory;
 use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
@@ -44,13 +45,12 @@ class ProductFactory extends Factory
         return [
             'name' => $name,
             'slug' => $sl=Str::slug($name),
-            'sku' => Str::substr($sl,0, 6),
             'description' => $this->faker->sentences(4, true),
             'category_id' => Category::factory()->state([
                 'name' => $n = Arr::random($productCategories),
                 'slug' => Str::slug($n)
             ]),
-            'subcategory_id' => SubCategoryFactory::factory()->state([
+            'sub_category_id' => SubCategory::factory()->state([
                 'name' => $n = Arr::random($subCategories),
                 'slug' => Str::slug($n)
             ]),

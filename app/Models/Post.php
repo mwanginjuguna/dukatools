@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Actions\SlugGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,9 +13,15 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title', 'slug', 'excerpt', 'content', 'category_id', 'tag_id', 'featured_image', 'user_id', 'is_published'
-    ];
+    protected $guarded = ['id'];
+
+    protected static function booted()
+    {
+        static::creating(function (Post $post) {
+            // generate unique slug
+            $post->slug = SlugGenerator::generate($post->title, $post);
+        });
+    }
 
     public function category(): BelongsTo
     {

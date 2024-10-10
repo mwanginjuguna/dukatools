@@ -9,5 +9,5 @@ class Discount extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['is_active'];
+    protected $guarded = ['id'];
 }

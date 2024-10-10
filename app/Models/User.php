@@ -21,6 +21,10 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $password;
  * @property string $email;
  * @property string $profile_image;
+ * @property string $first_name;
+ * @property string $last_name;
+ * @property string $phone_number;
+ * @property string $location;
  * @property int $userable_id;
  * @property string $userable_type;
  */
@@ -29,15 +33,11 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasApiTokens, SoftDeletes;
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are not mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = ['id', 'role'];
 
     /**
      * The attributes that should be hidden for serialization.

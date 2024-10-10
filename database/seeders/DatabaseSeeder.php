@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use App\Models\Category;
 use App\Models\ContactMessage;
 use App\Models\Currency;
+use App\Models\Customer;
 use App\Models\Discount;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -15,6 +17,7 @@ use App\Models\ProductImages;
 use App\Models\ProductRating;
 use App\Models\ProductReview;
 use App\Models\ProductVariation;
+use App\Models\Supplier;
 use App\Models\Tag;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -40,25 +43,28 @@ class DatabaseSeeder extends Seeder
         if (config('app.env') == 'local') {
             \Laravel\Prompts\info('App is in local environment. Seeding database...');
             // admin user
-            $admin = User::factory()->create([
-                'name' => 'Chief Blacksmith',
+            $admin = User::factory()->for(Admin::factory()->state([
+                'first_name' => config('app.admin.first_name'),
+                'last_name' => config('app.admin.last_name')
+            ]), 'userable')->create([
+                'name' => config('app.admin.name'),
                 'email' => config('app.admin.email'),
-                'password' => Hash::make(config('app.admin.password'))
+                'password' => Hash::make(config('app.admin.password')),
             ])->first();
 
             $admin->role = 'A';
             $admin->save();
 
             // random users
-            User::factory(20)->create([
+            User::factory(3)->create([
                 'created_at' => now()->subMonths(rand(0,5))->subHours(rand(24,120))
             ]);
 
             \Laravel\Prompts\info('Admin and users seeded.');
 
             \Laravel\Prompts\info('Creating Posts');
-            Tag::factory(30)->create();
-            Category::factory()->has(Post::factory()->count(12))->count(15)->create();
+            Tag::factory(6)->create();
+            Category::factory()->has(Post::factory()->count(3))->count(5)->create();
             \Laravel\Prompts\info('Posts seeded');
 
             // initialize discount
@@ -73,30 +79,32 @@ class DatabaseSeeder extends Seeder
                 ]
             );
 
-            \Laravel\Prompts\info("Discount seeded. \n Seeding users.");
+            \Laravel\Prompts\info("Discount seeded. \n Seeding suppliers.");
 
             // seed users who will be used to seed orders
-            $users = User::factory(80)->create([
+            $users = User::factory(5)
+                ->for(Supplier::factory(), 'userable')
+                ->create([
                 'created_at' => now()->subYear()->addMonths(rand(1,6))->subHours(rand(34,120))
             ]);
 
             \Laravel\Prompts\info("Seeding Products.");
             // seed products that will be used to create orders
-            $products = Product::factory()
-                ->count(30)
-                ->has(
-                    ProductFeature::factory()
-                        ->count(3)
-                )
-                ->create();
+            $products = Product::factory(10)
+                ->has(ProductFeature::factory(3))
+                ->has(ProductVariation::factory(2))
+                ->create([
+                    'supplier_id' => $users->random()->userable_id
+                ]);
 
-            \Laravel\Prompts\info("Users & order products seeded.");
+            \Laravel\Prompts\info("Users & order-products seeded.");
 
-            for ($i__ = 1; $i__ <= 500; $i__++)
+            for ($i__ = 1; $i__ <= 5; $i__++)
             {
+                $customer = User::factory()->for(Customer::factory(), 'userable')->create();
                 // order for a random user
                 $order = Order::factory()->create([
-                    'user_id' => $users->random()->id,
+                    'user_id' => $customer->id,
                     'discount_id' => $discount->id,
                     'created_at' => Arr::random([
                         now()->subMonths(rand(0, 5))->addHours(rand(24,48)),
@@ -121,8 +129,6 @@ class DatabaseSeeder extends Seeder
 
                     // review of the product
                     ProductReview::factory()->count(1)->for($product)->create();
-
-                    ProductVariation::factory()->count(rand(1, 3))->for($product)->create();
 
                     // rating of the product by an actual user
                     ProductRating::factory()->count(1)->for($product)->create([
@@ -155,7 +161,8 @@ class DatabaseSeeder extends Seeder
             \Laravel\Prompts\info("Messages seeded.");
 
             Product::factory(10)
-                ->has(ProductFeature::factory()->count(3))
+                ->has(ProductFeature::factory(2))
+                ->has(ProductVariation::factory(2))
                 ->create();
         }
 

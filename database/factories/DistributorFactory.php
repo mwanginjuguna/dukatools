@@ -20,7 +20,8 @@ class DistributorFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'first_name' => $this->faker->firstName,
+            'last_name' => $this->faker->lastName,
             'business_id' => Business::factory(),
             'location_id' => Location::factory(),
             'type' => $this->faker->word
