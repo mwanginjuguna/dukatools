@@ -15,6 +15,8 @@ class SubCategory extends Model
 
     protected $guarded = [];
 
+    protected $withCount = ['products'];
+
     protected static function booted()
     {
         self::creating(function (SubCategory $subCategory) {

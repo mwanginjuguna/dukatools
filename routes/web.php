@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActionsController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminProductsController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\Mpesa\C2BController;
 use App\Http\Controllers\Mpesa\StkPushController;
 use App\Http\Controllers\OrderController;
@@ -26,7 +27,25 @@ Route::get('/cart', [ActionsController::class, 'cart'])->name('cart');
 
 // auth routes
 Route::middleware('auth')->group(function () {
+    // vendor dashboard
     Route::get('/dashboard', [ActionsController::class, 'dashboard'])->name('dashboard');
+
+    // vendor store/products/shop
+    Route::get('/vendor', [ProductController::class, 'index'])->name('vendor.index');
+    Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::get('/vendor/products/show/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('admin.products.edit');
+    // categories
+    Route::get('/vendor/categories', [InventoryController::class, 'categories'])->name('vendor.categories');
+    Route::get('/vendor/sub-categories', [InventoryController::class, 'subCategories'])->name('vendor.subCategories');
+    Route::get('/vendor/brands', [InventoryController::class, 'brands'])->name('vendor.brands');
+
+    // vendor inventory
+    Route::get('/vendor/inventory', [AdminProductsController::class, 'products'])->name('vendor.inventory');
+    Route::get('/vendor/customers', [InventoryController::class, 'customers'])->name('vendor.customers');
+    Route::get('/vendor/suppliers', [InventoryController::class, 'suppliers'])->name('vendor.suppliers');
+    Route::get('/vendor/manufacturers', [InventoryController::class, 'manufacturers'])->name('vendor.manufacturers');
+
+    // vendor settings
 
     // checkout & orders
     Route::get('/checkout', [ActionsController::class, 'checkout'])->name('checkout');
@@ -53,11 +72,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // admin products
     Route::get('/admin/products', [AdminProductsController::class, 'products'])->name('admin.products');
+
     // add products
     Route::get('/admin/products/add', [ProductController::class, 'create'])->name('products.add');
-    Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/admin/products/add', [ProductController::class, 'store'])->name('products.store');
-    Route::get('/vendor/products/show/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('admin.products.edit');
 
     Route::get('/my-products', [ProductController::class, 'index'])->name('products.index');
 

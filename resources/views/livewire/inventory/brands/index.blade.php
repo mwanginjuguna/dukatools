@@ -1,6 +1,6 @@
 <div class="max-w-5xl mx-auto">
     <!-- Breadcrumb -->
-    <x-parts.inventory.invtry-breadcrumb title="Brands" count="{{ $brands->count() }}" />
+    <x-parts.inventory.invtry-breadcrumb title="Brands" count="{{ $brandCount }}" />
 
     <!-- accordion for filtering brands -->
     <section
@@ -14,7 +14,9 @@
                 @click="toggleTab1()"
                 :class="tabItem1 ? `border-b-emerald-500 dark:border-b-emerald-500 text-emerald-500 dark:text-emerald-600` : ` dark:border-l-slate-700 dark:border-b-slate-700 text-slate-500 hover:text-slate-700 dark:text-slate-400 `"
                 class="relative min-w-0 flex-1 bg-slate-100 first:border-s-0 border-s border-b-2 py-4 px-4 text-center overflow-hidden hover:bg-slate-50 focus:z-10 focus:outline-none focus:text-emerald-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:text-emerald-400" id="tabItem1">
-                Brands
+                Brands <span class="bg-emerald-100 text-emerald-800 text-xs px-1 py-0.5 rounded dark:bg-emerald-800 dark:text-emerald-200 inline-flex">
+                        {{ $brandCount }}
+                    </span>
             </button>
         </nav>
 
@@ -110,4 +112,3 @@
         </div>
     </section>
 </div>
-

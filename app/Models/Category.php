@@ -18,6 +18,8 @@ class Category extends Model
 
     protected $guarded = ['id'];
 
+    protected $withCount = ['products', 'brands', 'posts', 'subCategories'];
+
     protected static function booted()
     {
         self::creating(function (Category $category) {

@@ -10,10 +10,6 @@ class Customer extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
-
-    protected $with = ['user'];
-
     protected static function booted()
     {
         self::creating(function (Customer $customer) {
@@ -28,6 +24,10 @@ class Customer extends Model
             $customer->reference = $ref;
         });
     }
+
+    protected $guarded = ['id'];
+
+    protected $with = ['user'];
 
     public function user(): MorphOne
     {

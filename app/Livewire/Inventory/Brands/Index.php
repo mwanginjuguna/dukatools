@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Livewire\Inventory;
+namespace App\Livewire\Inventory\Brands;
 
 use App\Models\Brand;
 use Livewire\Component;
 
-class BrandList extends Component
+class Index extends Component
 {
     public int $perPage = 5;
+    public string $search = '';
+    public int $brandCount = 0;
 
     public string $brandName = '';
 
@@ -15,6 +17,8 @@ class BrandList extends Component
     {
         if (isset($this->brandName)) {
             Brand::updateOrCreate([
+                'name' => $this->brandName
+            ],[
                 'name' => $this->brandName
             ]);
         }
@@ -25,9 +29,11 @@ class BrandList extends Component
 
     public function render()
     {
-        $brands = Brand::query()->orderBy('products_count')->paginate($this->perPage);
-        return view('livewire.inventory.brand-list', [
-            'brands' => $brands
+        $brands = Brand::query()->orderBy('products_count');
+        $this->brandCount = $brands->count();
+
+        return view('livewire.inventory.brands.index', [
+            'brands' => $brands->paginate($this->perPage)
         ]);
     }
 }

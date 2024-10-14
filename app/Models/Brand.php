@@ -14,6 +14,7 @@ class Brand extends Model
 
     protected $guarded = [];
 
+    protected $withCount = ['products'];
 
     protected static function booted()
     {
