@@ -20,6 +20,8 @@ class Order extends Model
      */
     protected $guarded = [];
 
+    protected $with = ['user', 'orderItems'];
+
     /**
      * The attributes that should be cast to native types.
      */

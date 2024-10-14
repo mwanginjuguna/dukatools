@@ -32,9 +32,14 @@ return new class extends Migration
             $table->string('barcode')->nullable();
             $table->text('description');
             $table->decimal('price', 10, 2);
+            $table->decimal('tax_percent', 10, 2)->nullable()->default(0);
+            $table->decimal('shipping_fee', 10, 2)->nullable()->default(0);
 
             $table->integer('stock_quantity')->default(1);
             $table->boolean('is_active')->default(true);
+            $table->boolean('on_offer')->default(true);
+            $table->boolean('is_new')->default(false);
+            $table->boolean('is_new')->default(true);
 
             $table->string('shipped_from')->nullable();
             $table->string('image')->nullable();
@@ -48,6 +53,7 @@ return new class extends Migration
             $table->foreignId('distributor_id')->nullable()->constrained()->nullOnDelete();
 
             $table->unsignedBigInteger('views')->default(0);
+            $table->unsignedBigInteger('sales_count')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

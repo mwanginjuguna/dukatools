@@ -16,7 +16,7 @@ new class extends Component
     }
 }; ?>
 
-<nav x-data="{ open: false }" class="sticky top-0 z-50 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700">
+<nav x-data="{ open: false }" class="sticky top-0 z-50 bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto">
         <div class="flex justify-between items-center px-4 sm:px-6 lg:px-8 h-16">

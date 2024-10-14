@@ -78,6 +78,15 @@ class ProductFilters
         return $this;
     }
 
+    /**
+     * Sort products by stock.
+     */
+    public function sortByStock(): static
+    {
+        $this->query->orderBy('stock_quantity', 'desc');
+        return $this;
+    }
+
     public function get(): Collection|array
     {
         return $this->query->get();

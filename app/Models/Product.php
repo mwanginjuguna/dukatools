@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -20,6 +21,7 @@ use Illuminate\Support\Str;
  * @property string $slug
  * @property string $reference
  * @property string $sku
+ * @property string $supplier_sku
  * @property string $description
  */
 class Product extends Model
@@ -31,7 +33,7 @@ class Product extends Model
      */
     protected $guarded = ['id'];
 
-    protected $with = ['productVariations', 'supplier', 'manufacturer', 'category', 'subCategory', 'brand'];
+    protected $with = ['productVariations', 'supplier', 'manufacturer', 'category', 'subCategory', 'brand', 'returnPolicy'];
 
     /**
      * The attributes that should be cast to native types.
@@ -160,10 +162,31 @@ class Product extends Model
     }
 
     /**
+     * Return Policy for this product.
+     */
+    public function returnPolicy(): BelongsTo
+    {
+        return $this->belongsTo(ReturnPolicy::class);
+    }
+
+    /**
      * Scope a query to only include active products.
      */
     public function scopeActive($query): Builder
     {
         return $query->where('is_active', true);
+    }
+
+    /**
+     * Calculate total sales from the product
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeWithTotalSales(Builder $query): Builder
+    {
+        return $query->select('products.*')
+            ->withCount(['orders as total_sales' => function ($query) {
+                $query->select(DB::raw("SUM(order_items.quantity * order_items.price)"));
+            }]);
     }
 }

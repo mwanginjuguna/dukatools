@@ -13,6 +13,7 @@ class Supplier extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
+    protected $with = ['user',];
 
     protected static function booted()
     {
@@ -45,5 +46,13 @@ class Supplier extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Define the accessor for full name
+     */
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
     }
 }

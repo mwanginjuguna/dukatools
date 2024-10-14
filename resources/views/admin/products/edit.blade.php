@@ -3,7 +3,7 @@
         Edit A Product
     </x-slot:title>
 
-    <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="max-w-5xl mx-auto p-4">
         <livewire:products.edit :$product />
     </div>
 </x-app-layout>

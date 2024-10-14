@@ -11,15 +11,12 @@ class OrderItem extends Model
     use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are not mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'order_id',
-        'product_id',
-        'quantity',
-        'subtotal',
+    protected $guarded = [
+        'id'
     ];
 
     /**

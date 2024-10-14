@@ -13,11 +13,21 @@ class Admin extends Model
 
     protected $guarded = [];
 
+    protected $with = ['user'];
+
     /**
      * User instance
      */
     public function user(): MorphOne
     {
         return $this->morphOne(User::class, 'userable');
+    }
+
+    /**
+     * Define the accessor for full name
+     */
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
     }
 }

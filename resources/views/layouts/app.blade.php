@@ -43,7 +43,7 @@
             <x-parts.sidebar class="pt-6 sm:pt-0" ></x-parts.sidebar>
         </aside>
 
-        <div class="min-h-screen w-full bg-slate-100 dark:bg-slate-900">
+        <div class="min-h-screen w-full bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300">
             <livewire:layout.navigation />
 
             <div class="min-h-screen w-full">

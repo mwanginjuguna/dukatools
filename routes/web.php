@@ -11,7 +11,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+Route::get('/', [ProductController::class, 'index'])->name('home');
 Route::view('/about', 'pages.about')->name('about');
 Route::view('/services', 'pages.about')->name('services');
 Route::view('/privacy-policy', 'pages.about')->name('privacy-policy');
@@ -55,8 +55,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/products', [AdminProductsController::class, 'products'])->name('admin.products');
     // add products
     Route::get('/admin/products/add', [ProductController::class, 'create'])->name('products.add');
+    Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/admin/products/add', [ProductController::class, 'store'])->name('products.store');
-    Route::get('/admin/products/edit/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('admin.products.edit');
+    Route::get('/vendor/products/show/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('admin.products.edit');
+
+    Route::get('/my-products', [ProductController::class, 'index'])->name('products.index');
 
     // admin orders
 

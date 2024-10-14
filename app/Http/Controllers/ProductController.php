@@ -14,12 +14,7 @@ class ProductController extends Controller
      */
     public function index(): View
     {
-        $products = Product::query()->paginate(10);
-
-//        dd($products);
-        return view('pages.products.index', [
-            'products' => $products
-        ]);
+        return view('pages.products.index');
     }
 
     /**

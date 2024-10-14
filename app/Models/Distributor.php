@@ -11,7 +11,9 @@ class Distributor extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = [''];
+    protected $guarded = ['id'];
+
+    protected $with = ['user'];
 
     protected static function booted()
     {
@@ -36,4 +38,11 @@ class Distributor extends Model
         return $this->morphOne(User::class, 'userable');
     }
 
+    /**
+     * Define the accessor for full name
+     */
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
 }

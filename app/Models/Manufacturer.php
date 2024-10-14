@@ -13,6 +13,8 @@ class Manufacturer extends Model
 
     protected $guarded = ['id'];
 
+    protected $with = ['user'];
+
     protected static function booted()
     {
         self::creating(function (Manufacturer $manufacturer) {
@@ -36,4 +38,11 @@ class Manufacturer extends Model
         return $this->morphOne(User::class, 'userable');
     }
 
+    /**
+     * Define the accessor for full name
+     */
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
 }
