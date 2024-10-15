@@ -33,7 +33,7 @@ class Product extends Model
      */
     protected $guarded = ['id'];
 
-    protected $with = ['productVariations', 'supplier', 'manufacturer', 'category', 'subCategory', 'brand', 'returnPolicy'];
+    protected $with = ['productVariations', 'vendor', 'supplier', 'manufacturer', 'category', 'subCategory', 'brand', 'returnPolicy'];
 
     /**
      * The attributes that should be cast to native types.
@@ -119,6 +119,14 @@ class Product extends Model
     public function productVariations(): HasMany
     {
         return $this->hasMany(ProductVariation::class);
+    }
+
+    /**
+     * Vendor of this product
+     */
+    public function vendor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**

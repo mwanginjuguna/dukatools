@@ -22,9 +22,10 @@ class ManufacturerFactory extends Factory
         return [
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
+            'email' => $this->faker->email,
+            'phone_number' => $this->faker->phoneNumber,
             'location_id' => Location::factory(),
             'business_id' => Business::factory(),
-            'type' => $this->faker->word
         ];
     }
 }

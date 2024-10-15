@@ -37,13 +37,13 @@ return new class extends Migration
 
             $table->integer('stock_quantity')->default(1);
             $table->boolean('is_active')->default(true);
-            $table->boolean('on_offer')->default(true);
+            $table->boolean('on_offer')->default(false);
             $table->boolean('is_new')->default(false);
-            $table->boolean('is_new')->default(true);
 
             $table->string('shipped_from')->nullable();
             $table->string('image')->nullable();
 
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('brand_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('sub_category_id')->nullable()->constrained()->nullOnDelete();
@@ -53,7 +53,6 @@ return new class extends Migration
             $table->foreignId('distributor_id')->nullable()->constrained()->nullOnDelete();
 
             $table->unsignedBigInteger('views')->default(0);
-            $table->unsignedBigInteger('sales_count')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

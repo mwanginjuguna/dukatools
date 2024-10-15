@@ -13,8 +13,6 @@ class Distributor extends Model
 
     protected $guarded = ['id'];
 
-    protected $with = ['user'];
-
     protected static function booted()
     {
         self::creating(function (Distributor $distributor) {
@@ -28,14 +26,6 @@ class Distributor extends Model
 
             $distributor->reference = $ref;
         });
-    }
-
-    /**
-     * User instance
-     */
-    public function user(): MorphOne
-    {
-        return $this->morphOne(User::class, 'userable');
     }
 
     /**

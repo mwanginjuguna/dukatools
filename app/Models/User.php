@@ -90,6 +90,11 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
     /**
      * User can comment on posts.
      */

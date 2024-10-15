@@ -27,13 +27,6 @@ class Customer extends Model
 
     protected $guarded = ['id'];
 
-    protected $with = ['user'];
-
-    public function user(): MorphOne
-    {
-        return $this->morphOne(User::class, 'userable');
-    }
-
     /**
      * Define the accessor for full name
      */

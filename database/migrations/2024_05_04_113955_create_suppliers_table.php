@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
             $table->string('reference')->unique();
-            $table->string('type')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('phone_number_secondary')->nullable();
             $table->string('username')->unique()->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
@@ -36,7 +38,9 @@ return new class extends Migration
         Schema::create('manufacturers', function (Blueprint $table) {
             $table->id();
             $table->string('reference')->unique();
-            $table->string('type')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('phone_number_secondary')->nullable();
             $table->string('username')->unique()->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
@@ -58,7 +62,9 @@ return new class extends Migration
         Schema::create('distributors', function (Blueprint $table) {
             $table->id();
             $table->string('reference')->unique();
-            $table->string('type')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('phone_number_secondary')->nullable();
             $table->string('username')->unique()->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();

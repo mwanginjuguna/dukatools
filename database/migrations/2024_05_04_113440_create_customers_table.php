@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->string('reference')->unique();
-            $table->string('username')->nullable()->unique();
+            $table->string('email')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('phone_number_secondary')->nullable();
+            $table->string('username')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('second_name')->nullable();
-            $table->json('phone_numbers')->nullable();
             $table->string('website')->nullable();
             $table->string('facebook')->nullable();
             $table->string('instagram')->nullable();

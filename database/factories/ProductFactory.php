@@ -8,6 +8,7 @@ use App\Models\Manufacturer;
 use App\Models\ReturnPolicy;
 use App\Models\SubCategory;
 use App\Models\Supplier;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -64,6 +65,7 @@ class ProductFactory extends Factory
             'image' => Arr::random($productImages),
             'views' => rand(0, 150),
             'return_policy_id' => ReturnPolicy::factory(),
+            'user_id' => User::factory(),
             'supplier_id' => Supplier::factory(),
             'manufacturer_id' => Manufacturer::factory()
         ];

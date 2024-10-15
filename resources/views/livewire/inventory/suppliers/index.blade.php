@@ -1,6 +1,6 @@
 <div class="max-w-5xl mx-auto">
     <!-- Breadcrumb -->
-    <x-parts.inventory.invtry-breadcrumb title="Customers" count="{{ $customerCount }}" />
+    <x-parts.inventory.invtry-breadcrumb title="Suppliers" count="{{ $supplierCount }}" />
 
     <!-- accordion for filtering brands -->
     <section
@@ -15,15 +15,15 @@
                 @click="toggleTab1()"
                 :class="tabItem1 ? `border-b-emerald-500 dark:border-b-emerald-500 text-emerald-500 dark:text-emerald-600` : ` dark:border-l-slate-700 dark:border-b-slate-700 text-slate-500 hover:text-slate-700 dark:text-slate-400 `"
                 class="relative min-w-0 flex-1 bg-slate-100 first:border-s-0 border-s border-b-2 py-4 px-4 text-center overflow-hidden hover:bg-slate-50 focus:z-10 focus:outline-none focus:text-emerald-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:text-emerald-400" id="tabItem1">
-                Customers <span class="bg-emerald-100 text-emerald-800 text-xs px-1 py-0.5 rounded dark:bg-emerald-800 dark:text-emerald-200 inline-flex">
-                        {{ $customerCount }}
+                Suppliers <span class="bg-emerald-100 text-emerald-800 text-xs px-1 py-0.5 rounded dark:bg-emerald-800 dark:text-emerald-200 inline-flex">
+                        {{ $supplierCount }}
                     </span>
             </button>
             <button
                 @click="toggleTab2()"
                 :class="tabItem2 ? `border-b-emerald-500 dark:border-b-emerald-500 text-emerald-500 dark:text-emerald-600` : ` dark:border-l-slate-700 dark:border-b-slate-700 text-slate-500 hover:text-slate-700 dark:text-slate-400 `"
-                class="relative min-w-0 flex-1 bg-slate-100 first:border-s-0 border-s border-b-2 py-4 px-4 text-center overflow-hidden hover:bg-slate-50 focus:z-10 focus:outline-none focus:text-emerald-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:text-emerald-400" id="tabItem2">
-                Add Customer <span class="bg-emerald-100 text-emerald-800 text-xs px-1 py-0.5 rounded dark:bg-emerald-800 dark:text-emerald-200 inline-flex">
+                class="relative min-w-0 flex-1 bg-slate-100 first:border-s-0 border-s border-b-2 py-4 px-4 text-center overflow-hidden hover:bg-slate-50 focus:z-10 focus:outline-none focus:text-emerald-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:text-emerald-400" id="tabItem1">
+                Add Suppliers <span class="bg-emerald-100 text-emerald-800 text-xs px-1 py-0.5 rounded dark:bg-emerald-800 dark:text-emerald-200 inline-flex">
                         new
                     </span>
             </button>
@@ -31,12 +31,12 @@
 
         <div class="p-4 border border-t-0 border-slate-200 dark:border-slate-800 shadow-sm rounded-b-md">
 
-            <!-- Tab Item 1: Customers -->
+            <!-- Tab Item 1: Suppliers -->
             <div x-show="tabItem1" class="grid space-y-3">
                 <div class="mb-4 py-3 w-full flex flex-col md:flex-row gap-3 md:gap-0 md:justify-between md:items-center border-b border-slate-200 dark:border-slate-900">
                     <div>
-                        <h4 class="mb-1 font-semibold text-lg">Customers</h4>
-                        <p class="mb-1 text-xs text-slate-500 dark:text-slate-600"><em class="uppercase">BOSS NO #1.</em></p>
+                        <h4 class="mb-1 font-semibold text-lg">Suppliers</h4>
+                        <p class="mb-1 text-xs text-slate-500 dark:text-slate-600"><em class="uppercase">Partners in delivery.</em></p>
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@
                                         </tr>
                                         </thead>
                                         <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-sm">
-                                        @foreach($customers as $customer)
+                                        @foreach($suppliers as $supplier)
                                             <tr>
                                                 <td class="px-2 ps-2 md:px-6 md:ps-4">
                                                     <div class="flex items-center h-3 md:h-5">
@@ -85,14 +85,14 @@
                                                     </div>
                                                 </td>
                                                 <td class="px-2 py-2 md:px-6 md:py-4">
-                                                    {{ $customer->fullName }}
+                                                    {{ $supplier->fullName }}
                                                 </td>
 
                                                 <td class="px-2 py-2 md:px-6 md:py-4">
-                                                    {{ $customer->first_name }}
+                                                    {{ $supplier->email }}
                                                 </td>
                                                 <td class="px-2 py-2 md:px-6 md:py-4">
-                                                    {{ $customer->second_name }}
+                                                    {{ $supplier->phone_number }}
                                                 </td>
                                                 <td class="px-2 py-2 md:px-6 md:py-4 whitespace-nowrap text-end font-medium">
                                                     <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-emerald-600 hover:text-emerald-800 focus:outline-none focus:text-emerald-800 disabled:opacity-50 disabled:pointer-events-none dark:text-emerald-500 dark:hover:text-emerald-400 dark:focus:text-emerald-400">View</button>
@@ -105,24 +105,25 @@
 
                                 <!-- footer pagination -->
                                 <div class="pt-3 py-1 px-4 text-xs">
-                                    {{ $customers->onEachSide(1)->links() }}
+                                    {{ $suppliers->onEachSide(1)->links() }}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Tab Item 2: Create Customer -->
+
+            <!-- Tab Item 2: Create Supplier -->
             <div x-show="tabItem2" class="grid space-y-3">
                 <div class="mb-4 py-3 w-full flex flex-col md:flex-row gap-3 md:gap-0 md:justify-between md:items-center border-b border-slate-200 dark:border-slate-900">
                     <div>
-                        <h4 class="mb-1 font-semibold text-lg">New Customers</h4>
+                        <h4 class="mb-1 font-semibold text-lg">New Supplier</h4>
                         <p class="mb-1 text-xs text-slate-500 dark:text-slate-600"><em class="uppercase">Karibu!</em></p>
                     </div>
                 </div>
 
                 <div class="mt-6">
-                    <form class="max-w-md mx-auto" wire:submit="saveCustomer">
+                    <form class="max-w-md mx-auto" wire:submit="saveSupplier">
                         @csrf
                         <div class="relative z-0 w-full mb-5 group">
                             <input type="email" name="email" id="email"
@@ -168,11 +169,20 @@
         </div>
     </section>
 
+    <x-modal name="show-supplier-details">
+        <div class="p-4 py-6 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+            <div class="pt-3 mb-4 text-lg font-medium">Supplier Details</div>
+
+            <!-- supplier details with products delivered -->
+        </div>
+    </x-modal>
+
+
     <!-- Scripts -->
     @script
     <script>
-        Livewire.on('customer-saved', () => {
-            Swal.fire({title:'Customer Created!', text:'Customer details have been saved successfully.', icon:'success'});
+        Livewire.on('supplier-saved', () => {
+            Swal.fire({title:'Supplier Created!', text:'Supplier details have been saved successfully.', icon:'success'});
         })
     </script>
     @endscript

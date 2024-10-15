@@ -13,7 +13,9 @@ class Supplier extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
-    protected $with = ['user',];
+
+    protected $with = ['products'];
+    protected $withCount = ['products'];
 
     protected static function booted()
     {
@@ -28,14 +30,6 @@ class Supplier extends Model
 
             $supplier->reference = $ref;
         });
-    }
-
-    /**
-     * User instance
-     */
-    public function user(): MorphOne
-    {
-        return $this->morphOne(User::class, 'userable');
     }
 
     /**

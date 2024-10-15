@@ -5,7 +5,7 @@
 
     <!-- Body Section -->
     <div class="px-4 py-10 sm:px-6">
-        <livewire:inventory.manufacturer.index />
+        <livewire:inventory.manufacturers.index />
     </div>
 
 </x-app-layout>
