@@ -14,7 +14,6 @@ class Supplier extends Model
 
     protected $guarded = [];
 
-    protected $with = ['products'];
     protected $withCount = ['products'];
 
     protected static function booted()

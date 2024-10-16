@@ -1,9 +1,9 @@
 <x-app-layout>
-    <x-slot:title>All Orders - Admin.</x-slot:title>
+    <x-slot:title>Sales dashboard.</x-slot:title>
 
     <div class="max-w-6xl mx-auto px-4 py-10 md:py-16">
         <h1 class="py-2 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-            <span class="text-blue-600 dark:text-blue-500">All Orders</span>.
+            <span class="text-blue-600 dark:text-blue-500">Sales dashboard</span>.
         </h1>
 
 
@@ -19,15 +19,15 @@
                         </svg>
 
                         <div class="grow">
-                            <p class="text-xs uppercase tracking-wide font-medium text-gray-800 dark:text-neutral-200">
-                                Total Orders
+                            <p class="text-xs uppercase tracking-wide font-medium text-slate-800 dark:text-slate-200">
+                                Total Sales
                             </p>
-                            <h3 class="mt-1 text-xl sm:text-2xl font-semibold text-blue-600 dark:text-blue-400">
+                            <h3 class="mt-1 text-xl sm:text-2xl font-semibold text-emerald-500 dark:text-emerald-400">
                                 {{ $all = $orders->count() }}
                             </h3>
                             <div class="mt-1 flex justify-between items-center">
                                 <p class="text-xs text-slate-600 dark:text-slate-300">
-                                    paid: <span class="text-sm font-medium text-green-600 dark:text-green-400">{{ $paid = $orders->where('is_paid')->count() }}</span>
+                                    Paid: <span class="text-sm font-medium text-emerald-500 dark:text-emerald-400">{{ $paid = $orders->where('is_paid')->count() }}</span>
                                 </p>
                                 <span class="ms-1 inline-flex items-center gap-1.5 py-1 px-2 rounded-md text-xs font-medium bg-lime-300 text-slate-800 dark:bg-lime-600 dark:text-slate-100">
                                     <span class="inline-block">{{ $paid ? number_format($paid/$all * 100, 2) : 0 }}%</span>
@@ -46,15 +46,15 @@
                         </svg>
 
                         <div class="grow">
-                            <p class="text-xs uppercase tracking-wide font-medium text-gray-800 dark:text-neutral-200">
+                            <p class="text-xs uppercase tracking-wide font-medium text-slate-800 dark:text-slate-200">
                                 Customers
                             </p>
-                            <h3 class="mt-1 text-xl sm:text-2xl font-semibold text-blue-600 dark:text-blue-400">
+                            <h3 class="mt-1 text-xl sm:text-2xl font-semibold text-emerald-500 dark:text-emerald-400">
                                 {{ $customers }}
                             </h3>
                             <div class="mt-1 flex justify-between items-center">
                                 <p class="text-xs text-slate-600 dark:text-slate-300">
-                                    All users: <span class="text-sm font-medium text-green-600 dark:text-green-400">{{ $users }}</span>
+                                    Total leads: <span class="text-sm font-medium text-emerald-500 dark:text-emerald-400">{{ $users }}</span>
                                 </p>
                                 <span class="ms-1 inline-flex items-center gap-1.5 py-1 px-2 rounded-md text-xs font-medium bg-lime-300 text-slate-800 dark:bg-lime-600 dark:text-slate-100">
                                     <span class="inline-block">{{ $customers > 0 ? number_format($customers/$users * 100, 2) : 0 }}%</span>
@@ -73,15 +73,15 @@
                         </svg>
 
                         <div class="grow">
-                            <p class="text-xs uppercase tracking-wide font-medium text-gray-800 dark:text-neutral-200">
-                                Sales
+                            <p class="text-xs uppercase tracking-wide font-medium text-slate-800 dark:text-slate-200">
+                                Revenue
                             </p>
-                            <h3 class="mt-1 text-xl sm:text-2xl font-semibold text-blue-600 dark:text-blue-400">
+                            <h3 class="mt-1 text-xl sm:text-2xl font-semibold text-emerald-500 dark:text-emerald-400">
                                 {{ config('app.currency_symbol'). ' '. number_format($orders->sum('total'), 2) }}
                             </h3>
                             <div class="mt-1 flex justify-between items-center">
                                 <p class="text-xs text-slate-600 dark:text-slate-300">
-                                    Sold products: <span class="text-sm font-medium text-green-600 dark:text-green-400">{{ $purchasedProducts }}</span>
+                                    Sold products: <span class="text-sm font-medium text-emerald-500 dark:text-emerald-400">{{ $purchasedProducts }}</span>
                                 </p>
                                 <span class="ms-1 inline-flex items-center gap-1.5 py-1 px-2 rounded-md text-xs font-medium bg-lime-300 text-slate-800 dark:bg-lime-600 dark:text-slate-100">
                                     <span class="inline-block">{{ $purchasedProducts ? number_format($purchasedProducts/$products * 100, 2) : 0 }}%</span>

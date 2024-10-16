@@ -10,6 +10,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SalesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ProductController::class, 'index'])->name('home');
@@ -34,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/vendor', [ProductController::class, 'index'])->name('vendor.index');
     Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::get('/vendor/products/show/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('admin.products.edit');
+    Route::get('/vendor/products/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('vendor.products.show');
     // categories
     Route::get('/vendor/categories', [InventoryController::class, 'categories'])->name('vendor.categories');
     Route::get('/vendor/sub-categories', [InventoryController::class, 'subCategories'])->name('vendor.subCategories');
@@ -46,6 +48,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/vendor/manufacturers', [InventoryController::class, 'manufacturers'])->name('vendor.manufacturers');
 
     // vendor settings
+    // vendor sales
+    Route::get('/vendor/sales', [SalesController::class, 'sales'])->name('vendor.sales');
+    Route::get('/vendor/pos', [SalesController::class, 'pos'])->name('vendor.pos');
+    Route::get('/vendor/today', [ActionsController::class, 'dashboard'])->name('vendor.today');
 
     // checkout & orders
     Route::get('/checkout', [ActionsController::class, 'checkout'])->name('checkout');

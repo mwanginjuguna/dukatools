@@ -33,7 +33,9 @@
 
             <div class="mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-12 xl:gap-16">
                 <div class="min-w-0 flex-1 space-y-8">
-                    <div class="space-y-4">
+
+                    <!--delivery / customer details-->
+                    <div class="space-y-4 hidden">
                         <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Delivery Details</h2>
 
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -118,12 +120,14 @@
                         </div>
                     </div>
 
+                    <!--products or order items-->
                     <div class="space-y-4">
                         @foreach($order->orderItems as $item)
                             <x-cards.order-item :item="$item" />
                         @endforeach
                     </div>
 
+                    <!--delivery methods-->
                     <div class="space-y-4">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Delivery Methods</h3>
 
@@ -169,6 +173,7 @@
                         </div>
                     </div>
 
+                    <!-- promo code -->
                     <div id="apply-discount">
                         <label for="voucher" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Enter a gift card, voucher or promotional code </label>
                         <div class="flex max-w-md items-center gap-4">
@@ -180,6 +185,7 @@
                     </div>
                 </div>
 
+                <!-- cash summary -->
                 <div class="md:sticky md:top-10 mt-6 w-full space-y-6 sm:mt-8 lg:mt-0 lg:max-w-xs xl:max-w-md">
                     <div class="flow-root">
                         <div class="-my-3 divide-y divide-gray-200 dark:divide-gray-800">
@@ -218,6 +224,7 @@
                         </div>
                     </div>
 
+                    <!--pay buttons -->
                     <div class="space-y-3">
                         <button type="button"
                                 @click="$dispatch('open-modal', 'lipa-na-mpesa')"
