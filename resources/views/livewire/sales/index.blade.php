@@ -1,5 +1,15 @@
-<div>
-    <!-- accordion for filtering inventory tabs -->
+<div class="flex flex-col lg:flex-row gap-6 items-center">
+    <div class="w-full lg:max-w-sm">
+        <div class="hidden lg:block">
+            <livewire:charts.sales-by-brand-doughnut />
+        </div>
+        <div class="p-3">
+            <p class="mt-4 py-2 font-medium md:text-lg">Top Products/Sales</p>
+            <x-parts.top-products :$topProducts />
+        </div>
+    </div>
+
+    <!-- accordion for filtering product tabs -->
     <section
         x-data="{tabItem1:true,
         tabItem2:false,
@@ -8,7 +18,7 @@
         toggleTab2(){this.tabItem1=false;this.tabItem2=true;this.tabItem3=false;},
         toggleTab3(){this.tabItem1=false;this.tabItem2=false;this.tabItem3=true;}
         }"
-        class="relative max-w-5xl mx-auto mt-6 py-3"
+        class="relative w-full mt-6 py-3"
     >
         <nav class="relative z-0 flex border rounded-t-md overflow-hidden dark:border-slate-800">
             <button
@@ -86,7 +96,7 @@
             @endforeach
         </div> --}}
 
-    @script
+     @script
     <script>
         Livewire.on('product-deleted', () => {
             Swal.fire({icon: 'warning', title: 'Deleted!', text:'Product Deleted Permanently!'});

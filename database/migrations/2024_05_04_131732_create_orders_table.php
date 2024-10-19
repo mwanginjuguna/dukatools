@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->text('notes')->nullable();
 
-            $table->string('payment_gateway')->nullable();
+            $table->string('payment_method')->nullable();
             $table->foreignId('customer_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('discount_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();

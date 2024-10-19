@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Sales;
 
+use App\Actions\ProductFilters;
+use App\Actions\SaleAnalytics;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -14,6 +16,7 @@ class Index extends Component
     public function render()
     {
         $user = Auth::user();
+        $salesQuery = (new SaleAnalytics());
 
         $query = Order::query()->where('user_id', $user->id);
 
@@ -31,6 +34,8 @@ class Index extends Component
             'orders' => $orders,
             'pendingOrders' => $pendingOrders,
             'completedOrders' => $completedOrders,
+            'todaySales' => $salesQuery->getTodaySales()->with(['products'])->get(),
+            'topProducts' => (new ProductFilters())->topProducts(5)
         ]);
     }
 }

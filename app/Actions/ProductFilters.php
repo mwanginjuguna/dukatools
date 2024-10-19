@@ -20,10 +20,10 @@ class ProductFilters
     /**
      * All purchased products
      */
-    public function purchasedProducts(): static
+    public function purchasedProducts(): Builder
     {
-        $this->query->whereHas('orders');
-        return $this;
+        return $this->query->whereHas('orders');
+
     }
 
     /**
@@ -44,47 +44,42 @@ class ProductFilters
      * Get all products in a given brand
      * @param string $brand - product brand
      */
-    public function productsByBrand(string $brand): static
+    public function productsByBrand(string $brand): Builder
     {
-        $this->query->where('brand', $brand);
-        return $this;
+        return $this->query->where('brand', $brand);
     }
 
     /**
      * Get all products in a given brand
      * @param string $category - product brand
      */
-    public function productsByCategory(string $category): static
+    public function productsByCategory(string $category): Builder
     {
-        $this->query->where('category', $category);
-        return $this;
+        return $this->query->where('category', $category);
     }
 
     /**
      * Get the products that are out of stock.
      */
-    public function outOfStock(): static
+    public function outOfStock(): Builder
     {
-        $this->query->where('stock_quantity', 0);
-        return $this;
+        return $this->query->where('stock_quantity', 0);
     }
 
     /**
      * Get the products that are NOT out of stock.
      */
-    public function inStock(): static
+    public function inStock(): Builder
     {
-        $this->query->whereNot('stock_quantity', 0);
-        return $this;
+        return $this->query->whereNot('stock_quantity', 0);
     }
 
     /**
      * Sort products by stock.
      */
-    public function sortByStock(): static
+    public function sortByStock(): Builder
     {
-        $this->query->orderBy('stock_quantity', 'desc');
-        return $this;
+        return $this->query->orderBy('stock_quantity', 'desc');;
     }
 
     public function get(): Collection|array

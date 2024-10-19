@@ -14,6 +14,7 @@ class SalesController extends Controller
     public function sales()
     {
         $data = $this->stats();
+
         return view('pages.sales.index', [
             'products' => $data['products']->count(),
             'purchasedProducts' => $this->purchasedProducts()->count(),

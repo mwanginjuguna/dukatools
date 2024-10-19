@@ -93,18 +93,19 @@
         let suggestedMax = $wire.maxChartBarValue;
 
         const ctx = document.getElementById('salesChart');
-        darkMode = JSON.parse(localStorage.getItem('darkMode'));
+        let darkMode = JSON.parse(localStorage.getItem('darkMode'));
+        console.log(darkMode);
 
         let config = {
             type: 'bar',
             data: {
                 labels: months,
                 datasets: [{
-                    label: '# of Orders Per Month',
+                    label: 'Sales per Month',
                     data: orderCountPerMonth,
                     borderWidth: 0,
-                    borderColor: darkMode ? '#475569' : '#f5f5f4',
-                    backgroundColor: darkMode ? '#fb923c' : '#ea580c',
+                    borderColor: 'transparent',
+                    backgroundColor: darkMode ? '#f59e0b' : '#f59e0b',
                 }]
             },
             options: {
@@ -112,12 +113,20 @@
                     y: {
                         beginAtZero: true,
                         suggestedMin: 1,
-                        suggestedMax: suggestedMax
+                        suggestedMax: suggestedMax,
+                        step: 1,
+                    }
+                },
+                elements: {
+                    bar: {
+                        borderWidth: 0,
+                        borderColor: 'transparent',
+                        inflateAmount: 2
                     }
                 },
                 plugins: {
                     customCanvasBackgroundColor: {
-                        'color': 'lightGreen'
+                        'color': 'transparent'
                     }
                 }
             },
@@ -128,7 +137,7 @@
                         const {ctx} = chart;
                         ctx.save();
                         ctx.globalCompositeOperation = 'destination-over';
-                        ctx.fillStyle = options.color || '#99ffff';
+                        ctx.fillStyle = options.color || '#fff';
                         ctx.fillRect(0, 0, chart.width, chart.height);
                         ctx.borderRadius = options.borderRadius || 2
                         ctx.restore();

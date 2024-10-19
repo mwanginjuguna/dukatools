@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Customer;
+use App\Models\ShippingAddress;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
@@ -20,11 +21,9 @@ class OrderFactory extends Factory
      */
     public function definition(): array
     {
-        $user = User::factory()->create();
         return [
-            'user_id' => $user,
-            'customer_name' => $user->name,
-            'customer_email' => $user->email,
+            'customer_name' => $this->faker->name,
+            'customer_email' => $this->faker->email,
             'customer_phone' => $this->faker->phoneNumber(),
             'subtotal' => $this->faker->randomFloat(2, min: 1000, max: 25000),
             'total' => $this->faker->randomFloat(2, min: 1000, max: 25000),
@@ -34,10 +33,15 @@ class OrderFactory extends Factory
             'status' => function (array $attributes) {
                 return $attributes['is_paid'] ? Arr::random(['shipping', 'delivered']) : 'pending';
             },
+            'payment_method' => function (array $attributes) {
+                return $attributes['is_paid'] ? Arr::random(['card', 'mpesa', 'cash']) : '';
+            },
             'tracking_number' => function (array $attributes) {
                 return $attributes['is_paid'] ? Str::random(10) : null;
             },
-            'customer_id' => Customer::factory()
+            'customer_id' => Customer::factory(),
+            'user_id' => User::factory(),
+            'shipping_address_id' => ShippingAddress::factory()
         ];
     }
 
