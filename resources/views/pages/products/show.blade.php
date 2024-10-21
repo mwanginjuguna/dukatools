@@ -64,8 +64,6 @@
 
         <div class="">
             <livewire:products.product-show :product="$product"/>
-
-            <!--<x-parts.similar-products :products="$similarProducts" />-->
         </div>
     </div>
 </x-app-layout>

@@ -28,12 +28,6 @@
                 <span class="ms-3 md:text-base">{{ __('Checkout') }}</span>
             </x-side-link>
 
-            <x-side-link :href="route('products.create')" :active="request()->routeIs('products.create')" wire:navigate>
-                <svg class="w-7 h-7 text-amber-500 dark:text-amber-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg>
-
-                <span class="ms-3 md:text-base">{{ __('New Customer') }}</span>
-            </x-side-link>
-
         </div>
 
         <!-- vendor tools -->
@@ -156,10 +150,10 @@
 
         </div>
 
-        <!-- sales -->
+        <!-- old -->
         <div
             x-data="{expanded: false}"
-            class="mt-6 space-y-1 font-medium text-sm xl:text-base shadow-sm shadow-emerald-900 dark:shadow-emerald-700 rounded-lg"
+            class="hidden mt-6 space-y-1 font-medium text-sm xl:text-base shadow-sm shadow-emerald-900 dark:shadow-emerald-700 rounded-lg"
         >
             <button
                 x-on:click="expanded = ! expanded"
