@@ -1,4 +1,4 @@
-<div class="flex flex-col lg:flex-row gap-6 items-center">
+<div class="flex flex-col lg:flex-row gap-6 mt-6 py-3">
     <div class="w-full lg:max-w-sm">
         <div class="hidden lg:block">
             <livewire:charts.sales-by-brand-doughnut />
@@ -18,7 +18,7 @@
         toggleTab2(){this.tabItem1=false;this.tabItem2=true;this.tabItem3=false;},
         toggleTab3(){this.tabItem1=false;this.tabItem2=false;this.tabItem3=true;}
         }"
-        class="relative w-full mt-6 py-3"
+        class="relative w-full"
     >
         <nav class="relative z-0 flex border rounded-t-md overflow-hidden dark:border-slate-800">
             <button

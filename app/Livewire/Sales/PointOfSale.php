@@ -22,14 +22,28 @@ class PointOfSale extends Component
     public string $searchTerm = '';
     public bool $success = false;
 
-    public $cartShippingFee = 0;
-    public $cartTax = 0;
-    public $cartTotal = 0;
-    public $cartItems = [];
+    public float $cartShippingFee = 0;
+    public float $cartTax = 0;
+    public float $cartTotal = 0;
+    public array $cartItems = [];
     public Collection $cart;
 
-    public $discountAmount = 0;
-    public $discountCode = '';
+    public float $discountAmount = 0;
+    public string $discountCode = '';
+
+    public string $paymentMethod = '';
+
+    public float $cashAmount = 0;
+    public float $mpesaAmount = 0;
+    public float $cardAmount = 0;
+
+    public string $mpesaNumber = '';
+    public string $transactionCode = '';
+    public string $customerNumber = '';
+    public string $customerEmail = '';
+    public string $customerName = '';
+
+    private $orderData = array();
 
     public function addToCart(int $productId): void
     {
@@ -52,48 +66,75 @@ class PointOfSale extends Component
     {
         $this->cart = Cart::getCart();
         $this->cartTotal = Cart::getCartTotal() ?? 0;
+        $this->cardAmount = $this->cartTotal;
+        $this->mpesaAmount = $this->cartTotal;
     }
 
     /**
      * Process cash payments
      */
-    public function processCashPayment($cashAmount)
+    public function processCashPayment()
     {
         // Process cash payment and save order
-        $change = PaymentProcessor::cash($cashAmount);
+        $change = PaymentProcessor::cash($this->cashAmount);
+        $this->paymentMethod = 'cash';
+        $this->saveOrder();
+    }
 
-        OrderSaver::create([
-            'is_paid' => true,
-            'payment_method' => 'cash',
-            'customer_phone' => ''
-        ]);
-        dd($this->cart->first());
+    /**
+     * Process mpesa payments
+     */
+    public function processMpesaPayment()
+    {
+        // Process mpesa payment and save order
+        PaymentProcessor::mpesa($this->mpesaNumber, $this->transactionCode, $this->mpesaAmount);
+
+        $this->paymentMethod ='mpesa';
+        $this->saveOrder();
+
+        // capture transaction
+        // TODO: Create TransactionCapture action to record transactions
+        // TODO: Capture mpesa transaction with logic in PaymentProcessor
+
+    }
+
+    /**
+     * Process card payments
+     */
+    public function processCardPayment()
+    {
+        // Process card payment and save order
+        PaymentProcessor::card($this->transactionCode, $this->cardAmount);
+
+        $this->paymentMethod ='card';
+        $this->saveOrder();
+
+        // capture transaction
+        // TODO: Create TransactionCapture action to record transactions
+        // TODO: Capture card transaction with logic in PaymentProcessor
+
     }
 
     public function saveOrder(): void
     {
-        $order = new Order();
-//        $order->fill([
-//            'customer_name' => ['required','string','max:255'],
-//            'customer_email' => ['required','email','max:255'],
-//            'customer_phone' => ['required','string','max:255'],
-//        ]);
-        $order->total = $this->cart->sum('subtotal');
-        $order->save();
-
-        foreach ($this->cart as $cartItem) {
-            $orderItem = new OrderItem();
-            $orderItem->order_id = $order->id;
-            $orderItem->product_id = $cartItem->product_id;
-            $orderItem->quantity = $cartItem->quantity;
-            $orderItem->price = $cartItem->product->price;
-            $orderItem->save();
-        }
+        OrderSaver::create([
+            'is_paid' => true,
+            'payment_method' => $this->paymentMethod,
+            'customer_name' => $this->customerName,
+            'customer_email' => $this->customerEmail,
+            'customer_phone' => $this->customerNumber,
+            'transaction_code' => $this->transactionCode,
+            'mpesa_number' => $this->mpesaNumber,
+            'mpesa_amount' => $this->mpesaAmount,
+            'card_amount' => $this->cardAmount,
+            'cash_amount' => $this->cashAmount,
+            'customer_id' => null
+        ]);
 
         Cart::destroyCart();
         $this->success = true;
         $this->cart = Cart::getCart();
-        $this->resetPage();
+        $this->cartTotal = Cart::getCartTotal();
     }
 
     public function mount()

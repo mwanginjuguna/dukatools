@@ -1,12 +1,12 @@
 @props(['product'])
 
-<div class="p-2 rounded-lg shadow-sm border border-emerald-200 dark:border-emerald-600">
-    <div class="w-full flex gap-x-2 items-center">
+<div class="p-1 rounded-b-lg shadow-sm border-b border-emerald-200 dark:border-emerald-800">
+    <div class="w-full flex gap-x-3 items-center">
         <p class="shrink-0">
             <img class="h-12 w-12" src="/storage/{{ $product['image'] ?? '' }}" alt="{{ $product['product']['name'] }} image" />
         </p>
 
-        <div class="space-y-2 w-full">
+        <div class="space-y-1 w-full">
             <p class="">{{ $product['product']['name'] }}</p>
 
             <div class="flex items-center justify-between">

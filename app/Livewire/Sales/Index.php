@@ -21,20 +21,24 @@ class Index extends Component
         $query = Order::query()->where('user_id', $user->id);
 
         $pendingOrders = Order::query()
-            ->where('status', 'pending')->simplePaginate(10);
+            ->where('status', 'pending')
+            ->latest()
+            ->simplePaginate(10);
 
         $completedOrders = Order::query()
             ->whereIn('status', ['delivered', 'shipping'])
+            ->latest()
             ->paginate(10);
 
         $orders = Order::query()
+            ->latest()
             ->paginate(10);
 
         return view('livewire.sales.index', [
             'orders' => $orders,
             'pendingOrders' => $pendingOrders,
             'completedOrders' => $completedOrders,
-            'todaySales' => $salesQuery->getTodaySales()->with(['products'])->get(),
+            'todaySales' => $salesQuery->getTodaySales()->with(['products'])->latest()->get(),
             'topProducts' => (new ProductFilters())->topProducts(5)
         ]);
     }
