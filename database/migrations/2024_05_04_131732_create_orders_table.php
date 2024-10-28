@@ -24,14 +24,18 @@ return new class extends Migration
             $table->decimal('subtotal', 10, 2);
             $table->decimal('total', 10, 2)->nullable();
             $table->boolean('is_paid')->default(false);
-            $table->string('status')->default('pending');
-            $table->text('notes')->nullable();
-
+            $table->timestamp('paid_at')->nullable();
             $table->string('payment_method')->nullable();
+            $table->string('source')->default('store')->comment( "store, shop, online, promo, third_party");
+            $table->string('order_type')->default('sale')->comment("sale, return, exchange");
+            $table->string('status')->default('pending')->comment("pending, completed, refunded");
             $table->foreignId('customer_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('discount_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('vendor_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('employee_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('shipping_address_id')->nullable()->constrained()->nullOnDelete();
+            $table->text('notes')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

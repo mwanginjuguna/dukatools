@@ -11,9 +11,10 @@ use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [ProductController::class, 'index'])->name('home');
+Route::get('/', [ProductController::class, 'index'])->name('home')->middleware('auth');
 Route::view('/about', 'pages.about')->name('about');
 Route::view('/services', 'pages.about')->name('services');
 Route::view('/privacy-policy', 'pages.about')->name('privacy-policy');
@@ -31,8 +32,12 @@ Route::middleware('auth')->group(function () {
     // vendor dashboard
     Route::get('/dashboard', [ActionsController::class, 'dashboard'])->name('dashboard');
 
+    // vendor home
+    Route::get('/vendor', [VendorController::class, 'home'])->name('vendor.home');
+
+
     // vendor store/products/shop
-    Route::get('/vendor', [ProductController::class, 'index'])->name('vendor.index');
+    Route::get('/vendor/products', [ProductController::class, 'index'])->name('vendor.index');
     Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::get('/vendor/products/show/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('admin.products.edit');
     Route::get('/vendor/products/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('vendor.products.show');

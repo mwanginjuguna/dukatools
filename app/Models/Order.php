@@ -20,7 +20,7 @@ class Order extends Model
      */
     protected $guarded = [];
 
-    protected $with = ['user', 'orderItems'];
+    protected $with = ['vendor', 'orderItems'];
 
     /**
      * The attributes that should be cast to native types.
@@ -55,9 +55,9 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function user(): BelongsTo
+    public function vendor(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Vendor::class);
     }
 
     public function products(): BelongsToMany

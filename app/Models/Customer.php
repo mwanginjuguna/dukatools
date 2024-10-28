@@ -4,18 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customer extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    protected $guarded = ['id'];
 
     protected static function booted()
     {
         self::creating(function (Customer $customer) {
             do {
                 // random ref
-                $ref = 'CS' . substr(
+                $ref = 'CUST' . substr(
                         str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'),
                         0, 8);
 
@@ -25,7 +29,10 @@ class Customer extends Model
         });
     }
 
-    protected $guarded = ['id'];
+    public function location():BelongsTo
+    {
+        return $this->belongsTo(Location::class);
+    }
 
     /**
      * Define the accessor for full name

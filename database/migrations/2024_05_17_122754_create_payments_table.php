@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('order_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('reference')->unique();
+            $table->string('payment_method')->nullable();
             $table->string('paypal_transaction_id')->nullable();
             $table->string('stripe_session_id')->nullable();
             $table->string('paypal_payer_id')->nullable();
@@ -26,6 +26,11 @@ return new class extends Migration
             $table->text('transaction_debug_id')->nullable();
             $table->text('transaction_message')->nullable();
             $table->text('transaction_name')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('vendor_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('business_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('customer_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('order_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

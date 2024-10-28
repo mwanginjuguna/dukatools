@@ -32,7 +32,7 @@ new #[Layout('layouts.guest'), \Livewire\Attributes\Title('Register')] class ext
 
         Auth::login($user);
 
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+        $this->redirect(route('vendor.home', absolute: false), navigate: true);
     }
 }; ?>
 

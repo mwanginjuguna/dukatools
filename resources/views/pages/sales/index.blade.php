@@ -7,7 +7,7 @@
         </h1>
         <!-- Stats Section -->
         <div class="py-4 grid lg:grid-cols-4 gap-4 items-center">
-            <div class="lg:col-span-2 grid md:grid-cols-2 gap-6 items-center">
+            <div class="hidden lg:col-span-2 grid md:grid-cols-2 gap-6 items-center">
 
                 <!-- Revenue Card -->
                 <x-cards.simple-stats-card title="Total Revenue">
@@ -85,8 +85,8 @@
 
             </div>
             <!-- Grid -->
-            <div class="hidden lg:col-span-2 h-max grid md:grid-cols-2 border border-slate-200 shadow-sm rounded-xl overflow-hidden dark:border-slate-800">
-                <!-- Sales Card -->
+            <div class="lg:col-span-2 h-max grid md:grid-cols-2 border border-slate-200 shadow-sm rounded-xl overflow-hidden dark:border-slate-800">
+                <!-- Revenue Card -->
                 <div class="block md:col-span-2 p-4 md:p-5 relative bg-slate-50 hover:bg-orange-100 before:absolute before:top-0 before:start-0 before:w-full before:h-px md:before:w-px md:before:h-full before:bg-gray-200 before:first:bg-transparent dark:bg-slate-700 dark:hover:bg-slate-900 dark:before:bg-slate-800">
                     <div class="flex md:grid lg:flex gap-y-3 gap-x-5">
                         <svg class="w-6 h-6 text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -152,14 +152,6 @@
                             <h3 class="mt-1 text-xl sm:text-2xl font-semibold text-emerald-500 dark:text-emerald-400">
                                 {{ $customers }}
                             </h3>
-                            <div class="mt-1 flex justify-between items-center">
-                                <p class="text-xs text-slate-600 dark:text-slate-300">
-                                    Total leads: <span class="text-sm font-medium text-emerald-500 dark:text-emerald-400">{{ $users }}</span>
-                                </p>
-                                <span class="ms-1 inline-flex items-center gap-1.5 py-1 px-2 rounded-md text-xs font-medium bg-lime-300 text-slate-800 dark:bg-lime-600 dark:text-slate-100">
-                                    <span class="inline-block">{{ $customers > 0 ? number_format($customers/$users * 100, 2) : 0 }}%</span>
-                                </span>
-                            </div>
                         </div>
                     </div>
                 </div>

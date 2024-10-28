@@ -1,5 +1,5 @@
 @props(['icon' => null, 'button' => null])
-<div class="min-h-32 flex flex-col border shadow-sm rounded-xl border-slate-200 dark:border-slate-700 dark:shadow-slate-700/70">
+<div class="min-h-32 flex flex-col shadow-sm rounded-xl dark:shadow-slate-700/70">
     <div class="flex flex-auto flex-col justify-center items-center place-content center p-4 md:p-5">
         @if($icon === null)
             <svg class="size-10 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

@@ -16,7 +16,7 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user()->role !== 'A')
+        if (Auth::user() && Auth::user()->role !== 'A')
             {
                 return redirect('/dashboard');
             }

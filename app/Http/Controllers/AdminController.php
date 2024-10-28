@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -49,7 +50,6 @@ class AdminController extends Controller
 
     public function dashboard(): View
     {
-
         $posts = Post::query()->with('category')->orderBy('views', 'desc')->get();
 
         $data = $this->stats();

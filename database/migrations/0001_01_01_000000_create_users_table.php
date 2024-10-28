@@ -15,14 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('reference')->unique();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
 
             // profile
-            $table->string('phone_number')->unique()->nullable();
-            $table->json('location')->nullable();
+            $table->string('phone_number')->unique();
 
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('role')->default('U'); // U => User, A => Admin, D => Dev, etc
+            $table->string('role')->default('U');
             $table->unsignedBigInteger('userable_id')->nullable();
             $table->string('userable_type')->nullable();
             $table->string('password');
@@ -66,6 +65,16 @@ return new class extends Migration
             $table->softDeletes();
         });
 
+        Schema::create('vendors', function (Blueprint $table) {
+            $table->id();
+            $table->string('reference')->unique();
+            $table->string('name')->nullable();
+            $table->string('status')->nullable();
+            $table->boolean('is_suspended')->default(false);
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         // settings table
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
@@ -85,6 +94,7 @@ return new class extends Migration
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('admins');
+        Schema::dropIfExists('vendors');
         Schema::dropIfExists('settings');
     }
 };

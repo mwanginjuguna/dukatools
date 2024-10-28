@@ -122,11 +122,19 @@ class Product extends Model
     }
 
     /**
+     * User of this product
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * Vendor of this product
      */
     public function vendor(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Vendor::class);
     }
 
     /**

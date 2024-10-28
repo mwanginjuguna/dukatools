@@ -2,15 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\Business;
 use App\Models\Location;
-use App\Models\User;
-use App\Models\Vendor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Business>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Branch>
  */
-class BusinessFactory extends Factory
+class BranchFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -21,15 +20,11 @@ class BusinessFactory extends Factory
     {
         return [
             'name' => $this->faker->company,
-            'email' => $this->faker->unique()->safeEmail,
             'phone_number' => $this->faker->phoneNumber,
+            'email' => $this->faker->email,
             'address' => $this->faker->address,
-            'logo' => $this->faker->imageUrl(640, 480, 'business', true),
-            'website' => $this->faker->url,
-            'description' => $this->faker->paragraph,
-            'user_id' => User::factory(),
-            'vendor_id' => Vendor::factory(),
             'location_id' => Location::factory(),
+            'business_id' => Business::factory()
         ];
     }
 }

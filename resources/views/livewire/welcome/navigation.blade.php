@@ -57,17 +57,15 @@
             <div class="flex flex-row gap-x-4 items-center">
                 <x-utils.dark-mode-toggle />
 
-                <livewire:cart-actions />
-
                 <div class="hidden md:block">
                     @auth()
-                        <x-secondary-link href="{{ route('dashboard') }}" class="text-sm">Dashboard</x-secondary-link>
+                        <x-secondary-link href="{{ route('dashboard') }}" wire:navigate class="text-sm">Dashboard</x-secondary-link>
                     @endauth
                     @guest()
-                        <x-secondary-link href="{{ route('login') }}" class="text-sm">Login</x-secondary-link>
+                        <x-secondary-link href="{{ route('login') }}" wire:navigate class="text-sm">Login</x-secondary-link>
                     @endguest
                 </div>
-                <x-primary-link href="{{ route('contact-me') }}" class="hidden md:block">Contact Me</x-primary-link>
+                <x-primary-link href="{{ route('register') }}" wire:navigate class="hidden md:block">Start Selling</x-primary-link>
             </div>
 
 
@@ -103,10 +101,10 @@
             </x-responsive-nav-link>
             <div class="pl-4">
                 @auth()
-                    <x-secondary-link href="{{ route('dashboard') }}" class="text-sm">Dashboard</x-secondary-link>
+                    <x-secondary-link href="{{ route('dashboard') }}" wire:navigate class="text-sm">Dashboard</x-secondary-link>
                 @endauth
                 @guest()
-                    <x-secondary-link href="{{ route('login') }}" class="text-sm">Login</x-secondary-link>
+                    <x-secondary-link href="{{ route('login') }}" wire:navigate class="text-sm">Login</x-secondary-link>
                 @endguest
             </div>
         </div>

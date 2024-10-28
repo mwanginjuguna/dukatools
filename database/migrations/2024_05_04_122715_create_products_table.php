@@ -31,11 +31,16 @@ return new class extends Migration
             $table->string('supplier_sku')->nullable();
             $table->string('barcode')->nullable();
             $table->text('description');
+
             $table->decimal('price', 10, 2);
+            $table->decimal('buying_price', 10, 2)->default(0);
+            $table->decimal('selling_price', 10, 2)->default(0);
             $table->decimal('tax_percent', 10, 2)->nullable()->default(0);
             $table->decimal('shipping_fee', 10, 2)->nullable()->default(0);
 
             $table->integer('stock_quantity')->default(1);
+            $table->integer('stock_on_shelf')->default(1);
+
             $table->boolean('is_active')->default(true);
             $table->boolean('on_offer')->default(false);
             $table->boolean('is_new')->default(false);
@@ -44,6 +49,9 @@ return new class extends Migration
             $table->string('image')->nullable();
 
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('vendor_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('business_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('brand_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('sub_category_id')->nullable()->constrained()->nullOnDelete();

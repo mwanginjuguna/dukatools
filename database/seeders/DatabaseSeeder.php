@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Admin;
+use App\Models\Branch;
+use App\Models\Business;
 use App\Models\Category;
 use App\Models\ContactMessage;
 use App\Models\Currency;
@@ -47,9 +49,11 @@ class DatabaseSeeder extends Seeder
                 'first_name' => config('app.admin.first_name'),
                 'last_name' => config('app.admin.last_name'),
                 'email' => config('app.admin.email'),
+                'phone_number' => config('app.admin.phone_number'),
             ]), 'userable')->create([
                 'name' => config('app.admin.name'),
                 'email' => config('app.admin.email'),
+                'phone_number' => config('app.admin.phone_number'),
                 'password' => Hash::make(config('app.admin.password')),
             ])->first();
 
@@ -90,6 +94,19 @@ class DatabaseSeeder extends Seeder
             $suppliers = Supplier::factory(6)->create([
                 'created_at' => now()->subYear()->addMonths(rand(1,6))->subHours(rand(34,120))
             ]);
+            \Laravel\Prompts\info("Seeding a business.");
+            // seed A business
+            $business = Business::factory()->create([
+                'user_id' => $admin->id,
+                'vendor_id' => $admin->id,
+                'name' => 'Top-G Shoes'
+            ]);
+
+            $branch = Branch::factory()->create([
+                'business_id' => $business->id,
+                'name' => 'Eldoret CBD'
+            ]);
+
             \Laravel\Prompts\info("Seeding Products.");
             // seed products that will be used to create orders
             $products = Product::factory(9)
@@ -97,7 +114,9 @@ class DatabaseSeeder extends Seeder
                 ->has(ProductVariation::factory(2))
                 ->create([
                     'supplier_id' => $suppliers->random()->userable_id,
-                    'user_id' => $admin->id
+                    'user_id' => $admin->id,
+                    'vendor_id' => $admin->id,
+                    'business_id' => $business->id,
                 ]);
 
             \Laravel\Prompts\info("Users & order-products seeded.");
@@ -107,7 +126,9 @@ class DatabaseSeeder extends Seeder
                 $customer = Customer::factory()->create();
                 // order for a random user
                 $order = Order::factory()->create([
-                    'user_id' => $customer->id,
+                    'customer_id' => $customer->id,
+                    'vendor_id' => $admin->id,
+                    'user_id' => $admin->id,
                     'discount_id' => $discount->id,
                     'created_at' => Arr::random([
                         now()->subMonths(rand(0, 5))->addHours(rand(24,48)),
@@ -167,7 +188,8 @@ class DatabaseSeeder extends Seeder
                 ->has(ProductFeature::factory(2))
                 ->has(ProductVariation::factory(2))
                 ->create([
-                    'user_id' => $admin->id
+                    'user_id' => $admin->id,
+                    'vendor_id' => $admin->id
                 ]);
         }
 

@@ -2,9 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\ShippingAddress;
 use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -31,7 +33,7 @@ class OrderFactory extends Factory
             'tax' => $this->faker->randomFloat(2, 35, 85),
             'is_paid' => $this->faker->boolean(80),
             'status' => function (array $attributes) {
-                return $attributes['is_paid'] ? Arr::random(['shipping', 'delivered']) : 'pending';
+                return $attributes['is_paid'] ? Arr::random(['paid', 'delivered']) : 'pending';
             },
             'payment_method' => function (array $attributes) {
                 return $attributes['is_paid'] ? Arr::random(['card', 'mpesa', 'cash']) : '';
@@ -41,7 +43,9 @@ class OrderFactory extends Factory
             },
             'customer_id' => Customer::factory(),
             'user_id' => User::factory(),
-            'shipping_address_id' => ShippingAddress::factory()
+            'shipping_address_id' => ShippingAddress::factory(),
+            'branch_id' => Branch::factory(),
+            'vendor_id' => Vendor::factory()
         ];
     }
 

@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('region')->nullable();
             $table->string('state')->nullable();
             $table->string('country')->nullable();
+            $table->unsignedBigInteger('locationable_id')->nullable();
+            $table->string('locationable_type')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
