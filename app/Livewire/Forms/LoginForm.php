@@ -12,8 +12,9 @@ use Livewire\Form;
 
 class LoginForm extends Form
 {
-    #[Validate('required|string|email')]
-    public string $email = '';
+    // User can login using phone_number or email and password
+    #[Validate('required|string')]
+    public string $username = '';
 
     #[Validate('required|string')]
     public string $password = '';
@@ -30,11 +31,17 @@ class LoginForm extends Form
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only(['email', 'password']), $this->remember)) {
+        $pwd = $this->only('password')['password'];
+        $username = $this->only('username')['username'];
+
+        $attemptWithEmail = Auth::attempt(['email' => $username, 'password' => $pwd], $this->remember);
+        $attemptWithPhoneNumber = Auth::attempt(['phone_number' => $username, 'password' => $pwd], $this->remember);
+
+        if (!$attemptWithEmail && !$attemptWithPhoneNumber) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'form.email' => trans('auth.failed'),
+                'form.username' => trans('auth.failed'),
             ]);
         }
 
@@ -55,7 +62,7 @@ class LoginForm extends Form
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'form.email' => trans('auth.throttle', [
+            'form.username' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -67,6 +74,6 @@ class LoginForm extends Form
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->username).'|'.request()->ip());
     }
 }

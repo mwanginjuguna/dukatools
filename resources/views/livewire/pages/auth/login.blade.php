@@ -20,20 +20,40 @@ new #[Layout('layouts.guest'), \Livewire\Attributes\Title('Login')] class extend
 
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        $this->redirectIntended(default: route('vendor.home', absolute: false), navigate: true);
     }
 }; ?>
 
-<div class="max-w-md mx-auto mt-10">
+<div
+    x-data="{usePhone:false}"
+    class="max-w-md mx-auto mt-10 lg:mt-14"
+>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    <div class="p-4 sm:p-7">
+        <div class="text-center">
+            <h1 class="block text-2xl font-bold text-gray-800 dark:text-white">Sign in</h1>
+            <p class="mt-2 text-sm text-gray-600 dark:text-neutral-400">
+                Not a member yet?
+                <a
+                    wire:navigate
+                    class="text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
+                    href="{{ route('register') }}"
+                >
+                    Sign up here
+                </a>
+            </p>
+        </div>
+    </div>
+
     <form wire:submit="login">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="form.email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
+
+        <!-- Phone number / email -->
+        <div class="mt-4">
+            <x-input-label for="username" :value="__('Phone Number or Email')" />
+            <x-text-input wire:model="form.username" id="username" class="block mt-1 w-full" type="text" name="username" autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('form.username')" class="mt-2" />
         </div>
 
         <!-- Password -->

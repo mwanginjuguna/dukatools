@@ -94,7 +94,7 @@ return new class extends Migration
         Schema::create('product_reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->text('review');
             $table->softDeletes();
             $table->timestamps();
@@ -103,7 +103,7 @@ return new class extends Migration
         Schema::create('product_ratings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->decimal('rating', 1, 1)->default(5.0);
             $table->softDeletes();
             $table->timestamps();

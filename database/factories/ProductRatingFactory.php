@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Customer;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +20,7 @@ class ProductRatingFactory extends Factory
     {
         return [
             'product_id' => Product::factory(),
-            'user_id' => User::factory(),
+            'customer_id' => Customer::factory(),
             'rating' => $this->faker->randomFloat(1, 1.0,5.0)
         ];
     }

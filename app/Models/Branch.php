@@ -15,14 +15,14 @@ class Branch extends Model
 
     protected static function booted()
     {
-        static::creating(function (Business $branch) {
+        static::creating(function (Branch $branch) {
             do {
                 // random ref
                 $ref = 'BRN' . substr(
                         str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'),
                         0, 8);
 
-            } while(Business::where('reference', $ref)->exists());
+            } while(Branch::where('reference', $ref)->exists());
 
             $branch->reference = $ref;
         });

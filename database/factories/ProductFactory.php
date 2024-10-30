@@ -31,17 +31,24 @@ class ProductFactory extends Factory
         $name = $this->faker->sentence(5);
 
         // sample product categories
-        $productCategories = ['Clothing', 'Phones', 'Electronics', 'Fitness', 'Fashion',
-            'Food', 'Computing', 'Energy', 'Cars', 'Entertainment', 'Agriculture'];
+        $productCategories = ['Clothing', 'Fitness', 'Fashion'];
 
-        $subCategories = ['Mens', 'Women', 'Children', 'Phones', 'Gaming', 'PC', 'Laptop',
-            'Classic', 'Solar', 'Television', 'Headphones', 'Sports', 'Casual', 'Office'];
+//        $productCategories = ['Clothing', 'Phones', 'Electronics', 'Fitness', 'Fashion',
+//            'Food', 'Computing', 'Energy', 'Cars', 'Entertainment', 'Agriculture'];
+
+        $subCategories = ['Mens', 'Women', 'Children', 'Sports', 'Casual', 'Official'];
+//
+//        $subCategories = ['Mens', 'Women', 'Children', 'Phones', 'Gaming', 'PC', 'Laptop',
+//            'Classic', 'Solar', 'Television', 'Headphones', 'Sports', 'Casual', 'Office'];
 
         // Sample Product brands
-        $productBrands = ['Gucci', 'Mamba', 'Afrikana', 'Simba', 'Tesla', 'Sony',
-            'Maara', 'Savannah', 'Maasai', 'Safaricom', 'Tesla', 'Meta', 'Alibaba',
-            'Amazon', 'Wakanda', 'Lion', 'Puma', 'Toyota', 'Rasta', 'Apple', 'Google',
-            'Samsung', 'Huawei', 'Xiaomi', 'Hp'];
+        $productBrands = ['Gucci', 'Mamba', 'Jordan', 'Simba', 'Nike', 'Adidas',
+            'Oxford', 'Savannah', 'Maasai', 'Wakanda', 'Lion', 'Puma'];
+
+//        $productBrands = ['Gucci', 'Mamba', 'Afrikana', 'Simba', 'Tesla', 'Sony',
+//            'Maara', 'Savannah', 'Maasai', 'Safaricom', 'Tesla', 'Meta', 'Alibaba',
+//            'Amazon', 'Wakanda', 'Lion', 'Puma', 'Toyota', 'Rasta', 'Apple', 'Google',
+//            'Samsung', 'Huawei', 'Xiaomi', 'Hp'];
 
         return [
             'name' => $name,

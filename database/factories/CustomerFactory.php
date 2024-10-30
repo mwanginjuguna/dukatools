@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Location;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Customer>
@@ -23,7 +24,8 @@ class CustomerFactory extends Factory
             'last_name' => $this->faker->lastName,
             'location_id' => Location::factory(),
             'email' => $this->faker->email,
-            'phone_number' => $this->faker->phoneNumber
+            'phone_number' => $this->faker->phoneNumber,
+            'source' => Arr::random(['direct', 'facebook', 'instagram', 'website'])
         ];
     }
 }

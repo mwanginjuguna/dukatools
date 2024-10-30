@@ -130,7 +130,7 @@ return [
         'name' => env('ADMIN_USERNAME', 'Admin'),
         'first_name' => env('ADMIN_FIRST_NAME'),
         'last_name' => env('ADMIN_LAST_NAME'),
-        'phone' => env('ADMIN_PHONE_NUMBER'),
+        'phone_number' => env('ADMIN_PHONE_NUMBER'),
         'address' => env('ADMIN_ADDRESS'),
         'dob' => env('ADMIN_DOB'),
         'gender' => env('ADMIN_GENDER', 'Male'),

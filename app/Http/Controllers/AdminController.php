@@ -24,7 +24,7 @@ class AdminController extends Controller
             'products' => Product::query(),
             'users' => User::query()->whereNot('role', '=', 'A'),
             'purchasedProducts' => $this->purchasedProducts(),
-            'customers' => Order::query()->selectRaw('count(distinct user_id) as customers')->get()->first()->customers
+            'customers' => Order::query()->selectRaw('count(distinct customer_id) as customers')->get()->first()->customers
         ]);
     }
 

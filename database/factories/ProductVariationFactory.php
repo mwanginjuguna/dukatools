@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProductVariation>
@@ -19,9 +20,11 @@ class ProductVariationFactory extends Factory
     {
         return [
             'product_id' => Product::factory(),
-            'type' => $this->faker->randomElement(['Color', 'Size', 'Material', 'Dimensions']),
-            'details' => $this->faker->word(),
-            'price_change_percentage' => $this->faker->randomFloat(2, -10, 10),
+            'type' => $this->faker->randomElement(['color', 'size']),//, 'Material', 'Dimensions'
+            'details' => function (array $attributes) {
+                    return $attributes['type'] === 'size' ? rand(38,45) : Arr::random(['black', 'red', 'white', 'brown']);
+                },
+            'price_change_percentage' => 0,//$this->faker->randomFloat(2, -10, 10),
             'stock_quantity' => $this->faker->numberBetween(0, 100),
         ];
     }

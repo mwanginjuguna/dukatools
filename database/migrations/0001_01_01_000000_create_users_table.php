@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique()->nullable();
 
             // profile
-            $table->string('phone_number')->unique();
+            $table->string('phone_number')->unique()->nullable();
 
             $table->timestamp('email_verified_at')->nullable();
             $table->string('role')->default('U');

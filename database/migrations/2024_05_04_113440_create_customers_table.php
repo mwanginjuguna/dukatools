@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('reference')->unique();
             $table->string('email')->nullable();
+            $table->string('source')
+                ->default('direct')
+                ->comment('Can be direct, facebook, website, instagram, x, and other sales channels');
             $table->string('phone_number')->nullable();
             $table->string('phone_number_secondary')->nullable();
             $table->string('username')->nullable();

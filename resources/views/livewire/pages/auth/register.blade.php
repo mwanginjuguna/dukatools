@@ -12,6 +12,7 @@ new #[Layout('layouts.guest'), \Livewire\Attributes\Title('Register')] class ext
 {
     public string $name = '';
     public string $email = '';
+    public string $phone_number = '';
     public string $password = '';
     public string $password_confirmation = '';
 
@@ -22,7 +23,8 @@ new #[Layout('layouts.guest'), \Livewire\Attributes\Title('Register')] class ext
     {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['nullable','required_without:phone_number', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'phone_number' => ['nullable','required_without:email', 'string', 'unique:'.User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -37,6 +39,21 @@ new #[Layout('layouts.guest'), \Livewire\Attributes\Title('Register')] class ext
 }; ?>
 
 <div class="max-w-md mx-auto mt-10">
+    <div class="p-4 sm:p-7">
+        <div class="text-center">
+            <h1 class="block text-2xl font-bold text-gray-800 dark:text-white">Sign in</h1>
+            <p class="mt-2 text-sm text-gray-600 dark:text-neutral-400">
+                Already a member?
+                <a
+                    wire:navigate
+                    class="text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
+                    href="{{ route('login') }}"
+                >
+                    Login here
+                </a>
+            </p>
+        </div>
+    </div>
     <form wire:submit="register">
         <!-- Name -->
         <div>
@@ -45,10 +62,17 @@ new #[Layout('layouts.guest'), \Livewire\Attributes\Title('Register')] class ext
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
+        <!-- Phone number -->
+        <div class="mt-4">
+            <x-input-label for="phone_number" :value="__('Phone Number')" />
+            <x-text-input wire:model="phone_number" id="phone_number" class="block mt-1 w-full" type="text" name="phone_number" autocomplete="phone_number" />
+            <x-input-error :messages="$errors->get('phone_number')" class="mt-2" />
+        </div>
+
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autocomplete="username" />
+            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('expires_after')->default(1000);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -109,7 +109,7 @@ class DatabaseSeeder extends Seeder
 
             \Laravel\Prompts\info("Seeding Products.");
             // seed products that will be used to create orders
-            $products = Product::factory(9)
+            $products = Product::factory(21)
                 ->has(ProductFeature::factory(1))
                 ->has(ProductVariation::factory(2))
                 ->create([
@@ -121,20 +121,24 @@ class DatabaseSeeder extends Seeder
 
             \Laravel\Prompts\info("Users & order-products seeded.");
 
-            for ($i__ = 1; $i__ <= 17; $i__++)
+            for ($i__ = 1; $i__ <= 27; $i__++)
             {
                 $customer = Customer::factory()->create();
                 // order for a random user
+                $randomDate = Arr::random([
+                    now()->subHour(),
+                    now()->subDays(rand(0,5)),
+                    now()->subWeeks(rand(1,5)),
+                    now()->subMonths(rand(1, 5))->addHours(rand(24, 48)),
+                    now()->subYears(rand(1, 3))->addMonths((rand(1, 12)))->addHours(rand(14, 72)),
+                    now()->subYear()->addMonths(rand(0, 10))->subHours(rand(24, 144))
+                ]);
                 $order = Order::factory()->create([
                     'customer_id' => $customer->id,
                     'vendor_id' => $admin->id,
-                    'user_id' => $admin->id,
                     'discount_id' => $discount->id,
-                    'created_at' => Arr::random([
-                        now()->subMonths(rand(0, 5))->addHours(rand(24,48)),
-                        now()->subYears(rand(2,3))->addMonths((rand(1,12)))->addHours(rand(14,72)),
-                        now()->subYear()->addMonths(rand(0,10))->subHours(rand(24,144))
-                    ])
+                    'paid_at' => $randomDate,
+                    'created_at' => $randomDate,
                 ]);
 
                 \Laravel\Prompts\info("Order {$i__} created.");
@@ -142,6 +146,7 @@ class DatabaseSeeder extends Seeder
                 // let's generate random order items for this order
                 $itemCount = rand(1,3);
 
+                $orderTotal = 0.0;
                 for ($item = 1; $item < $itemCount; $item++)
                 {
                     $product = $products->random();
@@ -152,11 +157,13 @@ class DatabaseSeeder extends Seeder
                     ]);
 
                     // review of the product
-                    ProductReview::factory()->count(1)->for($product)->create();
+                    ProductReview::factory()->count(1)->for($product)->create([
+                        'customer_id' => $order->customer_id
+                    ]);
 
                     // rating of the product by an actual user
                     ProductRating::factory()->count(1)->for($product)->create([
-                        'user_id' => $order->user_id
+                        'customer_id' => $order->customer_id
                     ]);
 
                     $q = random_int(1, 2); // quantity
@@ -171,9 +178,13 @@ class DatabaseSeeder extends Seeder
                         'quantity' => $q,
                         'subtotal' => $price * $q
                     ]);
-                }
 
-                $order->total -= (float)number_format((float)$order->subtotal * (float)$discount->rate, 2);
+                    $orderTotal += $price * $q;
+                }
+                $order->subtotal = $orderTotal;
+                $order->total = $orderTotal + $order->tax ?? 0.0 + $order->shipping_fee ?? 0.0;
+
+                $order->total -= (float)number_format((float)$order->total * (float)$discount->rate, 2);
                 $order->save();
             }
 

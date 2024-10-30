@@ -23,10 +23,11 @@ return new class extends Migration
             $table->string('tracking_number')->nullable(); // added after order is paid.
             $table->decimal('subtotal', 10, 2);
             $table->decimal('total', 10, 2)->nullable();
+            $table->decimal('amount_paid', 10, 2)->nullable();
             $table->boolean('is_paid')->default(false);
             $table->timestamp('paid_at')->nullable();
             $table->string('payment_method')->nullable();
-            $table->string('source')->default('store')->comment( "store, shop, online, promo, third_party");
+            $table->string('channel')->default('shop')->comment( "direct, shop, online, promotion, third_party");
             $table->string('order_type')->default('sale')->comment("sale, return, exchange");
             $table->string('status')->default('pending')->comment("pending, completed, refunded");
             $table->foreignId('customer_id')->nullable()->constrained()->nullOnDelete();
