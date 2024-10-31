@@ -83,6 +83,21 @@ class User extends Authenticatable
         return $this->morphTo();
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->userable_type === Admin::class;
+    }
+
+    public function isVendor(): bool
+    {
+        return $this->userable_type === Vendor::class;
+    }
+
+    public function isEmployee(): bool
+    {
+        return $this->userable_type === Employee::class;
+    }
+
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
@@ -109,11 +124,6 @@ class User extends Authenticatable
     public function cart(): HasOne
     {
         return $this->hasOne(Cart::class);
-    }
-
-    public function wishlist(): HasOne
-    {
-        return $this->hasOne(Wishlist::class);
     }
 
     /**

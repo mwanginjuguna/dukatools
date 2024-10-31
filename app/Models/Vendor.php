@@ -50,7 +50,7 @@ class Vendor extends Model
      */
     public function getNameAttribute(): string
     {
-        return "$this->first_name $this->last_name";
+        return $this->fullName;
     }
 
     /**
