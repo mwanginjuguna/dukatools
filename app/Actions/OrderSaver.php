@@ -3,8 +3,11 @@
 namespace App\Actions;
 
 use App\Models\Cart;
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -16,7 +19,9 @@ class OrderSaver
         $cartTotal = Cart::getCartTotal();
 
         $order = Order::create([
-            'user_id' => Auth::user()->id,
+            'vendor_id' => $data['vendor_id'],
+            'employee_id' => $data['employee_id'],
+            'branch_id' => $data['branch_id'],
             'is_paid' => $data['is_paid'] ?? true,
             'payment_method' => $data['payment_method'] ?? 'N/A',
             'subtotal' => $cartTotal,
@@ -30,23 +35,27 @@ class OrderSaver
 //            'customer_email' => $data['customer_email'] ?? '',
 //            'customer_phone' => $data['customer_phone'] ?? '',
 
+        $customer = $data['customer_id'] === null ? Customer::create(['source' => $data['customer_source'],]) : Customer::find($data['customer_id']);
+
+        $order->customer_id = $customer->id;
         if (Str::length($data['customer_phone']) > 1){
             $order->customer_phone = $data['customer_phone'];
+            $customer->phone_number = $data['customer_phone'];
         }
 
         if (Str::length($data['customer_name']) > 1){
             $order->customer_name = $data['customer_name'];
+            $customer->username = $data['customer_name'];
+            $customer->first_name = $data['customer_name'];
         }
 
         if (Str::length($data['customer_email']) > 1){
             $order->customer_email = $data['customer_email'];
-        }
-
-        if (Str::length($data['customer_id']) > 1){
-            $order->customer_id = $data['customer_id'];
+            $customer->email = $data['customer_email'];
         }
 
         $order->save();
+        $customer->save();
         // save order items
         foreach ($cart as $item) {
             OrderItem::updateOrCreate([

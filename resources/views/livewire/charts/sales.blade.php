@@ -79,8 +79,6 @@
 
         </div>
 
-        <p class="py-2 font-medium md:text-lg">Top Products/Sales</p>
-        <x-parts.top-products :$topProducts />
     </div>
 
     <!-- total sales -->

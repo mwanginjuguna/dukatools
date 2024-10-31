@@ -21,10 +21,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $password;
  * @property string $email;
  * @property string $profile_image;
- * @property string $first_name;
- * @property string $last_name;
+ * @property string $country;
  * @property string $phone_number;
- * @property string $location;
  * @property int $userable_id;
  * @property string $userable_type;
  */

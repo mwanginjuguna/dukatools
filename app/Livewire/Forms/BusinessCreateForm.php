@@ -2,8 +2,12 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\Branch;
 use App\Models\Business;
 use App\Models\Location;
+use App\Models\User;
+use App\Models\Vendor;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
@@ -36,6 +40,15 @@ class BusinessCreateForm extends Form
             'code' => $this->zipCode,
         ]);
 
+        $user = User::query()->whereKey(auth()->id());
+        $vendor = Vendor::create([
+            'username' => $user->name,
+        ]);
+
+        $user->userable_id = $vendor->id;
+        $user->userable_type = Vendor::class;
+        $user->save();
+
         $business = Business::create([
             'name' => $this->name,
             'email' => $this->email,
@@ -46,7 +59,16 @@ class BusinessCreateForm extends Form
             'logo' => $this->logo,
             'location_id' => $location->id,
             'user_id' => auth()->id(),
-            'vendor_id' => auth()->id(),
+            'vendor_id' => $vendor->id,
+        ]);
+
+        Branch::create([
+            'name' => 'Main',
+            'phone_number' => $this->phone,
+            'email' => $this->email,
+            'address' => $this->address,
+            'location_id' => $location->id,
+            'business_id' => $business->id,
         ]);
     }
 }

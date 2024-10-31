@@ -136,6 +136,19 @@ return [
         'gender' => env('ADMIN_GENDER', 'Male'),
     ],
 
+    // Vendor details
+    'vendor' => [
+        'email' => env('VENDOR_EMAIL'),
+        'password' => env('VENDOR_PASSWORD'),
+        'username' => env('VENDOR_USERNAME', 'My Duka'),
+        'first_name' => env('VENDOR_FIRST_NAME'),
+        'last_name' => env('VENDOR_LAST_NAME'),
+        'phone_number' => env('VENDOR_PHONE_NUMBER'),
+        'address' => env('VENDOR_ADDRESS'),
+        'dob' => env('VENDOR_DOB'),
+        'gender' => env('VENDOR_GENDER', 'Male'),
+    ],
+
     // google site verification code - from search.google.com/console
     'google_site_verification' => env('GOOGLE_SITE_VERIFICATION'),
 

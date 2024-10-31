@@ -17,7 +17,11 @@ class VendorFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'first_name' => $f=$this->faker->firstName,
+            'last_name' => $l =$this->faker->lastName,
+            'username' => "$f $l",
+            'status' => 'active',
+            'is_suspended' => $this->faker->boolean(98)
         ];
     }
 }

@@ -7,9 +7,13 @@ use App\Actions\PaymentProcessor;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
+use App\Models\Vendor;
+use App\Services\VendorService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -44,6 +48,8 @@ class PointOfSale extends Component
     public string $customerName = '';
 
     private $orderData = array();
+
+    public $vendor;
 
     public function addToCart(int $productId): void
     {
@@ -128,7 +134,9 @@ class PointOfSale extends Component
             'mpesa_amount' => $this->mpesaAmount,
             'card_amount' => $this->cardAmount,
             'cash_amount' => $this->cashAmount,
-            'customer_id' => null
+            'customer_id' => null,
+            'vendor_id' => $this->vendor->id,
+            'employee_id' => auth()->id(),
         ]);
 
         Cart::destroyCart();
@@ -140,6 +148,10 @@ class PointOfSale extends Component
     public function mount()
     {
         $this->updateCart();
+
+        $vendorService = new VendorService();
+
+        $this->vendor = $vendorService->getVendor();
     }
 
     public function render()

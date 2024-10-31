@@ -4,15 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App/Models/Vendor - A seller profile on the app
+ * @property string $reference
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $username
+ */
 class Vendor extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
+
+    protected $with = ['user', 'businesses'];
 
     protected static function booted()
     {
@@ -32,5 +43,61 @@ class Vendor extends Model
     public function user(): MorphOne
     {
         return $this->morphOne(User::class, 'userable');
+    }
+
+    /**
+     * Define the accessor for name
+     */
+    public function getNameAttribute(): string
+    {
+        return "$this->first_name $this->last_name";
+    }
+
+    /**
+     * Define the accessor for full name
+     */
+    public function getFullNameAttribute(): string
+    {
+        return "$this->first_name $this->last_name";
+    }
+
+    /**
+     * Businesses / shops/ stores owned by this vendor/user
+     */
+    public function businesses(): HasMany
+    {
+        return $this->hasMany(Business::class);
+    }
+
+    /**
+     * Inventories belonging to this vendor/user
+     */
+    public function inventories(): HasMany
+    {
+        return $this->hasMany(Inventory::class);
+    }
+
+    /**
+     * Orders for this vendor
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Products for this vendor
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Subscription
+     */
+    public function subscription(): HasOne
+    {
+        return $this->hasOne(Subscription::class);
     }
 }

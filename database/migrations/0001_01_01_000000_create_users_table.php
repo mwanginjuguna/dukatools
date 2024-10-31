@@ -19,6 +19,7 @@ return new class extends Migration
 
             // profile
             $table->string('phone_number')->unique()->nullable();
+            $table->string('country')->unique()->nullable();
 
             $table->timestamp('email_verified_at')->nullable();
             $table->string('role')->default('U');
@@ -68,7 +69,19 @@ return new class extends Migration
         Schema::create('vendors', function (Blueprint $table) {
             $table->id();
             $table->string('reference')->unique();
-            $table->string('name')->nullable();
+            $table->string('username')->nullable();
+            $table->string('phone_number_secondary')->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('second_name')->nullable();
+            $table->boolean('is_adult')->nullable()->comment('Ensure vendor is not under 18 years old.');
+            $table->string('website')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('x')->nullable();
+            $table->string('whatsapp')->nullable();
+            $table->json('others')->nullable();
+
             $table->string('status')->nullable();
             $table->boolean('is_suspended')->default(false);
             $table->timestamps();

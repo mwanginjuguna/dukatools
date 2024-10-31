@@ -35,6 +35,10 @@ class Business extends Model
         });
     }
 
+    public function branches(): HasMany
+    {
+        return $this->hasMany(Branch::class);
+    }
 
     public function user(): BelongsTo
     {
