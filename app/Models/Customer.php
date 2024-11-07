@@ -34,6 +34,11 @@ class Customer extends Model
         return $this->belongsTo(Location::class);
     }
 
+    public function vendor():BelongsTo
+    {
+        return $this->belongsTo(Vendor::class);
+    }
+
     /**
      * Define the accessor for full name
      */

@@ -2,7 +2,7 @@
 'product',
 ])
 <!-- Card -->
-<div class="group shadow-sm rounded-xl dark:shadow-slate-700 border border-slate-50 hover:border-emerald-200 dark:border-slate-900 dark:hover:border-emerald-800 transition-all ease-in-out duration-300">
+<div class="group shadow-sm rounded-xl dark:shadow-slate-700 border border-slate-50 hover:border-emerald-200 dark:border-slate-900 dark:hover:border-emerald-800 transition-all ease-in-out duration-300 group">
     <div class="relative pt-[50%] sm:pt-[70%] overflow-hidden rounded-t-xl">
         <img
             class="size-full absolute top-0 start-0 object-cover rounded-t-xl group-hover:rounded-t-xl group-hover:scale-105 transition-transform duration-500 ease-in-out"
@@ -25,11 +25,13 @@
                 @endif
             </p>
             @if($product->stock_quantity !== 0)
-                <button
-                    wire:click="addToCart({{$product->id}})"
-                    class="p-1.5 rounded-md bg-emerald-500 dark:bg-emerald-500 text-white text-sm font-medium" wire:$refresh>
-                    Add to Cart
-                </button>
+                <div class="min-h-10 w-full">
+                    <button
+                        wire:click="addToCart({{$product->id}})"
+                        class="p-1.5 sm:hidden sm:group-hover:block w-full h-auto rounded-md bg-amber-500 dark:bg-amber-500 text-white text-sm font-medium transition-all ease-in-out duration-700" wire:$refresh>
+                        Add to Cart
+                    </button>
+                </div>
             @endif
         </div>
     </div>

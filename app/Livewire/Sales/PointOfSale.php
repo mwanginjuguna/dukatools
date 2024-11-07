@@ -50,6 +50,7 @@ class PointOfSale extends Component
     private $orderData = array();
 
     public $vendor;
+    public $customerSource = 'shop';
 
     public function addToCart(int $productId): void
     {
@@ -121,7 +122,7 @@ class PointOfSale extends Component
 
     }
 
-    public function saveOrder(): void
+    private function saveOrder(): void
     {
         OrderSaver::create([
             'is_paid' => true,
@@ -136,13 +137,17 @@ class PointOfSale extends Component
             'cash_amount' => $this->cashAmount,
             'customer_id' => null,
             'vendor_id' => $this->vendor->id,
-            'employee_id' => auth()->id(),
+            'branch_id' => null,
+            'employee_id' => null,
+            'customer_source' => $this->customerSource
         ]);
 
         Cart::destroyCart();
         $this->success = true;
         $this->cart = Cart::getCart();
         $this->cartTotal = Cart::getCartTotal();
+        session()->flash('success', 'Order Saved successfully.');
+        $this->redirectRoute('vendor.pos');
     }
 
     public function mount()
@@ -151,20 +156,19 @@ class PointOfSale extends Component
 
         $vendorService = new VendorService();
 
-        $this->vendor = $vendorService->getVendor();
+        $this->vendor = $vendorService->getVendor() ?? session()->get('vendor');
     }
 
     public function render()
     {
         $query = Product::query();
-        $query->where('is_active', true);
+        $query->where('is_active', true)->where('vendor_id', $this->vendor->id);
 
         if ($this->searchTerm !== '') {
             $query->where('name', 'like', '%' . $this->searchTerm . '%');
         }
 
         return view('livewire.sales.point-of-sale', [
-            'order' => Order::query()->first(),
             'products' => $query->paginate(12)
         ]);
     }

@@ -20,8 +20,6 @@ class OrderSaver
 
         $order = Order::create([
             'vendor_id' => $data['vendor_id'],
-            'employee_id' => $data['employee_id'],
-            'branch_id' => $data['branch_id'],
             'is_paid' => $data['is_paid'] ?? true,
             'payment_method' => $data['payment_method'] ?? 'N/A',
             'subtotal' => $cartTotal,
@@ -35,9 +33,19 @@ class OrderSaver
 //            'customer_email' => $data['customer_email'] ?? '',
 //            'customer_phone' => $data['customer_phone'] ?? '',
 
-        $customer = $data['customer_id'] === null ? Customer::create(['source' => $data['customer_source'],]) : Customer::find($data['customer_id']);
+        // save customer details
+        $customer = $data['customer_id'] === null ? Customer::create(['source' => $data['customer_source'],'vendor_id' => $data['vendor_id']]) : Customer::find($data['customer_id']);
 
         $order->customer_id = $customer->id;
+
+        if (isset($data['branch_id'])){
+            $order->branch_id = $data['branch_id'];
+        }
+
+        if (isset($data['employee_id'])){
+            $order->employee_id = $data['employee_id'];
+        }
+
         if (Str::length($data['customer_phone']) > 1){
             $order->customer_phone = $data['customer_phone'];
             $customer->phone_number = $data['customer_phone'];

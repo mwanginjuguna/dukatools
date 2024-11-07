@@ -28,7 +28,11 @@ class Index extends Component
 
     public function render()
     {
-        $supplierQuery = Supplier::query()->latest();
+        $vendor = session()->get('vendor');
+
+        $supplierQuery = Supplier::query()
+            ->where('vendor_id', $vendor->id)
+            ->latest();
         $this->supplierCount = $supplierQuery->count();
 
         return view('livewire.inventory.suppliers.index', [

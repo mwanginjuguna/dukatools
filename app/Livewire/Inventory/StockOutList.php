@@ -9,7 +9,10 @@ class StockOutList extends Component
 {
     public function render()
     {
+        $vendor = session()->get('vendor');
+
         $products = Product::query()
+            ->where('vendor_id', $vendor->id)
             ->with(['orders'])
             ->where('stock_quantity', 0)
             ->paginate(10);

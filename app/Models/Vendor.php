@@ -70,6 +70,14 @@ class Vendor extends Model
     }
 
     /**
+     * Customers of this vendor/user
+     */
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class);
+    }
+
+    /**
      * Inventories belonging to this vendor/user
      */
     public function inventories(): HasMany

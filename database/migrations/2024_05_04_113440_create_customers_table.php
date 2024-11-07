@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('x')->nullable();
             $table->string('whatsapp')->nullable();
             $table->json('others')->nullable();
+            $table->foreignId('vendor_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('location_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();

@@ -29,23 +29,15 @@ class ProductList extends Component
     {
         $val = $this->availableFilters[$this->productFilter];
 
-        switch ($val) {
-            case 'brand':
-                $this->products = (new ProductFilters)->productsByBrand($this->brandFilter)->get();
-                break;
-            case 'category':
-                $this->products = (new ProductFilters)->productsByCategory($this->categoryFilter)->get();
-                break;
-            case 'purchased':
-                $this->products = (new ProductFilters)->purchasedProducts()->get();
-                break;
-            case 'stock_quantity':
-                $this->products = (new ProductFilters)->outOfStock()->get();
-                break;
-            default:
-                $this->products = Product::query()->latest()->simplePaginate(48);
-                break;
-        }
+        $vendor = session()->get('vendor');
+
+        $this->products = match ($val) {
+            'brand' => (new ProductFilters)->where('vendor_id', $vendor->id)->productsByBrand($this->brandFilter)->get(),
+            'category' => (new ProductFilters)->where('vendor_id', $vendor->id)->productsByCategory($this->categoryFilter)->get(),
+            'purchased' => (new ProductFilters)->where('vendor_id', $vendor->id)->purchasedProducts()->get(),
+            'stock_quantity' => (new ProductFilters)->where('vendor_id', $vendor->id)->outOfStock()->get(),
+            default => Product::query()->where('vendor_id', $vendor->id)->latest()->simplePaginate(48),
+        };
     }
 
     public function render()

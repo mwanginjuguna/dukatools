@@ -30,7 +30,9 @@ class Index extends Component
 
     public function render()
     {
-        $customerQuery = Customer::query()->latest();
+        $vendor = session()->get('vendor');
+
+        $customerQuery = Customer::query()->where('vendor_id', $vendor->id)->latest();
 
         $this->customerCount = $customerQuery->count();
 

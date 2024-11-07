@@ -48,7 +48,10 @@ class ListTable extends Component
 
     public function render()
     {
-        $productQuery = Product::query()->latest();
+        $vendor = session()->get('vendor');
+
+        $productQuery = Product::query()->where('vendor_id', $vendor->id)->latest();
+
         if ($this->selectedFilter) {
             switch ($this->selectedFilter) {
                 case 'stock_quantity':

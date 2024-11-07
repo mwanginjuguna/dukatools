@@ -32,9 +32,9 @@
 
             <div class="p-2 mt-6 mt-6 sm:mt-8 grid grid-cols-1 lg:grid-cols-4 lg:gap-12 xl:gap-16">
                 <!--product list-->
-                <div class="lg:col-span-2 order-last lg:order-1">
-                    <h3 class="mb-3 text-xl font-semibold text-gray-900 dark:text-white">Available Products.</h3>
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                <div class="lg:col-span-2 order-last lg:order-1 mt-10 lg:mt-0">
+                    <h3 class="mb-3 py-3 text-xl font-semibold text-gray-900 dark:text-white">Available Products.</h3>
+                    <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
                         @forelse($products as $product)
                             <x-cards.vertical-image-text :product="$product"/>
                         @empty
@@ -53,7 +53,7 @@
                             @empty
                                 <x-parts.data-empty-state>
                                     <x-slot:icon>
-                                        <svg class="size-10 text-gray-800 dark:text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g> <path d="M21 5L19 12H7.37671M20 16H8L6 3H3M11 3L13.5 5.5M13.5 5.5L16 8M13.5 5.5L16 3M13.5 5.5L11 8M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                        <svg class="size-10 text-gray-800 dark:text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g> <path d="M21 5L19 12H7.37671M20 16H8L6 3H3M11 3L13.5 5.5M13.5 5.5L16 8M13.5 5.5L16 3M13.5 5.5L11 8M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                                     </x-slot:icon>
                                     <p class="text-center">The cart is empty.</p>
                                 </x-parts.data-empty-state>
@@ -61,7 +61,7 @@
                         </div>
                     </div>
 
-                    <div class="lg:sticky md:top-28 max-w-3xl mt-6 place-self-end">
+                    <div class="lg:sticky md:top-28 max-w-3xl w-full mt-6 place-self-end p-3 bg-slate-50 dark:bg-slate-950 shadow-sm dark:shadow-emerald-900">
 
                         <!-- promo code -->
                         <div id="apply-discount" hidden>
@@ -80,7 +80,7 @@
                         </div>
 
                         <!-- Total summary -->
-                        <div class="mt-4 py-2">
+                        <div class="py-6 px-3 w-full">
                             <div class="divide-y divide-gray-200 dark:divide-gray-800 text-sm text-gray-500 dark:text-gray-400">
                                 <dl class="flex items-center justify-between gap-4 py-3">
                                     <dt class="">Subtotal</dt>
@@ -89,24 +89,30 @@
                                     </dd>
                                 </dl>
 
+                                @if($discountAmount > 0)
                                 <dl hidden class="flex items-center justify-between gap-4 py-3">
                                     <dt class="">Savings</dt>
                                     <dd class="text-green-500 dark:text-green-600">
                                         {{ config('app.currency_symbol'). ' '. number_format($discountAmount,2) }}
                                     </dd>
                                 </dl>
+                                @endif
 
+                                @if($cartShippingFee > 0)
                                 <dl class="hidden flex items-center justify-between gap-4 py-3">
                                     <dt class="">Delivery fee</dt>
                                     <dd class="">
                                         {{ config('app.currency_symbol'). ' '. number_format($cartShippingFee, 2) ?? '0.00' }}
                                     </dd>
                                 </dl>
+                                @endif
 
+                                @if($cartTax)
                                 <dl class="flex items-center justify-between gap-4 py-3">
                                     <dt class="">Tax</dt>
                                     <dd class="">{{ number_format($cartTax, 2) ?? '0.00' }}</dd>
                                 </dl>
+                                @endif
 
                                 <dl class="flex items-center justify-between gap-4 mt-3 py-3">
                                     <dt class="text-base font-bold text-gray-900 dark:text-white">Total</dt>
@@ -120,7 +126,7 @@
                         @if($cartTotal > 0)
                         <!--Payment methods-->
                         <div class="space-y-4 mb-3">
-                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Payment Methods</h3>
+                            <h3 class="text-gray-500 dark:text-gray-500">Payment Methods</h3>
 
                             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                                 <!--cash-->
@@ -207,7 +213,7 @@
                 </div>
             </div>
         </x-modal>
-        <x-modal name="process-cash">
+        <x-modal name="process-cash" maxWidth="xl">
             <div class="px-4 py-6 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200">
                 <div class="flex justify-between items-center">
                     <h3 class="mb-2 text-lg py-2 font-bold">
@@ -226,18 +232,18 @@
 
             <dl class="flex items-center justify-between gap-4 mt-3 py-3">
                     <dt class="text-base font-bold text-gray-900 dark:text-white">Total</dt>
-                    <dd class="text-base font-bold text-gray-900 dark:text-white">
+                    <dd class="text-xl font-semibold text-amber-500 dark:text-amber-500">
                         {{ config('app.currency_symbol'). ' '. number_format($payable = $cartTotal + $cartTax + $cartShippingFee - $discountAmount, 2) }}
                     </dd>
                 </dl>
 
-                <form class="max-w-sm mt-3" wire:submit="processCashPayment">
+                <form class="mt-3" wire:submit="processCashPayment">
                     <div class="mb-5">
                         <label for="cash-amount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cash Amount.</label>
 
                         <input type="text" id="cash-amount"
                                name="cash-amount"
-                               wire:model.live.throttle.300ms="cashAmount"
+                               wire:model.live.debounce.500ms="cashAmount"
                                placeholder="1000"
                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                required/>
@@ -261,7 +267,7 @@
                 @endif
             </div>
         </x-modal>
-        <x-modal name="process-mpesa">
+        <x-modal name="process-mpesa" maxWidth="xl">
             <div class="px-4 py-6 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200">
                 <div class="flex justify-between items-center">
                     <h3 class="mb-2 text-lg py-2 font-bold">
@@ -280,12 +286,12 @@
 
             <dl class="flex items-center justify-between gap-4 mt-3 py-3">
                     <dt class="text-base font-bold text-gray-900 dark:text-white">Total</dt>
-                    <dd class="text-base font-bold text-gray-900 dark:text-white">
+                    <dd class="text-xl font-bold text-amber-500 dark:text-amber-500">
                         {{ config('app.currency_symbol'). ' '. number_format($payable = $cartTotal + $cartTax + $cartShippingFee - $discountAmount, 2) }}
                     </dd>
                 </dl>
 
-                <form class="max-w-sm mt-3" wire:submit="processMpesaPayment">
+                <form class="mt-3" wire:submit="processMpesaPayment">
                     <div class="mb-3">
                         <label for="mpesa-amount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount Paid .</label>
 
@@ -299,7 +305,7 @@
                     </div>
 
                     <!--mpesa number-->
-                    <div class="mb-3">
+                    <div class="mb-5">
                         <label for="mpesaNumber" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mpesa Number.</label>
 
                         <input type="text" id="mpesaNumber"
@@ -308,11 +314,13 @@
                                placeholder="0712 345 678"
                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                />
+                        <p id="helper-text-mpesa-number" class="mt-1 py-1 text-sm text-gray-500 dark:text-gray-400">
+                            {{__('Enter Mpesa number used to pay by customer (optional - recommended).')}}</p>
                         @error('mpesaNumber')<p class="text-red-500 text-xs md:text-sm">{{ $message }}</p>@enderror
                     </div>
 
                     <!--transaction code-->
-                    <div class="mb-3">
+                    <div class="mb-5">
                         <label for="transaction-code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mpesa Transaction Code.</label>
 
                         <input type="text" id="transaction-code"
@@ -321,11 +329,12 @@
                                placeholder="RLG6VYMSO7"
                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                required/>
+                        <p id="helper-text-transaction-code" class="mt-1 py-1 text-sm text-gray-500 dark:text-gray-400">Enter the mpesa transaction code (optional).</p>
                         @error('transactionCode')<p class="text-red-500 text-xs md:text-sm">{{ $message }}</p>@enderror
                     </div>
 
                     <button type="submit"
-                            class="text-white bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800">
+                            class="w-full sm:w-auto px-5 py-2.5 mt-2 text-white bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm text-center dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800">
                         Complete.
                     </button>
                 </form>
@@ -371,17 +380,17 @@
 
             <dl class="flex items-center justify-between gap-4 mt-3 py-3">
                     <dt class="text-base font-bold text-gray-900 dark:text-white">Total</dt>
-                    <dd class="text-base font-bold text-gray-900 dark:text-white">
+                    <dd class="text-xl font-bold text-amber-500 dark:text-amber-500">
                         {{ config('app.currency_symbol'). ' '. number_format($payable = $cartTotal + $cartTax + $cartShippingFee - $discountAmount, 2) }}
                     </dd>
                 </dl>
 
-                <form class="max-w-sm mt-3" wire:submit="processCardPayment">
+                <form class="mt-3" wire:submit="processCardPayment">
                     <!--card amount-->
                     <div class="mb-5">
-                        <label for="cash-amount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount Paid.</label>
+                        <label for="card-amount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount Paid.</label>
 
-                        <input type="text" id="cash-amount"
+                        <input type="text" id="card-amount"
                                name="card-amount"
                                wire:model="cardAmount"
                                placeholder="1000"
@@ -397,7 +406,7 @@
                         <input type="text" id="transaction-code"
                                name="transaction-code"
                                wire:model="transactionCode"
-                               placeholder="RLG6VYMSO7"
+                               placeholder="Enter bank transaction code"
                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                required/>
                         @error('transactionCode')<p class="text-red-500 text-xs md:text-sm">{{ $message }}</p>@enderror
@@ -410,4 +419,14 @@
             </div>
         </x-modal>
     </div>
+
+    <!-- Scripts -->
+    @script
+    <script>
+        Livewire.on('order-saved', () => {
+            Swal.fire({title:'Order Saved!', text:'The order has been saved successfully.', icon:'success'});
+            emit('close');
+        })
+    </script>
+    @endscript
 </div>

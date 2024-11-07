@@ -17,7 +17,9 @@ class StockList extends Component
 
     public function render()
     {
+        $vendor = session()->get('vendor');
         $products = Product::query()
+            ->where('vendor_id', $vendor->id)
             ->with(['orders'])
             ->orderBy('stock_quantity', 'desc')
             ->paginate(10);

@@ -39,7 +39,9 @@ class Index extends Component
 
     public function render()
     {
+        $vendor = session()->get('vendor');
         $manufacturerQuery = Manufacturer::query()
+            ->where('vendor_id', $vendor->id)
             ->whereHas('products')
             ->latest();
 

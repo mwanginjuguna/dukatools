@@ -20,7 +20,6 @@ Route::view('/services', 'pages.about')->name('services');
 Route::view('/privacy-policy', 'pages.about')->name('privacy-policy');
 Route::view('/terms-and-conditions', 'pages.about')->name('terms-and-conditions');
 Route::view('/gallery/videos', 'pages.videos')->name('videos');
-Route::get('/products', [ProductController::class, 'index'])->name('products');
 Route::get('/shop', [ProductController::class, 'index'])->name('shop');
 Route::get('/blog', [PostController::class, 'index'])->name('blog');
 Route::view('/contact', 'pages.contact')->name('contact-me');
@@ -28,9 +27,9 @@ Route::view('/contact', 'pages.contact')->name('contact-me');
 Route::get('/cart', [ActionsController::class, 'cart'])->name('cart');
 
 // auth routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'vendor'])->group(function () {
     // vendor dashboard
-    Route::get('/dashboard', [ActionsController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
     // vendor home
     Route::get('/vendor', [VendorController::class, 'home'])->name('vendor.home');
@@ -38,6 +37,7 @@ Route::middleware('auth')->group(function () {
 
     // vendor store/products/shop
     Route::get('/vendor/products', [ProductController::class, 'index'])->name('vendor.index');
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::get('/vendor/products/show/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('admin.products.edit');
     Route::get('/vendor/products/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('vendor.products.show');
@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // admin Routes
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth', 'admin', 'vendor'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/orders', [AdminController::class, 'orders'])->name('admin.orders');
 
@@ -88,7 +88,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/products/add', [ProductController::class, 'create'])->name('products.add');
     Route::post('/admin/products/add', [ProductController::class, 'store'])->name('products.store');
 
-    Route::get('/my-products', [ProductController::class, 'index'])->name('products.index');
+    //Route::get('/my-products', [ProductController::class, 'index'])->name('products.index');
 
     // admin orders
 

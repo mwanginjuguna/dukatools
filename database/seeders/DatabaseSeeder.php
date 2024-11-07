@@ -137,6 +137,7 @@ class DatabaseSeeder extends Seeder
 
             $branch = Branch::factory()->create([
                 'business_id' => $business->id,
+                'location_id' => $business->location_id,
                 'name' => 'Eldoret CBD'
             ]);
 
@@ -157,7 +158,9 @@ class DatabaseSeeder extends Seeder
 
             for ($i__ = 1; $i__ <= 27; $i__++)
             {
-                $customer = Customer::factory()->create();
+                $customer = Customer::factory()->create([
+                    'vendor_id' => $vendor->id
+                ]);
                 // order for a random user
                 $randomDate = Arr::random([
                     now()->subHour(),
@@ -226,18 +229,18 @@ class DatabaseSeeder extends Seeder
             \Laravel\Prompts\info("Orders processed.");
 
             // random contact messages from registered users
-            ContactMessage::factory(7)->create();
+            ContactMessage::factory(13)->create();
 
             \Laravel\Prompts\info("Messages seeded.");
 
-            Product::factory(6)
-                ->has(ProductFeature::factory(2))
-                ->has(ProductVariation::factory(2))
-                ->create([
-                    'user_id' => $vendorUser->id,
-                    'vendor_id' => $vendor->id,
-                    'branch_id' => $branch->id,
-                ]);
+//            Product::factory(6)
+//                ->has(ProductFeature::factory(2))
+//                ->has(ProductVariation::factory(2))
+//                ->create([
+//                    'user_id' => $vendorUser->id,
+//                    'vendor_id' => $vendor->id,
+//                    'branch_id' => $branch->id,
+//                ]);
         }
 
         foreach ($this->currencies as $currency) {

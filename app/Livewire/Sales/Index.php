@@ -17,20 +17,24 @@ class Index extends Component
     {
         $user = Auth::user();
         $salesQuery = (new SaleAnalytics());
+        $vendor = session()->get('vendor');
 
         $query = Order::query()->where('user_id', $user->id);
 
         $pendingOrders = Order::query()
+            ->where('vendor_id', $vendor->id)
             ->where('status', 'pending')
             ->latest()
             ->simplePaginate(10);
 
         $completedOrders = Order::query()
+            ->where('vendor_id', $vendor->id)
             ->whereIn('status', ['delivered', 'shipping'])
             ->latest()
             ->paginate(10);
 
         $orders = Order::query()
+            ->where('vendor_id', $vendor->id)
             ->latest()
             ->paginate(10);
 
