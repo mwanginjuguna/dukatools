@@ -25,7 +25,7 @@ class StockList extends Component
             ->paginate(10);
 
         return view('livewire.inventory.stock-list', [
-            'products' => $products
+            'products' => $products,
         ]);
     }
 }

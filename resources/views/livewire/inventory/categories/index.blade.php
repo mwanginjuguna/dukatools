@@ -101,7 +101,7 @@
                                                     {{ $category->products_count }}
                                                 </td>
                                                 <td class="px-2 py-2 md:px-6 md:py-4 whitespace-nowrap text-end font-medium">
-                                                    <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-emerald-600 hover:text-emerald-800 focus:outline-none focus:text-emerald-800 disabled:opacity-50 disabled:pointer-events-none dark:text-emerald-500 dark:hover:text-emerald-400 dark:focus:text-emerald-400">View</button>
+                                                    <button wire:click="showCategory({{$category->id}})" type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-emerald-600 hover:text-emerald-800 focus:outline-none focus:text-emerald-800 disabled:opacity-50 disabled:pointer-events-none dark:text-emerald-500 dark:hover:text-emerald-400 dark:focus:text-emerald-400">View</button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -188,7 +188,7 @@
                                                     {{ $category->products_count }}
                                                 </td>
                                                 <td class="px-2 py-2 md:px-6 md:py-4 whitespace-nowrap text-end font-medium">
-                                                    <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-emerald-600 hover:text-emerald-800 focus:outline-none focus:text-emerald-800 disabled:opacity-50 disabled:pointer-events-none dark:text-emerald-500 dark:hover:text-emerald-400 dark:focus:text-emerald-400">View</button>
+                                                    <button wire:click="showSubcategory({{$category->id}})" type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-emerald-600 hover:text-emerald-800 focus:outline-none focus:text-emerald-800 disabled:opacity-50 disabled:pointer-events-none dark:text-emerald-500 dark:hover:text-emerald-400 dark:focus:text-emerald-400">View</button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -208,4 +208,75 @@
 
         </div>
     </section>
+
+    <x-modal name="show-category-modal">
+        <div class="p-4 bg-slate-100 dark:bg-slate-900">
+        @if(isset($selectedCategory))
+                <div class="flex justify-between items-center">
+                    <h3 class="mb-2 text-lg py-2 font-bold">
+                        {{$selectedCategory->name}} category products
+                    </h3>
+
+                    <button
+                        @click="$dispatch('close')"
+                        type="button"
+                    >
+                        <svg class="w-6 h-6 text-slate-600 dark:text-slate-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                        </svg>
+                    </button>
+                </div>
+
+            @if($selectedCategory->products->count() > 0)
+                    <div class="grid gap-4">
+                        @foreach($selectedCategory->products as $product)
+                            <div class="flex items-center gap-3 pb-3 font-light md:font-medium border-b border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 ">
+                                <img src="/storage/{{ $product->image }}" alt="{{ __($product->name . ' Image') }}" class="w-8 h-8 rounded-sm hidden md:block">
+
+                                <a href="{{ route('admin.products.edit', $product->slug) }}" class="" wire:navigate>
+                                    {{ $product->name }} <span class="inline-flex text-xs text-gray-600 dark:text-gray-400">({{ $product->stock_quantity }} remaining)</span>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            @endif
+        </div>
+    </x-modal>
+
+    <x-modal name="show-subcategory-modal">
+        <div class="p-4 bg-slate-100 dark:bg-slate-900">
+        @if(isset($selectedSubcategory))
+                <div class="flex justify-between items-center">
+                    <h3 class="mb-2 text-lg py-2 font-bold">
+                        {{$selectedSubcategory->name}} subcategory products
+                    </h3>
+
+                    <button
+                        @click="$dispatch('close')"
+                        type="button"
+                    >
+                        <svg class="w-6 h-6 text-slate-600 dark:text-slate-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                        </svg>
+                    </button>
+                </div>
+
+            @if($selectedSubcategory->products->count() > 0)
+                    <div class="grid gap-4">
+                        @foreach($selectedSubcategory->products as $product)
+                            <div class="flex items-center gap-3 pb-3 font-light md:font-medium border-b border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 ">
+                                <img src="/storage/{{ $product->image }}" alt="{{ __($product->name . ' Image') }}" class="w-8 h-8 rounded-sm hidden md:block">
+
+                                <a href="{{ route('admin.products.edit', $product->slug) }}" class="" wire:navigate>
+                                    {{ $product->name }} <span class="inline-flex text-xs text-gray-600 dark:text-gray-400">({{ $product->stock_quantity }} remaining)</span>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            @endif
+        </div>
+    </x-modal>
+
 </div>

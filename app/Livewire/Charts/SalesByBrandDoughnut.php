@@ -11,6 +11,7 @@ use Livewire\Component;
 class SalesByBrandDoughnut extends Component
 {
     public int $year = 2023;
+    public object $vendor;
     public mixed $ordersPerYear;
     public mixed $orders;
     public mixed $products;
@@ -24,6 +25,7 @@ class SalesByBrandDoughnut extends Component
 
     // sales
     public array $categories = [];
+    public array $brands = [];
     public mixed $categoryProducts;
     public array $salesPerCategory = [];
     public array $saleCountPerCategory = [];
@@ -39,6 +41,7 @@ class SalesByBrandDoughnut extends Component
     public function getYearOrders()
     {
         $this->ordersPerYear = Order::query()
+            ->where('vendor_id', $this->vendor->id)
             ->getYearOrders($this->year)
             ->oldest()
             ->get(['order_number', 'total', 'created_at'])
@@ -78,20 +81,21 @@ class SalesByBrandDoughnut extends Component
 
     public function mount()
     {
+        $this->vendor = session()->get('vendor');
         $this->year = now()->year;
 
-        $this->revenue = Order::query()->sum('total');
+        $this->revenue = Order::query()->where('vendor_id', $this->vendor->id)->sum('total');
 
         $this->getYearOrders();
 
-        $this->categoryProducts = (new ProductFilters())
+        $this->categoryProducts = (new ProductFilters($this->vendor->id))
             ->purchasedProducts()
             ->get();
 
         $this->salesPerCategory = $this->categoryProducts
             ->groupBy(fn($product) => $product->category->name)->all();
 
-        $this->categories = collect($this->salesPerCategory)
+        $this->brands = collect($this->salesPerCategory)
             ->keys()
             ->values()
             ->toArray();
@@ -103,7 +107,7 @@ class SalesByBrandDoughnut extends Component
         }
 
         $this->categoryChartData = [
-            'labels' => $this->categories,
+            'labels' => $this->brands,
             'revenue_dataset' => $this->revenuePerCategory,
             'sale_count_dataset' => $this->saleCountPerCategory,
         ];

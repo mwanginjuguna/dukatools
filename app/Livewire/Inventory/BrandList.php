@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class BrandList extends Component
 {
-    public int $perPage = 5;
+    public int $perPage = 10;
 
     public string $brandName = '';
 
@@ -25,7 +25,7 @@ class BrandList extends Component
 
     public function render()
     {
-        $brands = Brand::query()->orderBy('products_count')->paginate($this->perPage);
+        $brands = Brand::query()->withCount('products')->orderBy('products_count', 'desc')->paginate($this->perPage);
         return view('livewire.inventory.brand-list', [
             'brands' => $brands
         ]);

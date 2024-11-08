@@ -6,8 +6,12 @@
 
         <!-- sales chart - quarterly / annually / monthly -->
         <div class="p-2">
-            <div class="relative w-64 h-64">
-                <canvas id="brandSalesChart" x-ref="canvas"></canvas>
+            <div class="relative w-64 h-64 grid place-content-center">
+                @if(count($brands) > 0)
+                    <canvas id="brandSalesChart" x-ref="canvas"></canvas>
+                @else
+                    <p class="text-center text-gray-600 dark:text-gray-400">No sales by brand data available.</p>
+                @endif
             </div>
         </div>
     </div>

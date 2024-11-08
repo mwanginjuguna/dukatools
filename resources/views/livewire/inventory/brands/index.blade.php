@@ -4,27 +4,13 @@
 
     <!-- accordion for filtering brands -->
     <section
-        x-data="{tabItem1:true,
-        toggleTab1(){this.tabItem1=true;}
-        }"
-        class="relative mt-6 py-3"
+        class="relative mt-3"
     >
-        <nav class="relative z-0 flex border rounded-t-md overflow-hidden text-xs lg:text-sm font-medium dark:border-slate-700">
-            <button
-                @click="toggleTab1()"
-                :class="tabItem1 ? `border-b-emerald-500 dark:border-b-emerald-500 text-emerald-500 dark:text-emerald-600` : ` dark:border-l-slate-700 dark:border-b-slate-700 text-slate-500 hover:text-slate-700 dark:text-slate-400 `"
-                class="relative min-w-0 flex-1 bg-slate-100 first:border-s-0 border-s border-b-2 py-4 px-4 text-center overflow-hidden hover:bg-slate-50 focus:z-10 focus:outline-none focus:text-emerald-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:text-emerald-400" id="tabItem1">
-                Brands <span class="bg-emerald-100 text-emerald-800 text-xs px-1 py-0.5 rounded dark:bg-emerald-800 dark:text-emerald-200 inline-flex">
-                        {{ $brandCount }}
-                    </span>
-            </button>
-        </nav>
 
-        <div class="p-4 border border-t-0 border-slate-200 dark:border-slate-800 shadow-sm rounded-b-md">
-
+        <div class="shadow-sm shadow-slate-200 dark:shadow-slate-800">
             <!-- Tab Item 1: Brands -->
-            <div x-show="tabItem1">
-                <div class="mb-4 py-3 w-full flex flex-col md:flex-row gap-3 md:gap-0 md:justify-between md:items-center border-b border-slate-200 dark:border-slate-900">
+            <div>
+                <div class="mb-4 p-4 w-full flex flex-col md:flex-row gap-3 md:gap-0 md:justify-between md:items-center">
                     <div>
                         <h4 class="mb-1 font-semibold text-lg">Brands</h4>
                         <p class="mb-1 text-xs text-slate-500 dark:text-slate-600">Product Brands e.g Nike, Gucci, Huawei.</p>
@@ -41,9 +27,9 @@
                 </div>
 
                 <div class="flex flex-col">
-                    <div class="-m-1.5 overflow-x-auto">
-                        <div class="p-1.5 min-w-full inline-block align-middle">
-                            <div class="border rounded-lg divide-y divide-slate-200 dark:border-slate-800 dark:divide-slate-800">
+                    <div class="overflow-x-auto">
+                        <div class="min-w-full inline-block align-middle">
+                            <div class="border dark:border-slate-800">
                                 <!--search-->
                                 <div class="py-3 px-4">
                                     <div class="relative max-w-xs">
@@ -91,7 +77,7 @@
                                                     {{ $brand->products_count }}
                                                 </td>
                                                 <td class="px-2 py-2 md:px-6 md:py-4 whitespace-nowrap text-end font-medium">
-                                                    <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-emerald-600 hover:text-emerald-800 focus:outline-none focus:text-emerald-800 disabled:opacity-50 disabled:pointer-events-none dark:text-emerald-500 dark:hover:text-emerald-400 dark:focus:text-emerald-400">View</button>
+                                                    <button wire:click="showBrand({{$brand->id}})" type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-emerald-600 hover:text-emerald-800 focus:outline-none focus:text-emerald-800 disabled:opacity-50 disabled:pointer-events-none dark:text-emerald-500 dark:hover:text-emerald-400 dark:focus:text-emerald-400">View</button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -111,4 +97,39 @@
 
         </div>
     </section>
+
+    <x-modal name="show-brand-modal">
+        <div class="p-4 bg-slate-100 dark:bg-slate-800">
+            @if(isset($selectedBrand))
+                <div class="flex justify-between items-center">
+                    <h3 class="mb-2 text-lg py-2 font-bold">
+                        {{$selectedBrand->name}} brand products
+                    </h3>
+
+                    <button
+                        @click="$dispatch('close')"
+                        type="button"
+                    >
+                        <svg class="w-6 h-6 text-slate-600 dark:text-slate-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                @if($selectedBrand->products->count() > 0)
+                    <div class="grid gap-4">
+                        @foreach($selectedBrand->products as $product)
+                            <div class="flex items-center gap-3 pb-3 font-light md:font-medium border-b border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 ">
+                                <img src="/storage/{{ $product->image }}" alt="{{ __($product->name . ' Image') }}" class="w-8 h-8 rounded-sm hidden md:block">
+
+                                <a href="{{ route('admin.products.edit', $product->slug) }}" class="" wire:navigate>
+                                    {{ $product->name }} <span class="inline-flex text-xs text-gray-600 dark:text-gray-400">({{ $product->stock_quantity }} remaining)</span>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            @endif
+        </div>
+    </x-modal>
 </div>

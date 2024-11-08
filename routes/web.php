@@ -27,36 +27,15 @@ Route::view('/contact', 'pages.contact')->name('contact-me');
 Route::get('/cart', [ActionsController::class, 'cart'])->name('cart');
 
 // auth routes
-Route::middleware(['auth', 'vendor'])->group(function () {
-    // vendor dashboard
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-
+Route::middleware('auth')->group(function () {
     // vendor home
     Route::get('/vendor', [VendorController::class, 'home'])->name('vendor.home');
 
-
     // vendor store/products/shop
-    Route::get('/vendor/products', [ProductController::class, 'index'])->name('vendor.index');
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('products.create');
-    Route::get('/vendor/products/show/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('admin.products.edit');
-    Route::get('/vendor/products/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('vendor.products.show');
     // categories
     Route::get('/vendor/categories', [InventoryController::class, 'categories'])->name('vendor.categories');
     Route::get('/vendor/sub-categories', [InventoryController::class, 'subCategories'])->name('vendor.subCategories');
     Route::get('/vendor/brands', [InventoryController::class, 'brands'])->name('vendor.brands');
-
-    // vendor inventory
-    Route::get('/vendor/inventory', [AdminProductsController::class, 'products'])->name('vendor.inventory');
-    Route::get('/vendor/customers', [InventoryController::class, 'customers'])->name('vendor.customers');
-    Route::get('/vendor/suppliers', [InventoryController::class, 'suppliers'])->name('vendor.suppliers');
-    Route::get('/vendor/manufacturers', [InventoryController::class, 'manufacturers'])->name('vendor.manufacturers');
-
-    // vendor settings
-    // vendor sales
-    Route::get('/vendor/sales', [SalesController::class, 'sales'])->name('vendor.sales');
-    Route::get('/vendor/pos', [SalesController::class, 'pos'])->name('vendor.pos');
-    Route::get('/vendor/today', [ActionsController::class, 'dashboard'])->name('vendor.today');
 
     // checkout & orders
     Route::get('/checkout', [ActionsController::class, 'checkout'])->name('checkout');
@@ -68,8 +47,35 @@ Route::middleware(['auth', 'vendor'])->group(function () {
     Route::post('/orders/pay/mpesa/stk-push', [StkPushController::class, 'stkInit'])->name('mpesa.stk-push');
 });
 
+// vendor routes
+Route::middleware(['auth', 'vendor'])->group(function () {
+    // vendor dashboard
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    // vendor store/products/shop
+    Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::get('/vendor/products/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('vendor.products.show');
+    Route::get('/vendor/products', [ProductController::class, 'index'])->name('vendor.index');
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/vendor/products/show/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('admin.products.edit');
+
+    // pos
+    Route::get('/vendor/pos', [SalesController::class, 'pos'])->name('vendor.pos');
+
+    // vendor inventory
+    Route::get('/vendor/inventory', [AdminProductsController::class, 'products'])->name('vendor.inventory');
+    Route::get('/vendor/customers', [InventoryController::class, 'customers'])->name('vendor.customers');
+    Route::get('/vendor/suppliers', [InventoryController::class, 'suppliers'])->name('vendor.suppliers');
+    Route::get('/vendor/manufacturers', [InventoryController::class, 'manufacturers'])->name('vendor.manufacturers');
+
+    // vendor settings
+    // vendor sales
+    Route::get('/vendor/sales', [SalesController::class, 'sales'])->name('vendor.sales');
+    Route::get('/vendor/today', [ActionsController::class, 'dashboard'])->name('vendor.today');
+});
+
 // admin Routes
-Route::middleware(['auth', 'admin', 'vendor'])->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/orders', [AdminController::class, 'orders'])->name('admin.orders');
 

@@ -14,10 +14,10 @@
                     <span class="text-slate-500 text-sm">Total products:</span>
                     <span class="dark:text-white font-medium text-base lg:text-lg">{{ number_format($productCount, 0) }}</span>
                 </h5>
-                <h5 class="md:ms-2">
+                {{--<h5 class="md:ms-2">
                     <span class="text-slate-500 text-sm">Total sales:</span>
                     <span class="text-amber-500 dark:text-amber-600 font-semibold text-base lg:text-lg">Ksh {{ number_format($productSales, 2) }}</span>
-                </h5>
+                </h5>--}}
             </div>
 
             <!-- actions -->

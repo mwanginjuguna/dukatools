@@ -12,9 +12,12 @@ class ProductFilters
     /**
      * Create a new class instance.
      */
-    public function __construct()
+    public function __construct(int $vendorId = null)
     {
         $this->query = \App\Models\Product::query();
+        if ($vendorId) {
+            $this->query->where('vendor_id', $vendorId);
+        }
     }
 
     /**

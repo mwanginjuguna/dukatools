@@ -3,7 +3,7 @@
 <!-- List Group -->
 <ul class="mt-3 flex flex-col">
     <li class="px-4">
-        <div class="flex items-center justify-between w-full text-sm">
+        <div class="pb-2 flex items-center justify-between w-full text-sm border-b border-slate-200 dark:border-slate-800">
             <p>Product</p>
             <p class="flex flex-row items-center gap-x-1 text-lime-600 dark:text-lime-500">Sales</p>
         </div>

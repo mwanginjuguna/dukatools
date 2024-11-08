@@ -9,9 +9,14 @@ use Illuminate\Database\Eloquent\Collection;
 class SaleAnalytics
 {
     public Builder $order;
-    public function __construct()
+
+    public function __construct(int $vendorId = null)
     {
         $this->order = Order::query();
+
+        if ($vendorId) {
+            $this->order->where('vendor_id', $vendorId);
+        }
     }
 
     /**

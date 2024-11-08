@@ -6,8 +6,12 @@
 
         <!-- sales chart - quarterly / annually / monthly -->
         <div class="p-2 ">
-            <div class="relative w-full h-44 md:h-64">
-                <canvas id="mySalesChart" x-ref="canvas"></canvas>
+            <div class="relative w-full h-44 md:h-64 grid place-content-center">
+                @if(count($categories) > 0)
+                    <canvas id="mySalesChart" x-ref="canvas"></canvas>
+                @else
+                    <p class="text-center text-gray-600 dark:text-gray-400">No sales by category data available.</p>
+                @endif
             </div>
         </div>
     </div>

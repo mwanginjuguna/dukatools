@@ -20,10 +20,6 @@
                         {{ __('Home') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('products')" :active="request()->routeIs('products')" wire:navigate>
-                        {{ __('Products') }}
-                    </x-nav-link>
-
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="inline-flex items-center gap-x-1 px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
@@ -38,10 +34,6 @@
                         <x-slot name="content">
                             <x-dropdown-link :href="route('blog')" wire:navigate>
                                 {{ __('Blog') }}
-                            </x-dropdown-link>
-
-                            <x-dropdown-link :href="route('videos')" wire:navigate>
-                                {{ __('Videos') }}
                             </x-dropdown-link>
 
                             <x-dropdown-link :href="route('about')" wire:navigate>
@@ -93,11 +85,8 @@
             <x-responsive-nav-link :href="route('blog')" :active="request()->routeIs('blog')" wire:navigate>
                 {{ __('Blog') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('products')" :active="request()->routeIs('products')" wire:navigate>
-                {{ __('Products') }}
-            </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('contact-me')" :active="request()->routeIs('contact-me')" wire:navigate>
-                {{ __('Contact Me') }}
+                {{ __('Contact Us') }}
             </x-responsive-nav-link>
             <div class="pl-4">
                 @auth()

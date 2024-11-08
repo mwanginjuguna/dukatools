@@ -5,7 +5,15 @@
         </div>
         <div class="p-3">
             <p class="mt-4 py-2 font-medium md:text-lg">Top Products/Sales</p>
-            <x-parts.top-products :$topProducts />
+            @if($topProducts->count() >0)
+                <x-parts.top-products :$topProducts />
+            @else
+                <p class="py-1 flex flex-row items-center gap-x-1 text-xs text-slate-600 dark:text-slate-500">
+                    <svg class="w-6 h-6 pe-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                    No sales data to show, Yet.</p>
+            @endif
         </div>
     </div>
 
@@ -48,7 +56,6 @@
                 <div class="p-1.5 content-center space-y-5 overflow-x-auto">
                     @forelse($orders as $order)
                             <x-parts.sales.sale-card :order="$order" />
-
                     @empty
                         <div class="py-2">
                             <x-parts.inventory.table-empty-state />

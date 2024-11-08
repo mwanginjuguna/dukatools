@@ -8,12 +8,15 @@ use Livewire\Component;
 
 class Index extends Component
 {
-    public int $perPage = 5;
+    public int $perPage = 15;
     public int $categoriesCount = 0;
     public int $subCategoriesCount = 0;
 
     public string $categoryName = '';
     public string $subCategoryName = '';
+
+    public object $selectedCategory;
+    public object $selectedSubcategory;
 
     public function submitCategory()
     {
@@ -21,7 +24,7 @@ class Index extends Component
             Category::updateOrCreate(['name' => $this->categoryName],['name' => $this->categoryName]);
 
             $this->dispatch('category-created');
-            
+
             $this->categoryName = '';
         }
     }
@@ -37,6 +40,21 @@ class Index extends Component
         }
     }
 
+
+    public function showCategory(Category $category)
+    {
+        $this->selectedCategory = $category;
+
+        $this->dispatch('open-modal', 'show-category-modal');
+    }
+
+    public function showSubcategory(SubCategory $subcategory)
+    {
+        $this->selectedSubcategory = $subcategory;
+
+        $this->dispatch('open-modal', 'show-subcategory-modal');
+    }
+
     public function updatingPerPage()
     {
         $this->resetPage();
@@ -45,8 +63,10 @@ class Index extends Component
     public function render()
     {
         $categories = Category::query()
+            ->withCount('products')
             ->orderBy('products_count', 'desc');
         $subCategories = SubCategory::query()
+            ->withCount('products')
             ->orderBy('products_count', 'desc');
 
         $this->categoriesCount = $categories->count();

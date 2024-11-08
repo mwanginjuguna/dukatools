@@ -3,15 +3,19 @@
 namespace App\Livewire\Inventory\Brands;
 
 use App\Models\Brand;
+use App\Models\Product;
 use Livewire\Component;
 
 class Index extends Component
 {
-    public int $perPage = 5;
+    public int $perPage = 15;
     public string $search = '';
     public int $brandCount = 0;
 
     public string $brandName = '';
+
+    public object $selectedBrand;
+    public object $selectedBrandProducts;
 
     public function submitBrand()
     {
@@ -27,9 +31,20 @@ class Index extends Component
         $this->brandName = '';
     }
 
+    public function showBrand(Brand $brand)
+    {
+        $this->selectedBrand = $brand;
+        $this->selectedBrandProducts = Product::query()
+            ->where('vendor_id', $this->vendor->id)
+            ->where('brand_id', $brand->id)
+            ->get(['name', 'stock_quantity']);
+
+        $this->dispatch('open-modal', 'show-brand-modal');
+    }
+
     public function render()
     {
-        $brands = Brand::query()->orderBy('products_count');
+        $brands = Brand::query()->withCount('products')->orderBy('products_count', 'desc');
         $this->brandCount = $brands->count();
 
         return view('livewire.inventory.brands.index', [

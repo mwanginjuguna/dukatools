@@ -285,11 +285,11 @@
                 </div>
 
             <dl class="flex items-center justify-between gap-4 mt-3 py-3">
-                    <dt class="text-base font-bold text-gray-900 dark:text-white">Total</dt>
-                    <dd class="text-xl font-bold text-amber-500 dark:text-amber-500">
-                        {{ config('app.currency_symbol'). ' '. number_format($payable = $cartTotal + $cartTax + $cartShippingFee - $discountAmount, 2) }}
-                    </dd>
-                </dl>
+                <dt class="text-base font-bold text-gray-900 dark:text-white">Total</dt>
+                <dd class="text-xl font-bold text-amber-500 dark:text-amber-500">
+                    {{ config('app.currency_symbol'). ' '. number_format($payable = $cartTotal + $cartTax + $cartShippingFee - $discountAmount, 2) }}
+                </dd>
+            </dl>
 
                 <form class="mt-3" wire:submit="processMpesaPayment">
                     <div class="mb-3">

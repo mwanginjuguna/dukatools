@@ -1,5 +1,5 @@
 @props([
-    'ordersCount', 'pendingOrders', 'productsCount', 'stocked', 'contactMessages', 'posts', 'usersCount', 'customers'
+    'ordersCount', 'revenue', 'weeklyRevenue', 'pendingOrders', 'productsCount', 'stocked', 'contactMessages', 'posts', 'usersCount', 'customers'
 ])
 
 <!-- Card Section -->
@@ -13,24 +13,16 @@
 
                 <div class="grow">
                     <p class="text-xs uppercase tracking-wide font-medium text-gray-800 dark:text-neutral-200">
-                        Registered Users
+                        Revenue
                     </p>
                     <h3 class="mt-1 text-xl sm:text-2xl font-semibold text-blue-600 dark:text-blue-500">
-                        {{ number_format($usersCount, 0) }}
+                        {{ config('app.currency_symbol') . ' ' . number_format($revenue, 2) }}
                     </h3>
 
                     <div class="mt-1 flex justify-between items-center">
                         <p class="text-xs text-gray-500 dark:text-neutral-500">
-                            customers <span class="font-semibold text-gray-800 dark:text-neutral-200">{{ $customers }}</span>
+                            this week <span class="font-semibold text-gray-800 dark:text-neutral-200">{{ config('app.currency_symbol') . ' ' . number_format($revenue, 2) }}</span>
                         </p>
-
-                        <span class="ms-1 inline-flex items-center gap-1.5 py-1 px-2 rounded-md text-xs font-medium bg-lime-300 text-gray-800 dark:bg-lime-600 dark:text-neutral-200">
-                            <svg class="inline-block size-3 self-center" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                            </svg>
-                            <span>
-                            {{ $customers ? number_format($customers/$usersCount * 100, 1) : 0 }}%</span>
-                        </span>
                     </div>
                 </div>
             </div>
@@ -104,25 +96,17 @@
 
                 <div class="grow">
                     <p class="text-xs uppercase tracking-wide font-medium text-gray-800 dark:text-neutral-200">
-                        Blog Posts
+                        Stockouts
                     </p>
                     <h3 class="mt-1 text-xl sm:text-2xl font-semibold text-blue-600 dark:text-blue-500">
-                        {{ $pc = $posts->count() }}
+                        {{ $productsCount - $stocked }}
                     </h3>
                     <div class="mt-1 flex justify-between items-center">
                         <p class="text-xs text-gray-500 dark:text-neutral-500">
-                            Total Views <span class="font-semibold text-gray-800 dark:text-neutral-200">
-                                {{ number_format($posts->sum('views'), 0) }}
+                            Low stock <span class="font-semibold text-gray-800 dark:text-neutral-200">
+                                {{ $productsCount - $stocked }}
                             </span>
                         </p>
-                        <span class="ms-1 inline-flex items-center gap-1.5 py-1 px-2 rounded-md text-xs font-medium bg-lime-300 text-gray-800 dark:bg-lime-600 dark:text-neutral-200">
-                            <svg class="inline-block size-3 self-center" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                            </svg>
-                            <span class="inline-block">
-                                {{ $pc ? number_format($posts->where('views', '>', 0)->count()/$pc * 100, 1) : 0 }}%
-                            </span>
-                        </span>
                     </div>
                 </div>
             </div>

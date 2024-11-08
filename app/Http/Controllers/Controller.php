@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\DB;
 
 abstract class Controller
 {
+    public mixed $vendor;
+    public function __construct()
+    {
+        $this->vendor = session()->get('vendor', []);
+    }
+
     public function isAdmin(): bool
     {
         return Auth::user()->role === 'A';
@@ -18,7 +24,7 @@ abstract class Controller
 
     public function topProducts($take = 5): Collection|array
     {
-        return Product::query()->join('order_items', 'products.id', '=', 'order_items.product_id')
+        return Product::query()->where('vendor_id', $this->vendor->id)->join('order_items', 'products.id', '=', 'order_items.product_id')
             ->select('products.*', DB::raw('count(order_items.product_id) as count'))
             ->groupBy('products.id')
             ->orderBy('count', 'DESC')
@@ -28,17 +34,17 @@ abstract class Controller
 
     public function purchasedProducts(): Collection|array
     {
-        return Product::query()->whereHas('orders')->get();
+        return Product::query()->where('vendor_id', $this->vendor->id)->whereHas('orders')->get();
     }
 
     public function stats(): \Illuminate\Support\Collection
     {
         return collect([
-            'orders' => Order::query(),
-            'products' => Product::query(),
+            'orders' => Order::query()->where('vendor_id', $this->vendor->id),
+            'products' => Product::query()->where('vendor_id', $this->vendor->id),
             'users' => User::query()->whereNot('role', '=', 'A'),
             'purchasedProducts' => $this->purchasedProducts(),
-            'customers' => Order::query()->selectRaw('count(distinct customer_id) as customers')->get()->first()->customers
+            'customers' => Order::query()->where('vendor_id', $this->vendor->id)->selectRaw('count(distinct customer_id) as customers')->get()->first()->customers
         ]);
     }
 

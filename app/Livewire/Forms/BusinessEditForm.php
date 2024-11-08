@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
-class BusinessCreateForm extends Form
+class BusinessEditForm extends Form
 {
     #[Validate('required')]
     public string $name = '';
@@ -26,6 +26,8 @@ class BusinessCreateForm extends Form
     public string $county = '';
     public string $country = '';
     public string $zipCode = '';
+    public int $vendorId = 0;
+    public int $locationId = 0;
 
     public bool $isEdit = false;
 
@@ -33,26 +35,35 @@ class BusinessCreateForm extends Form
     {
         $this->validate();
         // Save business and Location data
-        $location = Location::create([
-            'name' => $this->address,
-            'address' => $this->address,
-            'county' => $this->county,
-            'town' => $this->town,
-            'country' => $this->country,
-            'code' => $this->zipCode,
-        ]);
+        $location = Location::query()->whereKey($this->locationId)->first();
 
-        $user = User::query()->whereKey(auth()->id())->first();
+        if (!$location) {
+            $location = Location::create([
+                'name' => $this->address,
+                'address' => $this->address,
+                'county' => $this->county,
+                'town' => $this->town,
+                'country' => $this->country,
+                'code' => $this->zipCode,
+            ]);
+        } else {
+            $location->update([
+                'name' => $this->address,
+                'address' => $this->address,
+                'county' => $this->county,
+                'town' => $this->town,
+                'country' => $this->country,
+                'code' => $this->zipCode,
+            ]);
+        }
 
-        $vendor = Vendor::create([
-            'username' => $user->name,
-        ]);
+        $this->locationId = $location->id;
 
-        $user->userable_id = $vendor->id;
-        $user->userable_type = Vendor::class;
-        $user->save();
-
-        $business = Business::create([
+        $business = Business::updateOrCreate([
+            'email' => $this->email,
+            'user_id' => auth()->id(),
+            'vendor_id' => $this->vendorId,
+        ],[
             'name' => $this->name,
             'email' => $this->email,
             'address' => $this->address,
@@ -62,16 +73,7 @@ class BusinessCreateForm extends Form
             'logo' => $this->logo,
             'location_id' => $location->id,
             'user_id' => auth()->id(),
-            'vendor_id' => $vendor->id,
-        ]);
-
-        Branch::create([
-            'name' => 'Main',
-            'phone_number' => $this->phone,
-            'email' => $this->email,
-            'address' => $this->address,
-            'location_id' => $location->id,
-            'business_id' => $business->id,
+            'vendor_id' => $this->vendorId,
         ]);
     }
 }

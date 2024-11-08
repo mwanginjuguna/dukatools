@@ -17,6 +17,7 @@ class ProductList extends Component
     public string $brandFilter;
     public string $categoryFilter;
 
+    public object $vendor;
 
     public array $availableFilters = [
         'brand' => 'brand',

@@ -29,6 +29,9 @@ class ProductCreateForm extends Form
     public int $categoryId = 0;
     public int $manufacturerId = 0;
     public int $supplierId = 0;
+    public int $vendorId = 0;
+    public int $businessId = 0;
+    public int $branchId = 0;
     public int $subCategoryId = 0;
     public mixed $tax = 0;
     public string $shippedFrom = '';
@@ -64,7 +67,17 @@ class ProductCreateForm extends Form
             'manufacturer_id' => $this->manufacturerId,
             'tax_percent' => $this->tax,
            'shipping_fee' => $this->shippingFee,
+            'user_id' => auth()->id(),
+            'vendor_id' => $this->vendorId,
         ]);
+
+        if ($this->businessId > 0) {
+            $product->business_id = $this->businessId;
+        }
+        if ($this->branchId > 0) {
+            $product->branch_id = $this->branchId;
+        }
+        $product->save();
 
         $listOfVariants = [];
         $listOfVariants[] = isset($this->color) ?  ['type'=>'color', 'details'=>$this->color]: [];

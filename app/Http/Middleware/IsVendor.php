@@ -18,12 +18,12 @@ class IsVendor
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::user() && Auth::user()->userable_type === Vendor::class)
-            {
-                session()->put('vendor', Vendor::query()->whereKey(Auth::user()->userable_id)->first());
-
-                return $next($request);
-            }
+        {
+            session()->put('vendor', Vendor::query()->whereKey(Auth::user()->userable_id)->first());
 
             return $next($request);
         }
+
+        return redirect()->route('vendor.home');
+    }
 }

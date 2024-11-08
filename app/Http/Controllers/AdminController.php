@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Post;
@@ -20,9 +21,9 @@ class AdminController extends Controller
     public function stats(): \Illuminate\Support\Collection
     {
         return collect([
-            'orders' => Order::query(),
-            'products' => Product::query(),
-            'users' => User::query()->whereNot('role', '=', 'A'),
+            'orders' => Order::query()->where('vendor_id', $this->vendor->id),
+            'products' => Product::query()->where('vendor_id', $this->vendor->id),
+            'users' => Customer::query()->where('vendor_id', $this->vendor->id),
             'purchasedProducts' => $this->purchasedProducts(),
             'customers' => Order::query()->selectRaw('count(distinct customer_id) as customers')->get()->first()->customers
         ]);
@@ -30,7 +31,9 @@ class AdminController extends Controller
 
     public function topProducts($take = 5): Collection|array
     {
-        return Product::query()->join('order_items', 'products.id', '=', 'order_items.product_id')
+        return Product::query()
+            ->where('vendor_id', $this->vendor->id)
+            ->join('order_items', 'products.id', '=', 'order_items.product_id')
             ->select('products.*', DB::raw('count(order_items.product_id) as count'))
             ->groupBy('products.id')
             ->orderBy('count', 'DESC')
@@ -40,7 +43,7 @@ class AdminController extends Controller
 
     public function purchasedProducts(): Collection|array
     {
-        return Product::query()->whereHas('orders')->get();
+        return Product::query()->where('vendor_id', $this->vendor->id)->whereHas('orders')->get();
     }
 
     public function posts(): View
@@ -61,6 +64,7 @@ class AdminController extends Controller
             'topProducts' => $this->topProducts(),
             'purchasedProducts' => $this->purchasedProducts()->count(),
             'ordersCount' => $data['orders']->count(),
+            'revenue' => $data['orders']->sum('total'),
             'pendingOrders' => $data['orders']->where('status', 'pending')->count(),
             'customers' => $data['customers'],
             'usersCount' => $data['users']->count(),

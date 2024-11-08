@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot:title>
-        Product List
+        My Shop Home
     </x-slot:title>
 
     <div class="max-w-7xl mx-auto">

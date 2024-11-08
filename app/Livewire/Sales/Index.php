@@ -16,8 +16,9 @@ class Index extends Component
     public function render()
     {
         $user = Auth::user();
-        $salesQuery = (new SaleAnalytics());
         $vendor = session()->get('vendor');
+
+        $salesQuery = (new SaleAnalytics($vendor->id));
 
         $query = Order::query()->where('user_id', $user->id);
 
@@ -28,7 +29,6 @@ class Index extends Component
             ->simplePaginate(10);
 
         $completedOrders = Order::query()
-            ->where('vendor_id', $vendor->id)
             ->whereIn('status', ['delivered', 'shipping'])
             ->latest()
             ->paginate(10);
@@ -43,7 +43,7 @@ class Index extends Component
             'pendingOrders' => $pendingOrders,
             'completedOrders' => $completedOrders,
             'todaySales' => $salesQuery->getTodaySales()->with(['products'])->latest()->get(),
-            'topProducts' => (new ProductFilters())->topProducts(5)
+            'topProducts' => (new ProductFilters($vendor->id))->topProducts(5)
         ]);
     }
 }

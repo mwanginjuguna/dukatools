@@ -9,10 +9,12 @@ use Livewire\Component;
 class DashboardStats extends Component
 {
     public object $orders;
+    public object $vendor;
 
     public function mount()
     {
-        $this->orders = Order::query()->where('user_id', auth()->id())->get();
+        $this->vendor = session()->get('vendor');
+        $this->orders = Order::query()->where('vendor_id', $this->vendor->id)->get();
     }
 
     public function render()

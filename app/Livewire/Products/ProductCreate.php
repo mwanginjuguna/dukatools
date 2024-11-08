@@ -13,6 +13,7 @@ use App\Models\ReturnPolicy;
 use App\Models\SubCategory;
 use App\Models\Supplier;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -24,15 +25,18 @@ class ProductCreate extends Component
     public ProductCreateForm $form;
 
     public $productImage;
+    public $vendor;
 
     public string $imagePath = '';
 
     public function productSave()
     {
+        $this->form->vendorId = $this->vendor->id ?? auth()->id();
+
         if (isset($this->productImage)) {
             $this->imagePath = Storage::disk('public')
                 ->putFileAs(
-                    'products',
+                    'products/vendors/'.$this->vendor->reference,
                     $this->productImage,
                     $this->productImage->getClientOriginalName()
                 );
@@ -44,11 +48,13 @@ class ProductCreate extends Component
 
         $this->form->reset();
 
-        $this->redirectRoute('admin.products');
+        $this->redirectRoute('vendor.index');
     }
 
     public function render()
     {
+        $this->vendor = session()->get('vendor');
+
         return view('livewire.products.product-create', [
             'brands' => Brand::query()->get(),
             'categories' => Category::query()->get(),

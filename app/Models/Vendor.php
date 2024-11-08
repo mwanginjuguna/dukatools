@@ -24,6 +24,7 @@ class Vendor extends Model
     protected $guarded = ['id'];
 
     protected $with = ['user', 'businesses'];
+    protected $withCount = ['businesses', 'customers', 'products', 'orders'];
 
     protected static function booted()
     {

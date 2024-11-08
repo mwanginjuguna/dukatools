@@ -16,6 +16,7 @@ class ListTable extends Component
     public float $productSales = 0;
     public mixed $selectedFilter = null;
     public mixed $sortOrder = 'desc';
+    public object $vendor;
 
     public function applyFilter()
     {
@@ -41,16 +42,15 @@ class ListTable extends Component
     }
 
     public function mount() {
-        $pQuery = Product::query();
+        $this->vendor = session()->get('vendor');
+        $pQuery = Product::query()->where('vendor_id', $this->vendor->id);
         $this->productCount = $pQuery->count();
         $this->productSales = $pQuery->sum('price');
     }
 
     public function render()
     {
-        $vendor = session()->get('vendor');
-
-        $productQuery = Product::query()->where('vendor_id', $vendor->id)->latest();
+        $productQuery = Product::query()->where('vendor_id', $this->vendor->id)->latest();
 
         if ($this->selectedFilter) {
             switch ($this->selectedFilter) {

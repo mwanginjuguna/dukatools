@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,8 +13,8 @@ class AdminProductsController extends Controller
 {
     public function products(): View
     {
-        $products = Product::query()->orderBy('views', 'desc')->get();
-        $users = User::all();
+        $products = Product::query()->where('vendor_id', $this->vendor->id)->orderBy('views', 'desc')->get();
+        $users = Customer::query()->where('vendor_id', $this->vendor->id)->get();
 
         return view('admin.products.index', [
             'products' => $products,
@@ -24,7 +25,7 @@ class AdminProductsController extends Controller
 
     public function purchasedProducts(): Collection|array
     {
-        return Product::query()->whereHas('orders')->get();
+        return Product::query()->where('vendor_id', $this->vendor->id)->whereHas('orders')->get();
     }
 
     public function editProduct(Request $request, Product $product): View

@@ -13,9 +13,9 @@
                 </svg>
             </span>
         @endif
-            <div class="ms-3">
-            <h3 class="font-medium text-slate-700 dark:text-slate-300">{{ $user->name }}</h3>
-            <p class="text-sm font-light text-slate-400 dark:text-slate-500">{{ $user->email }}</p>
+        <div class="ms-3">
+            <h3 class="font-medium text-slate-700 dark:text-slate-300">{{ $user->name ?? $user->first_name ?? $user->reference }}</h3>
+            <p class="text-sm font-light text-slate-400 dark:text-slate-500 italic">via {{ $user->email ?? $user->source }} | {{ $user->created_at->diffForHumans() }}</p>
         </div>
     </div>
 </div>
