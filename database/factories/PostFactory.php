@@ -18,7 +18,7 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-        $title = $this->faker->sentence(7);
+        $title = $this->faker->realText(60);
         return [
             'title' => $title,
             'slug' => Str::slug($title),

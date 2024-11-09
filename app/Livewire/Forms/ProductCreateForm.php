@@ -53,18 +53,13 @@ class ProductCreateForm extends Form
             'name' => $this->name,
             'slug' => Str::slug($this->name),
             'category_id' => $this->categoryId,
-            'sub_category_id' => $this->subCategoryId,
             'price' => $this->price,
             'brand_id' => $this->brandId,
             'description' => $this->description,
             'stock_quantity' => $this->stockQuantity,
-            'return_policy_id' => $this->returnPolicyId,
             'shipped_from' => $this->shippedFrom,
             'image' => $this->image,
             'sku' => $this->sku,
-            'supplier_sku' => $this->supplierSku,
-            'supplier_id' => $this->supplierId,
-            'manufacturer_id' => $this->manufacturerId,
             'tax_percent' => $this->tax,
            'shipping_fee' => $this->shippingFee,
             'user_id' => auth()->id(),
@@ -76,6 +71,21 @@ class ProductCreateForm extends Form
         }
         if ($this->branchId > 0) {
             $product->branch_id = $this->branchId;
+        }
+        if ($this->subCategoryId > 0) {
+            $product->sub_category_id = $this->subCategoryId;
+        }
+        if ($this->supplierId > 0) {
+            $product->supplier_id = $this->supplierId;
+        }
+        if ($this->manufacturerId > 0) {
+            $product->manufacturer_id = $this->manufacturerId;
+        }
+        if ($this->returnPolicyId > 0) {
+            $product->return_policy_id = $this->returnPolicyId;
+        }
+        if (strlen($this->supplierSku) > 0) {
+            $product->supplier_sku = $this->supplierSku;
         }
         $product->save();
 

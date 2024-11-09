@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Admin;
 use App\Models\Branch;
+use App\Models\Brand;
 use App\Models\Business;
 use App\Models\Category;
 use App\Models\ContactMessage;
@@ -19,14 +20,18 @@ use App\Models\ProductImages;
 use App\Models\ProductRating;
 use App\Models\ProductReview;
 use App\Models\ProductVariation;
+use App\Models\ReturnPolicy;
+use App\Models\SubCategory;
 use App\Models\Supplier;
 use App\Models\Tag;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Vendor;
 use Illuminate\Database\Seeder;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
+use function Pest\Laravel\call;
 
 class DatabaseSeeder extends Seeder
 {
@@ -42,28 +47,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // dummy data for local testing
-        if (config('app.env') == 'local') {
-            \Laravel\Prompts\info('App is in local environment. Seeding database...');
-            \Laravel\Prompts\info('Seeding admin.');
-            // admin user
-            $admin = Admin::factory()->create([
-                'first_name' => config('app.admin.first_name'),
-                'last_name' => config('app.admin.last_name'),
-                'email' => config('app.admin.email'),
-                'phone_number' => config('app.admin.phone_number'),
-            ]);
-            $adminUser = User::factory()->create([
-                'name' => config('app.admin.name'),
-                'email' => config('app.admin.email'),
-                'userable_id' => $admin->id,
-                'userable_type' => Admin::class,
-                'phone_number' => config('app.admin.phone_number'),
-                'password' => Hash::make(config('app.admin.password')),
-            ]);
+        // Cleanup storage
+//        $file = new Filesystem;
+//        $file->cleanDirectory('storage/app/public/products/');
 
-            $adminUser->role = 'A';
-            $adminUser->save();
+        \Laravel\Prompts\info('Seeding admin.');
+        $this->call(AdminSeeder::class);
+        $admin = Admin::query()->first();
+        \Laravel\Prompts\info('Admin seeded.');
+
+        \Laravel\Prompts\info('Seeding sample brands, categories, return policies, & subcategories.');
+        $this->call(SubCategorySeeder::class);
+        $this->call(BrandSeeder::class);
+        $this->call(ReturnPolicySeeder::class);
+        \Laravel\Prompts\info('Brands, categories, subcategories, return policies seeded.');
+
+        \Laravel\Prompts\info('Seeding currencies.');
+        foreach ($this->currencies as $currency) {
+            Currency::create($currency);
+        }
+        \Laravel\Prompts\info('Currencies seeded.');
+
+        // dummy data for local testing
+        if (app()->environment('local')) {
+            \Laravel\Prompts\info('App is in local environment. Seeding database...');
 
             // seed a vendor
             \Laravel\Prompts\info('Seeding vendor...');
@@ -81,20 +88,16 @@ class DatabaseSeeder extends Seeder
                 'country' => config('app.vendor.country'),
                 'password' => Hash::make(config('app.vendor.password')),
             ]);
-
             $vendorUser->role = 'V';
             $vendorUser->save();
-
-            \Laravel\Prompts\info('Admin and vendor seeded.');
+            \Laravel\Prompts\info('Vendor seeded.');
 
             \Laravel\Prompts\info('Creating Posts');
             $postTags = ['Marketing', 'Sales', 'Inventory', 'Shopping', 'Docs', 'Tips'];
             $categories = ['Technology', 'Lifestyle', 'Sports', 'Food', 'Travel', 'Business', 'Health'];
-
             Arr::map($postTags, fn($tag) => Tag::factory(6)->create([
                 'name' => $tag
             ]));
-
             // seed categories with goods
             Arr::map($categories, fn($category) => Category::factory(6)
                 ->has(Post::factory(2, ['user_id' => $admin->id]))
@@ -102,8 +105,21 @@ class DatabaseSeeder extends Seeder
                     'name' => $category
                 ])
             );
-
             \Laravel\Prompts\info('Posts seeded');
+
+            \Laravel\Prompts\info("Seeding a business.");
+            // seed A business
+            $business = Business::factory()->create([
+                'user_id' => $vendorUser->id,
+                'vendor_id' => $vendor->id,
+                'name' => 'Top-G Shoes'
+            ]);
+            $branch = Branch::factory()->create([
+                'business_id' => $business->id,
+                'location_id' => $business->location_id,
+                'name' => 'Eldoret CBD'
+            ]);
+            \Laravel\Prompts\info('Business & branch seeded. Seeding discount');
 
             // initialize discount
             $discount = Discount::updateOrCreate(
@@ -116,46 +132,38 @@ class DatabaseSeeder extends Seeder
                     'expires_after' => 1000,
                 ]
             );
-
             \Laravel\Prompts\info("Discount seeded. \n Seeding suppliers.");
 
             // seed users who will be used to seed orders
-            $users = User::factory(6)
-                ->create([
-                'created_at' => now()->subYear()->addMonths(rand(1,6))->subHours(rand(34,120))
-            ]);
             $suppliers = Supplier::factory(6)->create([
-                'created_at' => now()->subYear()->addMonths(rand(1,6))->subHours(rand(34,120))
-            ]);
-            \Laravel\Prompts\info("Seeding a business.");
-            // seed A business
-            $business = Business::factory()->create([
-                'user_id' => $vendorUser->id,
-                'vendor_id' => $vendor->id,
-                'name' => 'Top-G Shoes'
-            ]);
-
-            $branch = Branch::factory()->create([
+                'created_at' => now()->subYear()->addMonths(rand(1,6))->subHours(rand(34,120)),
                 'business_id' => $business->id,
-                'location_id' => $business->location_id,
-                'name' => 'Eldoret CBD'
+                'location_id' => $business->location_id
             ]);
-
             \Laravel\Prompts\info("Seeding Products.");
+
+            // seed product categories
+            $productCategories = Category::query()->whereNotIn('name', $categories)->get(['id']);
+            $productSubcategories = SubCategory::query()->get(['id']);
+            $productBrands = Brand::query()->get(['id']);
+            $returnPolicies = ReturnPolicy::query()->get(['id']);
+
             // seed products that will be used to create orders
             $products = Product::factory(21)
                 ->has(ProductFeature::factory(1))
                 ->has(ProductVariation::factory(2))
                 ->create([
-                    'supplier_id' => $suppliers->random()->userable_id,
+                    'supplier_id' => $suppliers->random()->id,
                     'user_id' => $vendorUser->id,
                     'vendor_id' => $vendor->id,
                     'business_id' => $business->id,
-                    'branch_id' => $branch->id
+                    'branch_id' => $branch->id,
+                    'category_id' => $productCategories->random()->id,
+                    'sub_category_id' => $productSubcategories->random()->id,
+                    'brand_id' => $productBrands->random()->id,
+                    'return_policy_id' => $returnPolicies->random()->id,
                 ]);
-
-            \Laravel\Prompts\info("Users & order-products seeded.");
-
+            \Laravel\Prompts\info("Products seeded. Seeding orders.");
             for ($i__ = 1; $i__ <= 27; $i__++)
             {
                 $customer = Customer::factory()->create([
@@ -225,26 +233,7 @@ class DatabaseSeeder extends Seeder
                 $order->total -= (float)number_format((float)$order->total * (float)$discount->rate, 2);
                 $order->save();
             }
-
             \Laravel\Prompts\info("Orders processed.");
-
-            // random contact messages from registered users
-            ContactMessage::factory(13)->create();
-
-            \Laravel\Prompts\info("Messages seeded.");
-
-//            Product::factory(6)
-//                ->has(ProductFeature::factory(2))
-//                ->has(ProductVariation::factory(2))
-//                ->create([
-//                    'user_id' => $vendorUser->id,
-//                    'vendor_id' => $vendor->id,
-//                    'branch_id' => $branch->id,
-//                ]);
-        }
-
-        foreach ($this->currencies as $currency) {
-            Currency::create($currency);
         }
     }
 }

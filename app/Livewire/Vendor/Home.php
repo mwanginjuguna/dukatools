@@ -45,7 +45,7 @@ class Home extends Component
 
         $this->form->reset();
 
-        $this->redirectRoute('vendor.home');
+        $this->redirectRoute('dashboard');
     }
 
     private function createBusiness()

@@ -51,18 +51,21 @@ class ProductCreate extends Component
         $this->redirectRoute('vendor.index');
     }
 
-    public function render()
+    public function mount()
     {
         $this->vendor = session()->get('vendor');
+    }
 
+    public function render()
+    {
         return view('livewire.products.product-create', [
             'brands' => Brand::query()->get(),
             'categories' => Category::query()->get(),
             'tags' => Tag::query()->get(),
             'SubCategories' => SubCategory::query()->get(),
             'returnPolicies' => ReturnPolicy::query()->get(),
-            'suppliers' => Supplier::query()->get(),
-            'manufacturers' => Manufacturer::query()->get()
+            'suppliers' => Supplier::query()->where('vendor_id', $this->vendor->id)->where('vendor_id', $this->vendor->id)->get(),
+            'manufacturers' => Manufacturer::query()->where('vendor_id', $this->vendor->id)->get()
         ]);
     }
 }

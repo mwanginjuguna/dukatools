@@ -14,13 +14,12 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [ProductController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/', [VendorController::class, 'home'])->name('home')->middleware('vendor');
 Route::view('/about', 'pages.about')->name('about');
 Route::view('/services', 'pages.about')->name('services');
 Route::view('/privacy-policy', 'pages.about')->name('privacy-policy');
 Route::view('/terms-and-conditions', 'pages.about')->name('terms-and-conditions');
 Route::view('/gallery/videos', 'pages.videos')->name('videos');
-Route::get('/shop', [ProductController::class, 'index'])->name('shop');
 Route::get('/blog', [PostController::class, 'index'])->name('blog');
 Route::view('/contact', 'pages.contact')->name('contact-me');
 
@@ -30,6 +29,7 @@ Route::get('/cart', [ActionsController::class, 'cart'])->name('cart');
 Route::middleware('auth')->group(function () {
     // vendor home
     Route::get('/vendor', [VendorController::class, 'home'])->name('vendor.home');
+    Route::get('/shop', [VendorController::class, 'home'])->name('shop')->middleware('vendor');
 
     // vendor store/products/shop
     // categories
