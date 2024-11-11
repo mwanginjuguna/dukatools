@@ -1,7 +1,7 @@
 @props(['product'])
 
 <div class="w-full max-w-[186px] bg-slate-50 border border-slate-200 rounded-lg shadow dark:bg-slate-800 dark:border-slate-700">
-    <img class="w-[185px] h-[185px] rounded-t-lg" src="/storage/{{ $product->image }}" alt="product image" />
+    <img class="w-[185px] h-[185px] rounded-t-lg" src="{{ asset($product->image) }}" alt="product image" />
     <div class="py-1 px-5 pb-5">
         <a href="{{ route('products.show', $product->slug) }}" class="">
             <h5 class="text-xs md:text-sm font-medium underline text-orange-500 tracking-tight">

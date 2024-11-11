@@ -6,7 +6,7 @@
     <div class="relative pt-[50%] sm:pt-[70%] overflow-hidden rounded-t-xl">
         <img
             class="size-full absolute top-0 start-0 object-cover rounded-t-xl group-hover:rounded-t-xl group-hover:scale-105 transition-transform duration-500 ease-in-out"
-            src="/storage/{{ $product->image ?? '' }}" alt="{{ $product->name }} image">
+            src="{{ asset($product->image) ?? '' }}" alt="{{ $product->name }} image">
         <span class="absolute top-0 end-0 rounded-se-xl rounded-es-xl text-xs font-medium bg-gray-800 text-white py-1.5 px-3 dark:bg-neutral-900">
           {{ config('app.currency_symbol'). ' ' .number_format($product->price, 2) }}
         </span>

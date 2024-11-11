@@ -180,7 +180,7 @@
 
         <!-- main image -->
         <div class="col-span-1 p-2">
-            <img class="rounded-xl w-full" src="/{{ 'storage/'. $product->image }}" alt="{{ $product->name }} Image">
+            <img class="rounded-xl w-full" src="{{ asset($product->image) }}" alt="{{ $product->name }} Image">
         </div>
 
         <!-- more images -->
@@ -190,7 +190,7 @@
             <div class="grid grid-cols-3">
                 @forelse($product->productImages as $img)
                     <div class="col-span-1 p-2">
-                        <img class="rounded-xl w-full" src="/{{ 'storage/'.$img->image_location }}" alt="{{ $product->name }} Image">
+                        <img class="rounded-xl w-full" src="{{ asset($img->image_location) }}" alt="{{ $product->name }} Image">
                     </div>
                 @empty
                     <div class="italic">Ooops!! We found nothing.</div>

@@ -79,10 +79,10 @@
 
     <div class="mt-6 md:mt-10 grid gap-y-4 text-slate-800 dark:text-slate-200">
         <div class="mt-3 flex gap-2 lg:gap-4 items-center overflow-x-auto">
-            <img class="rounded-sm h-10 lg:h-16 w-10 lg:w-16 object-center object-cover" src="/{{ 'storage/' . $product->image }}" alt="{{ $product->name }} Image">
+            <img class="rounded-sm h-10 lg:h-16 w-10 lg:w-16 object-center object-cover" src="{{ asset($product->image) }}" alt="{{ $product->name }} Image">
             @forelse($product->productImages as $img)
                 <div class="">
-                    <img class="rounded-sm h-10 lg:h-16 w-10 lg:w-16 object-center object-cover" src="/{{ 'storage/'.$img->image_location }}" alt="{{ $product->name }} Image">
+                    <img class="rounded-sm h-10 lg:h-16 w-10 lg:w-16 object-center object-cover" src="/{{ asset($img->image_location) }}" alt="{{ $product->name }} Image">
                 </div>
             @empty
                 <div>No Other Images</div>
