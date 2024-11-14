@@ -25,8 +25,8 @@
                 <!--top-->
                 <div class="md:col-span-1 max-w-3xl grid text-slate-600 dark:text-slate-400 gap-6">
                     <!--top-products-->
-                    <div class="py-6 px-4 shadow-sm shadow-slate-200 dark:shadow-slate-700 rounded-lg">
-                        <h2 class="py-2 font-bold text-xl">
+                    <div class="py-6">
+                        <h2 class="py-1 font-semibold text-center text-slate-600 dark:text-slate-400">
                             Top 10 Selling Products (by sales)
                         </h2>
                         @if($topProducts->count() >0)
@@ -36,7 +36,7 @@
                                 <svg class="w-6 h-6 pe-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg>
-                                No sales data to show, Yet.</p>
+                                No sales data to show, yet.</p>
                         @endif
                     </div>
                 </div>
@@ -58,7 +58,7 @@
 
                     <div>
                         <!--new-users -->
-                        <h4 class="py-2 font-semibold text-slate-600 dark:text-slate-400">Latest Customers</h4>
+                        <h4 class="py-2 font-semibold text-center text-slate-600 dark:text-slate-400">Latest Customers</h4>
 
                         <div class="mt-1">
                             <x-cards.users-list :$users />

@@ -283,7 +283,7 @@
                 @endif
             </div>
 
-            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center gap-6">
+            <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 items-center gap-6">
                 @forelse($businesses as $business)
                     <div class="py-3">
                         <div class="max-w-xs flex flex-col bg-white border border-t-4 border-t-emerald-600 shadow-sm shadow-emerald-200/70 rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:border-t-emerald-500 dark:shadow-emerald-700/70">

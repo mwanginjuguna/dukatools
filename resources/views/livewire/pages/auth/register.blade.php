@@ -30,7 +30,20 @@ new #[Layout('layouts.guest'), \Livewire\Attributes\Title('Register')] class ext
 
         $validated['password'] = Hash::make($validated['password']);
 
-        event(new Registered($user = User::create($validated)));
+        $userInfo = [
+            'name' => $validated['name'],
+            'password' => $validated['password']
+        ];
+
+        if ($validated['email'] !== '') {
+            $userInfo['email'] = $validated['email'];
+        }
+
+        if ($validated['phone_number']!== '') {
+            $userInfo['phone_number'] = $validated['phone_number'];
+        }
+
+        event(new Registered($user = User::create($userInfo)));
 
         Auth::login($user);
 
