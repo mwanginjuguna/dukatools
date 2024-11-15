@@ -69,9 +69,9 @@
                                                     <label for="hs-table-pagination-checkbox-all" class="sr-only">Checkbox</label>
                                                 </div>
                                             </th>
-                                            <th scope="col" class="px-2 py-2 md:px-6 md:py-4 text-start">Name</th>
-                                            <th scope="col" class="px-2 py-2 md:px-6 md:py-4 text-start">Email</th>
-                                            <th scope="col" class="px-2 py-2 md:px-6 md:py-4 text-start">Phone No.</th>
+                                            <th scope="col" class="px-2 py-2 md:px-6 md:py-4 text-start">ID</th>
+                                            <th scope="col" class="px-2 py-2 md:px-6 md:py-4 text-start">Contact</th>
+                                            <th scope="col" class="px-2 py-2 md:px-6 md:py-4 text-start">Source</th>
                                             <th scope="col" class="px-2 py-2 md:px-6 md:py-4 text-end">Action</th>
                                         </tr>
                                         </thead>
@@ -85,14 +85,14 @@
                                                     </div>
                                                 </td>
                                                 <td class="px-2 py-2 md:px-6 md:py-4">
-                                                    {{ $customer->fullName }}
+                                                    {{ $customer->reference }}
                                                 </td>
 
                                                 <td class="px-2 py-2 md:px-6 md:py-4">
-                                                    {{ $customer->first_name }}
+                                                    {{  $customer->phone_number ?? $customer->email ?? 'N/A' }}
                                                 </td>
                                                 <td class="px-2 py-2 md:px-6 md:py-4">
-                                                    {{ $customer->second_name }}
+                                                    {{ $customer->source ?? 'N/A'}}
                                                 </td>
                                                 <td class="px-2 py-2 md:px-6 md:py-4 whitespace-nowrap text-end font-medium">
                                                     <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-emerald-600 hover:text-emerald-800 focus:outline-none focus:text-emerald-800 disabled:opacity-50 disabled:pointer-events-none dark:text-emerald-500 dark:hover:text-emerald-400 dark:focus:text-emerald-400">View</button>

@@ -13,11 +13,13 @@ class Index extends Component
 
     public SupplierCreateForm $form;
     public int $supplierCount = 0;
-    public int $perPage = 4;
+    public int $perPage = 15;
     public string $search = '';
+    public $vendor;
 
     public function saveSupplier()
     {
+        $this->form->businessId = $this->vendor->businesses->first()->id;
         $this->form->store();
 
         $this->form->reset();
@@ -26,12 +28,16 @@ class Index extends Component
         $this->resetPage();
     }
 
+    public function mount()
+    {
+        $this->vendor = session()->get('vendor');
+        $this->form->businessId = $this->vendor->businesses->first()->id;
+    }
+
     public function render()
     {
-        $vendor = session()->get('vendor');
-
         $supplierQuery = Supplier::query()
-            ->where('vendor_id', $vendor->id)
+            ->where('business_id', $this->form->businessId)
             ->latest();
         $this->supplierCount = $supplierQuery->count();
 

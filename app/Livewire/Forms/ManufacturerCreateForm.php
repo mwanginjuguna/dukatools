@@ -24,6 +24,7 @@ class ManufacturerCreateForm extends Form
     public string $phone = '';
 
     public string $location = '';
+    public int $businessId = 1;
 
     public function store()
     {

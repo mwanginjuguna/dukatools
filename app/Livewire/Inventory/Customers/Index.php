@@ -13,7 +13,7 @@ class Index extends Component
 
     public CustomerCreateForm $form;
     public int $customerCount = 0;
-    public int $perPage = 3;
+    public int $perPage = 15;
     public float $totalCustomerValue = 0;
     public float $averageCustomerValue = 0;
     public int $averageOrderCount = 0;
