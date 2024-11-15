@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot:title>
-        Admin Products List
+        Inventory - Products Catalogue
     </x-slot:title>
 
     <section class="max-w-5xl mx-auto px-4 py-8 md:py-12">
@@ -39,6 +39,28 @@
                     </a>-->
                 </div>
                 <!-- End overview -->
+
+                <!-- Stock out Card -->
+                <div class="flex flex-col bg-slate-100 border border-rose-100 shadow-sm rounded-xl dark:bg-slate-800 dark:border-rose-800">
+                    <div class="p-4 md:p-5 flex justify-between gap-x-3">
+                        <div>
+                            <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                                Stock Outs
+                            </p>
+                            <div class="mt-1 flex items-center gap-x-2">
+                                <h3 class="mt-1 text-xl font-medium text-rose-500 dark:text-rose-400">
+                                    {{ number_format($products->where('stock_quantity', 0)->count(), 0) }}
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0 flex justify-center items-center size-[46px] bg-emerald-50 text-rose-500 rounded-full dark:bg-emerald-900 dark:text-rose-400">
+                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.5 4h-13m13 16h-13M8 20v-3.333a2 2 0 0 1 .4-1.2L10 12.6a1 1 0 0 0 0-1.2L8.4 8.533a2 2 0 0 1-.4-1.2V4h8v3.333a2 2 0 0 1-.4 1.2L13.957 11.4a1 1 0 0 0 0 1.2l1.643 2.867a2 2 0 0 1 .4 1.2V20H8Z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Stock out -->
 
                 <!-- purchased products overview -->
                 <div class="flex flex-col bg-slate-100 border shadow-sm border-emerald-100 rounded-xl dark:bg-slate-800 dark:border-emerald-800">
@@ -126,28 +148,6 @@
                     </div>
                 </div>
                 <!-- End views -->
-
-                <!-- Inventory Card -->
-                <div class="flex flex-col bg-slate-100 border border-rose-100 shadow-sm rounded-xl dark:bg-slate-800 dark:border-rose-800">
-                    <div class="p-4 md:p-5 flex justify-between gap-x-3">
-                        <div>
-                            <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                                Out of Stocked
-                            </p>
-                            <div class="mt-1 flex items-center gap-x-2">
-                                <h3 class="mt-1 text-xl font-medium text-rose-500 dark:text-rose-400">
-                                    {{ number_format($products->where('stock_quantity', 0)->count(), 0) }}
-                                </h3>
-                            </div>
-                        </div>
-                        <div class="flex-shrink-0 flex justify-center items-center size-[46px] bg-emerald-50 text-rose-500 rounded-full dark:bg-emerald-900 dark:text-rose-400">
-                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.5 4h-13m13 16h-13M8 20v-3.333a2 2 0 0 1 .4-1.2L10 12.6a1 1 0 0 0 0-1.2L8.4 8.533a2 2 0 0 1-.4-1.2V4h8v3.333a2 2 0 0 1-.4 1.2L13.957 11.4a1 1 0 0 0 0 1.2l1.643 2.867a2 2 0 0 1 .4 1.2V20H8Z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Inventory -->
             </div>
             <!-- End Grid -->
         </div>

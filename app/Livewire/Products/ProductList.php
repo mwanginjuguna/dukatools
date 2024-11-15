@@ -26,6 +26,29 @@ class ProductList extends Component
         'outOfStock' => 'stock_quantity',
     ];
 
+
+    public $selectedProduct;
+    public int $currentStockQuantity = 0;
+    public int $newStockQuantity = 0;
+
+    public function restockModal(Product $product)
+    {
+        $this->selectedProduct = $product;
+        $this->currentStockQuantity = $product->stock_quantity;
+        $this->dispatch('open-modal', 'restock-modal');
+    }
+
+    public function restock()
+    {
+        $this->selectedProduct->stock_quantity += $this->newStockQuantity;
+        $this->selectedProduct->save();
+        $this->dispatch('stock-updated');
+        $this->dispatch('close-modal','restock-modal');
+        $this->newStockQuantity = 0;
+        sleep(1);
+        $this->redirectRoute('vendor.inventory');
+    }
+
     public function applyFilter()
     {
         $val = $this->availableFilters[$this->productFilter];

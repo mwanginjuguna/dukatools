@@ -10,7 +10,7 @@ class StockLowList extends Component
 {
     use WithPagination;
 
-    public int $lowestStock = 5;
+    public int $lowestStock = 10;
 
     public function render()
     {
@@ -20,6 +20,7 @@ class StockLowList extends Component
             ->where('vendor_id', $vendor->id)
             ->with(['orders'])
             ->where('stock_quantity', '<', $this->lowestStock)
+            ->orderBy('stock_quantity', 'asc')
             ->paginate(10);
 
         return view('livewire.inventory.stock-low-list', [

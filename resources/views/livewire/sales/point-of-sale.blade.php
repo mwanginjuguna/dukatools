@@ -41,6 +41,11 @@
                             <p class="text-center">No products found.</p>
                         @endforelse
                     </div>
+                    @if(!$products->isEmpty())
+                    <div class="flex justify-end">
+                        {{ $products->links() }}
+                    </div>
+                    @endif
                 </div>
 
                 <!-- summary -->

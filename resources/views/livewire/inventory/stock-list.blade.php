@@ -1,6 +1,6 @@
 <div>
     @if(isset($products))
-        <div class="relative overflow-x-auto">
+        <div class="relative overflow-x-auto min-h-[50vh] pb-6">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -85,6 +85,12 @@
                                         </x-dropdown-link>
 
                                         <!-- Authentication -->
+                                        <button wire:click="$parent.restockModal({{$product->id}})"
+                                                class="w-full text-start">
+                                            <x-dropdown-link class="hover:underline text-orange-500 dark:text-orange-600">
+                                                {{ __('Restock') }}
+                                            </x-dropdown-link>
+                                        </button>
                                         <button wire:click="productDelete({{$product->id}})"
                                                 wire:confirm="Do you want to delete this product (You cannot reverse this action)?"
                                                 class="w-full text-start">
@@ -133,5 +139,4 @@
         </div>
     @endif
     <!-- End empty state -->
-
 </div>
