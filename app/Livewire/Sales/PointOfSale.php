@@ -47,7 +47,7 @@ class PointOfSale extends Component
     public string $customerEmail = '';
     public string $customerName = '';
 
-    private $orderData = array();
+    private $orderData = [];
 
     public $vendor;
     public $customerSource = 'shop';
@@ -115,15 +115,12 @@ class PointOfSale extends Component
 
         $this->paymentMethod ='card';
         $this->saveOrder();
-
         // capture transaction
-        // TODO: Create TransactionCapture action to record transactions
-        // TODO: Capture card transaction with logic in PaymentProcessor
-
     }
 
     private function saveOrder(): void
     {
+        $this->dispatch('saving-order');
         OrderSaver::create([
             'is_paid' => true,
             'payment_method' => $this->paymentMethod,
@@ -142,11 +139,19 @@ class PointOfSale extends Component
             'customer_source' => $this->customerSource
         ]);
 
+        // update product stock quantity
+        foreach ($this->cart as $item) {
+            $product = Product::find($item['product']['id']);
+            $product->stock_quantity -= $item['quantity'];
+            $product->save();
+        }
+
         Cart::destroyCart();
         $this->success = true;
         $this->cart = Cart::getCart();
         $this->cartTotal = Cart::getCartTotal();
         session()->flash('success', 'Order Saved successfully.');
+        $this->dispatch('order-saved');
         $this->redirectRoute('vendor.pos');
     }
 
@@ -156,13 +161,14 @@ class PointOfSale extends Component
 
         $vendorService = new VendorService();
 
-        $this->vendor = $vendorService->getVendor() ?? session()->get('vendor');
+        $this->vendor = session()->get('vendor') ?? $vendorService->getVendor();
     }
 
     public function render()
     {
         $query = Product::query();
-        $query->where('is_active', true)->where('vendor_id', $this->vendor->id);
+        $query->where('is_active', true)
+            ->where('vendor_id', $this->vendor->id);
 
         if ($this->searchTerm !== '') {
             $query->where('name', 'like', '%' . $this->searchTerm . '%');
