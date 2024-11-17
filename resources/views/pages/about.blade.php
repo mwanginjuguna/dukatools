@@ -1,118 +1,175 @@
 <x-guest-layout>
     <x-slot:title>
-        About {{ config('app.name') }}
+        {{ config('app.name') }} - Sellers Companion
     </x-slot:title>
 
-    <div class="max-w-6xl mx-auto">
+    <div class="lg:max-w-[95em] mb-6 lg:mb-14 mx-auto text-slate-800 dark:text-slate-100">
         {{-- hero --}}
-        <!-- Hero -->
-        <div class="relative overflow-hidden">
-            <!-- Gradients -->
-            <div aria-hidden="true" class="flex absolute -top-96 start-1/2 transform -translate-x-1/2">
-                <div class="bg-gradient-to-r from-violet-300/50 to-purple-100 blur-3xl w-[25rem] h-[44rem] rotate-[-60deg] transform -translate-x-[10rem] dark:from-violet-900/50 dark:to-purple-900"></div>
-                <div class="bg-gradient-to-tl from-blue-50 via-blue-100 to-blue-50 blur-3xl w-[90rem] h-[50rem] rounded-fulls origin-top-left -rotate-12 -translate-x-[15rem] dark:from-indigo-900/70 dark:via-indigo-900/70 dark:to-blue-900/70"></div>
+        <div class="relative bg-gradient-to-tr from-slate-100/50 via-slate-100 to-amber-100 dark:from-slate-900/50 dark:via-slate-900/70 dark:to-amber-900">
+            <div class="px-4 py-10 lg:py-16 grid lg:grid-cols-2 gap-4 items-center">
+                <div class="mt-10 md:py-10">
+                    <h4 class="text-base lg:text-xl font-medium bg-clip-text bg-gradient-to-l from-emerald-600 to-amber-500 text-transparent dark:from-emerald-400 dark:to-amber-400">
+                        {{ __('Karibu Dukatools - Companion wa Shop!') }}
+                    </h4>
+
+                    <!-- Title -->
+                    <div class="mt-5 max-w-2xl">
+                        <h1 class="block font-semibold text-gray-800 text-4xl md:text-5xl lg:text-6xl dark:text-neutral-200">
+                            {{ __('Digitize Duka Yako, Make Selling Easy Again!') }}
+                        </h1>
+                    </div>
+                    <!-- End Title -->
+
+                    <div class="mt-5 max-w-3xl">
+                        <p class="py-2 lg:pe-4 text-lg lg:text-xl text-gray-600 dark:text-neutral-400">Say goodbye to manual record-keeping and hello to digital, automated Duka records. Dukatools helps you create product catalogues, process & track sales, and manage inventory all in one place. <strong>No more tedious paperwork or stockouts.</strong></p>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="mt-8 gap-x-6 flex items-center">
+                        <a class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 disabled:pointer-events-none" href="{{ route('register') }}">
+                            Start Selling
+                            <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                        </a>
+                        <x-parts.learn-more-link href="{{ route('login') }}">Login</x-parts.learn-more-link>
+                    </div>
+                </div>
+
+                <img
+                    src="https://cdn.shopify.com/b/shopify-brochure2-assets/a887e144dd7d29e316c4add7f934e236.webp"
+                    alt="Dukatools Ad image"
+                    class="mt-10 lg:mt-0 rounded-sm shadow-sm shadow-emerald-200/70 dark:shadow-emerald-700/70 hover:scale-[1.01] transition-all ease-in-out duration-500"
+                >
             </div>
-            <!-- End Gradients -->
+        </div>
 
-            <div class="relative z-10">
-                <div class="px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
-                    <div class="max-w-2xl text-center mx-auto">
-                        <p class="inline-block text-sm font-medium bg-clip-text bg-gradient-to-l from-blue-600 to-violet-500 text-transparent dark:from-blue-400 dark:to-violet-400">
-                            About {{ config('app.name') }}
-                        </p>
+        <!-- slider of dukas supported -->
+        <div class="mt-4 lg:mt-10 p-4 py-10 lg:py-20 grid sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Shoes -->
+            <div class="block border border-gray-200 rounded-sm hover:shadow-sm focus:outline-none dark:border-neutral-700">
+                <div class="relative flex items-center overflow-hidden">
+                    <img class="w-32 sm:w-48 h-full absolute inset-0 object-cover rounded-s-lg" src="https://madloba.info/media/images/factory-galleria-tbilisi-03.2e16d0ba.fill-720x405.jpg" alt="An Image of Shoes in Shop shelves">
 
-                        <!-- Title -->
-                        <div class="mt-5 max-w-2xl">
-                            <h1 class="block font-semibold text-gray-800 text-4xl md:text-5xl lg:text-6xl dark:text-neutral-200">
-                                The Intuitive Laravel Templates and Components
-                            </h1>
+                    <div class="grow p-4 ms-32 sm:ms-48">
+                        <div class="min-h-24 flex flex-col justify-center">
+                            <h3 class="font-semibold text-sm text-gray-800 dark:text-neutral-300">
+                                Duka Ya Viatu
+                            </h3>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-neutral-500">
+                                Sell, monitor sales/stocks, track revenues for every shoe in any collection that goes through your shop.
+                            </p>
                         </div>
-                        <!-- End Title -->
-
-                        <div class="mt-5 max-w-3xl">
-                            <p class="text-lg text-gray-600 dark:text-neutral-400">{{ config('app.name') }} is a set of prebuilt UI components, ready-to-use examples and Figma design system based on the utility-first Tailwind CSS framework.</p>
-                        </div>
-
-                        <!-- Buttons -->
-                        <div class="mt-8 gap-3 flex justify-center">
-                            <a class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" href="#">
-                                Get started
-                                <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                            </a>
-                            <a class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-800" href="#">
-                                <svg class="flex-shrink-0 size-4" width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6.875 18C8.531 18 9.875 16.656 9.875 15V12H6.875C5.219 12 3.875 13.344 3.875 15C3.875 16.656 5.219 18 6.875 18Z" fill="#0ACF83"></path>
-                                    <path d="M3.875 9C3.875 7.344 5.219 6 6.875 6H9.875V12H6.875C5.219 12 3.875 10.656 3.875 9Z" fill="#A259FF"></path>
-                                    <path d="M3.875 3C3.875 1.344 5.219 0 6.875 0H9.875V6H6.875C5.219 6 3.875 4.656 3.875 3Z" fill="#F24E1E"></path>
-                                    <path d="M9.87501 0H12.875C14.531 0 15.875 1.344 15.875 3C15.875 4.656 14.531 6 12.875 6H9.87501V0Z" fill="#FF7262"></path>
-                                    <path d="M15.875 9C15.875 10.656 14.531 12 12.875 12C11.219 12 9.87501 10.656 9.87501 9C9.87501 7.344 11.219 6 12.875 6C14.531 6 15.875 7.344 15.875 9Z" fill="#1ABCFE"></path>
-                                </svg>
-                                Preline Figma
-                            </a>
-                        </div>
-                        <!-- End Buttons -->
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- End Hero -->
 
-        <!-- stats -->
-        <x-parts.stats />
+            <!-- Hardware -->
+            <div class="block border border-gray-200 rounded-sm hover:shadow-sm focus:outline-none dark:border-neutral-700">
+                <div class="relative flex items-center overflow-hidden">
+                    <img class="w-32 sm:w-48 h-full absolute inset-0 object-cover rounded-s-lg" src="https://cdn-imddh.nitrocdn.com/BgpVdYdrOyYzGZDHCldtezOehOYupTPa/assets/images/optimized/rev-f05fc79/www.technoserve.org/wp-content/uploads/2023/12/Francis-Kinyanjui-at-his-business-Evergreen-General-Store-1024x683.jpg" alt="Hardware Seller Image">
+
+                    <div class="grow p-4 ms-32 sm:ms-48">
+                        <div class="min-h-24 flex flex-col justify-center">
+                            <h3 class="font-semibold text-sm text-gray-800 dark:text-neutral-300">
+                                Hardware Store
+                            </h3>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-neutral-500">
+                                Imagine never losing a sale because of misplaced inventory again!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Card -->
+
+            <!-- furniture -->
+            <div class="block border border-gray-200 rounded-sm hover:shadow-sm focus:outline-none dark:border-neutral-700">
+                <div class="relative flex items-center overflow-hidden">
+                    <img class="w-32 sm:w-48 h-full absolute inset-0 object-cover rounded-s-lg" src="https://cdn11.bigcommerce.com/s-9nl27vlw/images/stencil/532x532/products/7336/16320/KAJ_DARIO_9S_1__59931.1728039825.jpg?c=2" alt="Hardware Seller Image">
+
+                    <div class="grow p-4 ms-32 sm:ms-48">
+                        <div class="min-h-24 flex flex-col justify-center">
+                            <h3 class="font-semibold text-sm text-gray-800 dark:text-neutral-300">
+                                Furniture Shop
+                            </h3>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-neutral-500">
+                                Keep track of what’s in store. Streamline Your Furniture Sales!.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Card -->
+        </div>
 
         <x-parts.mission-values />
 
-        <x-parts.featured-story />
     </div>
 
-    <div class="my-8 md:my-14">
+    <div class="mt-10 max-w-[95rem] relative p-4 py-10 lg:py-14">
+        <div class="max-w-2xl text-center mx-auto mb-4">
+            <h1 class="block text-3xl font-bold text-slate-800 sm:text-4xl md:text-5xl dark:text-slate-200">
+                Make informed decisions with <span class="text-amber-500">up-to-the-minute sales data</span>
+            </h1>
+            <p class="mt-3 text-lg text-slate-800 dark:text-slate-200">Track your sales performance in real-time and adjust your strategies on the fly. Dukatools gives you the insights you need to boost your business.</p>
+        </div>
+        <div class="mt-6 max-w-7xl mx-auto grid items-center justify-center">
+            <img
+                src="https://github.com/mwanginjuguna/public-image-assets/blob/main/dukatools/dukatools-sales-dashboard-light.png?raw=true"
+                class="rounded-sm shadow shadow-emerald-200/70 dark:shadow-emerald-700/70"
+                alt="Screenshot Image of Dukatools Sales Dashboard"
+            >
+        </div>
+    </div>
+
+    <div class="mt-10 py-8 lg:py-14">
         <x-parts.how-it-works />
     </div>
 
-    <!-- Card Section -->
+    <div class="my-8 md:my-14 p-4 py-10 lg:py-16 lg:max-w-[95em] mx-auto text-slate-800 dark:text-slate-100">
+        <x-parts.featured-story />
+    </div>
+
+    <!-- Getting help -->
     <div class="max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-        <!-- Grid -->
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-            <!-- Card -->
-            <a class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-neutral-900 dark:border-neutral-800" href="#">
+            <!-- start selling -->
+            <a class="group flex flex-col bg-emerald-100 border shadow-sm rounded-xl hover:shadow-md transition dark:bg-emerald-900 dark:border-slate-800" href="{{ route('register')}}">
                 <div class="p-4 md:p-5">
                     <div class="flex">
                         <svg class="mt-1 flex-shrink-0 size-5 text-gray-800 dark:text-neutral-200" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
 
                         <div class="grow ms-5">
                             <h3 class="group-hover:text-blue-600 font-semibold text-gray-800 dark:group-hover:text-neutral-400 dark:text-neutral-200">
-                                Ask our community
+                                Join a community of sellers.
                             </h3>
                             <p class="text-sm text-gray-500 dark:text-neutral-500">
-                                Get help from 40k+ Preline users
+                                Level up your shop. Let's go digital.
                             </p>
                         </div>
                     </div>
                 </div>
             </a>
-            <!-- End Card -->
 
-            <!-- Card -->
-            <a class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-neutral-900 dark:border-neutral-800" href="#">
+            <!-- live-chat -->
+            <a class="group flex flex-col bg-emerald-100 border shadow-sm rounded-xl hover:shadow-md transition dark:bg-emerald-900 dark:border-slate-800" href="https://api.whatsapp.com/message/LDZPA35DBGTTI1">
                 <div class="p-4 md:p-5">
                     <div class="flex">
                         <svg class="mt-1 flex-shrink-0 size-5 text-gray-800 dark:text-neutral-200" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
 
                         <div class="grow ms-5">
                             <h3 class="group-hover:text-blue-600 font-semibold text-gray-800 dark:group-hover:text-neutral-400 dark:text-neutral-200">
-                                Get help in the app
+                                Get help on WhatsApp
                             </h3>
                             <p class="text-sm text-gray-500 dark:text-neutral-500">
-                                Just head to «Help» in the app
+                                Click to chat on Whatsapp
                             </p>
                         </div>
                     </div>
                 </div>
             </a>
-            <!-- End Card -->
 
-            <!-- Card -->
-            <a class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-neutral-900 dark:border-neutral-800" href="#">
+            <!-- email us -->
+            <a class="group flex flex-col bg-emerald-100 border shadow-sm rounded-xl hover:shadow-md transition dark:bg-emerald-900 dark:border-neutral-800" href="mailto:francis@gameplanlabs.org">
                 <div class="p-4 md:p-5">
                     <div class="flex">
                         <svg class="mt-1 flex-shrink-0 size-5 text-gray-800 dark:text-neutral-200" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 .8-1.6l8-6a2 2 0 0 1 2.4 0l8 6Z"/><path d="m22 10-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 10"/></svg>
@@ -122,15 +179,17 @@
                                 Email us
                             </h3>
                             <p class="text-sm text-gray-500 dark:text-neutral-500">
-                                Reach us at <span class="text-blue-600 decoration-2 group-hover:underline font-medium dark:text-blue-500">info@site.com</span>
+                                Reach out to Francis for custom help <span class="text-blue-600 decoration-2 group-hover:underline font-medium dark:text-blue-500">francis@gameplanlabs.org</span>
                             </p>
                         </div>
                     </div>
                 </div>
             </a>
-            <!-- End Card -->
         </div>
-        <!-- End Grid -->
     </div>
-    <!-- End Card Section -->
+
+    <!-- faqs -->
+    <div class="max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+        <x-parts.faqs />
+    </div>
 </x-guest-layout>

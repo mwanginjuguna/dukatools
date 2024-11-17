@@ -10,7 +10,7 @@
                        class="flex flex-row items-center"
                        wire:navigate>
                         <x-application-logo class="block h-9 w-auto object-cover object-center text-slate-800 dark:text-slate-200" />
-                        <span class="pl-1 font-medium text-orange-600 dark:text-orange-500 text-xs lg:text-sm">{{ config('app.name') }}</span>
+                        <span class="pl-1 font-medium text-amber-600 dark:text-amber-400 text-xs lg:text-sm">{{ config('app.name') }}</span>
                     </a>
                 </div>
 
