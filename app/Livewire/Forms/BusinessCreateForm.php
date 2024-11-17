@@ -4,6 +4,7 @@ namespace App\Livewire\Forms;
 
 use App\Models\Branch;
 use App\Models\Business;
+use App\Models\Inventory;
 use App\Models\Location;
 use App\Models\User;
 use App\Models\Vendor;
@@ -65,13 +66,22 @@ class BusinessCreateForm extends Form
             'vendor_id' => $vendor->id,
         ]);
 
-        Branch::create([
+        $branch = Branch::create([
             'name' => 'Main',
             'phone_number' => $this->phone,
             'email' => $this->email,
             'address' => $this->address,
             'location_id' => $location->id,
             'business_id' => $business->id,
+        ]);
+
+        $inventory = Inventory::create([
+            'name' => $this->name . ' Inventory',
+            'location_id' => $location->id,
+            'vendor_id' => $vendor->id,
+            'business_id' => $business->id,
+            'branch_id' => $branch->id,
+            'type' => 'main'
         ]);
     }
 }

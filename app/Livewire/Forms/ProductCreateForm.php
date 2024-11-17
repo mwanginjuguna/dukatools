@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\Inventory;
+use App\Models\InventoryItem;
 use App\Models\Product;
 use App\Models\ProductVariation;
 use Illuminate\Support\Arr;
@@ -20,6 +22,8 @@ class ProductCreateForm extends Form
     #[Validate('required')]
     public string $description = '';
 
+    public mixed $buyingPrice = 1.99;
+    public mixed $sellingPrice = 0;
     public string $brand = '';
     public int $brandId = 0;
     public string $returnPolicy = '';
@@ -48,6 +52,7 @@ class ProductCreateForm extends Form
     public function store()
     {
         $this->validate();
+        $this->sellingPrice = $this->price;
 
         $product = Product::create([
             'name' => $this->name,
@@ -66,6 +71,37 @@ class ProductCreateForm extends Form
             'vendor_id' => $this->vendorId,
         ]);
 
+        $this->saveRelations($product);
+
+        if (strlen($this->supplierSku) > 0) {
+            $product->supplier_sku = $this->supplierSku;
+        }
+
+        $listOfVariants = [];
+        $listOfVariants[] = isset($this->color) ?  ['type'=>'color', 'details'=>$this->color]: [];
+        $listOfVariants[] = isset($this->size) ?  ['type'=>'size', 'details'=> $this->size]: [];
+        $listOfVariants[] = isset($this->dimension) ?  ['type'=>'dimension', 'details'=> $this->dimension]: [];
+        $listOfVariants[] = isset($this->gender) ?  ['type'=>'gender', 'details'=> $this->gender]: [];
+
+        foreach ($listOfVariants as $variant) {
+            ProductVariation::create([
+                'product_id' => $product->id,
+                'type' => Arr::get($variant, 'type'),
+                'details' => Arr::get($variant, 'details'),
+                'price_change_percentage' => 0,
+               'stock_quantity' => $this->stockQuantity,
+            ]);
+        }
+
+        // update inventory
+        $this->updateInventory($product);
+    }
+
+    /**
+     * Save product relations.
+     */
+    private function saveRelations($product): void
+    {
         if ($this->businessId > 0) {
             $product->business_id = $this->businessId;
         }
@@ -84,25 +120,30 @@ class ProductCreateForm extends Form
         if ($this->returnPolicyId > 0) {
             $product->return_policy_id = $this->returnPolicyId;
         }
-        if (strlen($this->supplierSku) > 0) {
-            $product->supplier_sku = $this->supplierSku;
-        }
         $product->save();
+    }
 
-        $listOfVariants = [];
-        $listOfVariants[] = isset($this->color) ?  ['type'=>'color', 'details'=>$this->color]: [];
-        $listOfVariants[] = isset($this->size) ?  ['type'=>'size', 'details'=> $this->size]: [];
-        $listOfVariants[] = isset($this->dimension) ?  ['type'=>'dimension', 'details'=> $this->dimension]: [];
-        $listOfVariants[] = isset($this->gender) ?  ['type'=>'gender', 'details'=> $this->gender]: [];
-
-        foreach ($listOfVariants as $variant) {
-            ProductVariation::create([
-                'product_id' => $product->id,
-                'type' => Arr::get($variant, 'type'),
-                'details' => Arr::get($variant, 'details'),
-                'price_change_percentage' => 0,
-               'stock_quantity' => $this->stockQuantity,
+    /**
+     * Update inventory
+     */
+    private function updateInventory($product): void
+    {
+        $inventory = Inventory::query()->where('vendor_id', $this->vendorId)->first();
+        if (!$inventory) {
+            $inventory = Inventory::create([
+                'vendor_id' => $this->vendorId,
             ]);
         }
+
+        InventoryItem::create([
+            'product_id' => $product->id,
+            'item_name' => $this->name,
+            'selling_price' => $this->sellingPrice,
+            'buying_price' => $this->buyingPrice ?? 0,
+            'quantity' => $this->stockQuantity,
+            'vendor_id' => $this->vendorId,
+            'inventory_id' => $inventory->id,
+            'stocked_at' => $product->created_at
+        ]);
     }
 }

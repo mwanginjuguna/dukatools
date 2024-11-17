@@ -3,6 +3,7 @@
 namespace App\Livewire\Products;
 
 use App\Actions\ProductFilters;
+use App\Models\InventoryItem;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -42,11 +43,28 @@ class ProductList extends Component
     {
         $this->selectedProduct->stock_quantity += $this->newStockQuantity;
         $this->selectedProduct->save();
+
+        // update inventory
+        $this->updateInventoryStock();
+
+        // dispatch to frontend
         $this->dispatch('stock-updated');
         $this->dispatch('close-modal','restock-modal');
+
         $this->newStockQuantity = 0;
         sleep(1);
+
+        // redirect to stock
         $this->redirectRoute('vendor.inventory');
+    }
+
+    private function updateInventoryStock()
+    {
+        $inventoryItem = InventoryItem::query()->firstWhere('product_id', $this->selectedProduct->id);
+        if ($inventoryItem !== null) {
+            $inventoryItem->quantity += $this->newStockQuantity;
+            $inventoryItem->save();
+        }
     }
 
     public function applyFilter()

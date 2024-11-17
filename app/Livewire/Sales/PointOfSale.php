@@ -5,6 +5,7 @@ namespace App\Livewire\Sales;
 use App\Actions\OrderSaver;
 use App\Actions\PaymentProcessor;
 use App\Models\Cart;
+use App\Models\InventoryItem;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -144,6 +145,12 @@ class PointOfSale extends Component
             $product = Product::find($item['product']['id']);
             $product->stock_quantity -= $item['quantity'];
             $product->save();
+
+            $inventoryItem = InventoryItem::query()->firstWhere('product_id', $product->id);
+            if ($inventoryItem !== null) {
+                $inventoryItem->quantity -= $item['quantity'];
+                $inventoryItem->save();
+            }
         }
 
         Cart::destroyCart();

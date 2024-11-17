@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('reference')->unique();
             $table->string('name')->nullable();
             $table->foreignId('vendor_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('business_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('location_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('branch_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('business_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('location_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('branch_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('type')->nullable();
             $table->json('details')->nullable();
             $table->softDeletes();
@@ -33,6 +33,7 @@ return new class extends Migration
             $table->unsignedBigInteger('quantity')->default(1);
             $table->unsignedBigInteger('min_stock_level')->default(5);
             $table->foreignId('inventory_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('vendor_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('supplier_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('manufacturer_id')->nullable()->constrained()->cascadeOnDelete();
 
