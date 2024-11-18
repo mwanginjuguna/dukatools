@@ -51,6 +51,24 @@ class AdminController extends Controller
         return view('admin.posts.index');
     }
 
+    /*
+     * Display a list of users
+     */
+    public function users(): View
+    {
+        return view('admin.users.index');
+    }
+
+    /*
+     * Show a single
+     */
+    public function userShow(Request $request, User $user): View
+    {
+        return view('admin.users.show', [
+            'user' => $user
+        ]);
+    }
+
     public function dashboard(): View
     {
         $posts = Post::query()->with('category')->orderBy('views', 'desc')->get();

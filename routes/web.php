@@ -97,6 +97,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //Route::get('/my-products', [ProductController::class, 'index'])->name('products.index');
 
     // admin orders
+    // admin users
+    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::get('/admin/users/{user}', [AdminController::class, 'userShow'])->name('admin.users.show');
 
     // activate mpesa urls for lipa na mpesa notifications
     Route::post('/mpesa/c2b/register-urls', [C2BController::class, 'registerURLS'])->name('c2b.registerUrls');
