@@ -1,4 +1,4 @@
-<div class="max-w-5xl mx-auto">
+<div class="max-w-5xl p-4 mx-auto">
     <!-- Breadcrumb -->
     <x-parts.inventory.invtry-breadcrumb title="Suppliers" count="{{ $supplierCount }}" />
 
@@ -29,11 +29,11 @@
             </button>
         </nav>
 
-        <div class="p-4 border border-t-0 border-slate-200 dark:border-slate-800 shadow-sm rounded-b-md">
+        <div class="border border-t-0 border-slate-200 dark:border-slate-800 shadow-sm rounded-b-md">
 
             <!-- Tab Item 1: Suppliers -->
             <div x-show="tabItem1" class="grid space-y-3">
-                <div class="mb-4 py-3 w-full flex flex-col md:flex-row gap-3 md:gap-0 md:justify-between md:items-center border-b border-slate-200 dark:border-slate-900">
+                <div class="mb-4 p-3 w-full flex flex-col md:flex-row gap-3 md:gap-0 md:justify-between md:items-center border-b border-slate-200 dark:border-slate-900">
                     <div>
                         <h4 class="mb-1 font-semibold text-lg">Suppliers</h4>
                         <p class="mb-1 text-xs text-slate-500 dark:text-slate-600"><em class="uppercase">Partners in delivery.</em></p>
@@ -41,14 +41,16 @@
                 </div>
 
                 <div class="mt-6 flex flex-col">
-                    <div class="-m-1.5 overflow-x-auto">
-                        <div class="p-1.5 min-w-full inline-block align-middle">
+                    <div class="overflow-x-auto">
+                        <div class="min-w-full inline-block align-middle">
                             <div class="border rounded-lg divide-y divide-slate-200 dark:border-slate-800 dark:divide-slate-800">
                                 <!--search-->
                                 <div class="py-3 px-4">
                                     <div class="relative max-w-xs">
-                                        <label class="sr-only">Search</label>
-                                        <input type="text" name="hs-table-with-pagination-search" id="hs-table-with-pagination-search" class="py-2 px-3 ps-9 block w-full border-slate-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-emerald-500 focus:ring-emerald-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-slate-700 dark:text-slate-400 dark:placeholder-slate-500 dark:focus:ring-slate-600" placeholder="Search for items">
+                                        <label id="sup-search" class="sr-only">Search</label>
+                                        <input
+                                            wire:model.live.throttle.300ms="search"
+                                            type="text" name="sup-search" id="sup-search" class="py-2 px-3 ps-9 block w-full border-slate-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-emerald-500 focus:ring-emerald-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-slate-700 dark:text-slate-400 dark:placeholder-slate-500 dark:focus:ring-slate-600" placeholder="Search for suppliers">
                                         <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-3">
                                             <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <circle cx="11" cy="11" r="8"></circle>

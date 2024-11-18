@@ -16,33 +16,44 @@ class Index extends Component
     public int $perPage = 15;
     public string $search = '';
     public $vendor;
+    public $business;
 
     public function saveSupplier()
     {
-        $this->form->businessId = $this->vendor->businesses->first()->id;
+        $this->form->businessId = $this->business->id;
         $this->form->store();
 
         $this->form->reset();
 
         $this->dispatch('supplier-saved');
-        $this->resetPage();
+        $this->redirectRoute('vendor.suppliers');
     }
 
     public function mount()
     {
         $this->vendor = session()->get('vendor');
-        $this->form->businessId = $this->vendor->businesses->first()->id;
+        $this->business = $this->vendor->businesses->first();
     }
 
     public function render()
     {
-        $supplierQuery = Supplier::query()
-            ->where('business_id', $this->form->businessId)
-            ->latest();
+        $supplierQuery = Supplier::query();
+
+        if ($this->search !== '') {
+            $supplierQuery->where('business_id', $this->business->id)
+                ->where('first_name', 'like', '%'. $this->search. '%')
+                ->orWhere('last_name', 'like', '%'. $this->search . '%')
+                ->orWhere('email', 'like', '%'. $this->search . '%');
+        }
+
+        $supplierQuery->where('business_id', $this->business->id);
+
         $this->supplierCount = $supplierQuery->count();
 
         return view('livewire.inventory.suppliers.index', [
-            'suppliers' => $supplierQuery->paginate(perPage: $this->perPage)
+            'suppliers' => $supplierQuery
+                ->latest()
+                ->paginate(perPage: $this->perPage)
         ]);
     }
 }

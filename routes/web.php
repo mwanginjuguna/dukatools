@@ -56,7 +56,7 @@ Route::middleware(['auth', 'vendor'])->group(function () {
     Route::get('/vendor/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::get('/vendor/products/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('vendor.products.show');
     Route::get('/vendor/products', [ProductController::class, 'index'])->name('vendor.index');
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/vendor/catalogue/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/vendor/products/show/{product:slug}', [AdminProductsController::class, 'editProduct'])->name('admin.products.edit');
 
     // pos

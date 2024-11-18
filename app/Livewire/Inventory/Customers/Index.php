@@ -14,6 +14,7 @@ class Index extends Component
     public CustomerCreateForm $form;
     public int $customerCount = 0;
     public int $perPage = 15;
+    public string $search = '';
     public float $totalCustomerValue = 0;
     public float $averageCustomerValue = 0;
     public int $averageOrderCount = 0;
@@ -32,12 +33,29 @@ class Index extends Component
     {
         $vendor = session()->get('vendor');
 
-        $customerQuery = Customer::query()->where('vendor_id', $vendor->id)->latest();
+        $customerQuery = Customer::query();
+
+        $customerQuery->where('vendor_id', $vendor->id);
+
+
+        // search
+        if ($this->search) {
+            $customerQuery->where('vendor_id', $vendor->id)
+                ->where('first_name', 'like', '%'. $this->search. '%')
+                ->orWhere('last_name', 'like', '%'. $this->search . '%')
+                ->orWhere('email', 'like', '%'. $this->search . '%')
+                ->orWhere('reference', 'like', '%'. $this->search . '%')
+                ->orWhere('source', 'like', '%'. $this->search . '%');
+        }
+
+        $customerQuery->when($this->search, function ($query, $search) {
+            return $query->where('name', 'like', "%{$search}%");
+        });
 
         $this->customerCount = $customerQuery->count();
 
         return view('livewire.inventory.customers.index', [
-            'customers' => $customerQuery->paginate($this->perPage)
+            'customers' => $customerQuery->latest()->paginate($this->perPage)
         ]);
     }
 }

@@ -24,7 +24,8 @@ class CustomerCreateForm extends Form
 
     public string $phone = '';
 
-    public string $location = '';
+    public string $location = 'Kenya';
+    public int $vendorId = 0;
 
     public function store()
     {
@@ -44,6 +45,14 @@ class CustomerCreateForm extends Form
             'phone_number' => $this->phone,
             'location_id' => $loc->id?? null,
         ]);
+
+        if ($this->vendorId !== 0) {
+            $customer->vendor_id = $this->vendorId;
+        } else {
+            $customer->vendor_id = session()->get('vendor')->id;
+        }
+
+        $customer->save();
 
         $this->reset();
     }

@@ -25,7 +25,7 @@ class BusinessCreateForm extends Form
     public string $address = '';
     public string $town = '';
     public string $county = '';
-    public string $country = '';
+    public string $country = 'Kenya';
     public string $zipCode = '';
 
     public bool $isEdit = false;

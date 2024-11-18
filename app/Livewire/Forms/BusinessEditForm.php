@@ -24,7 +24,7 @@ class BusinessEditForm extends Form
     public string $address = '';
     public string $town = '';
     public string $county = '';
-    public string $country = '';
+    public string $country = 'Kenya';
     public string $zipCode = '';
     public int $vendorId = 0;
     public int $locationId = 0;

@@ -23,7 +23,7 @@ class SupplierCreateForm extends Form
 
     public string $phone = '';
 
-    public string $location = '';
+    public string $location = 'Kenya';
     public int $businessId = 1;
 
     public function store()
@@ -43,6 +43,7 @@ class SupplierCreateForm extends Form
             'email' => $this->email,
             'phone_number' => $this->phone,
             'location_id' => $loc->id?? null,
+            'business_id' => $this->businessId,
         ]);
 
 

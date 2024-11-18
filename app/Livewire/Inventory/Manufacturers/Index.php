@@ -14,15 +14,18 @@ class Index extends Component
     public ManufacturerCreateForm $form;
     public int $manufacturerCount = 0;
     public int $perPage = 15;
+    // search
+    public string $search = '';
 
     public bool $isView = false;
     public object $selectedManufacturer;
 
     public object $vendor;
+    public object $business;
 
     public function saveManufacturer()
     {
-        $this->form->businessId = $this->vendor->businesses->first()->id;
+        $this->form->businessId = $this->business->id;
         $this->form->store();
 
         $this->form->reset();
@@ -43,14 +46,22 @@ class Index extends Component
     public function mount()
     {
         $this->vendor = session()->get('vendor');
-        $this->form->businessId = $this->vendor->businesses->first()->id;
+        $this->business = $this->vendor->businesses->first();
     }
 
     public function render()
     {
-        $manufacturerQuery = Manufacturer::query()
-            ->where('business_id', $this->form->businessId)
-            ->whereHas('products')
+        $manufacturerQuery = Manufacturer::query();
+
+        // search
+        if ($this->search) {
+            $manufacturerQuery->where('business_id', $this->business->id)
+                ->where('first_name', 'like', '%'. $this->search. '%')
+                ->orWhere('last_name', 'like', '%'. $this->search . '%')
+                ->orWhere('email', 'like', '%'. $this->search . '%');
+        }
+
+        $manufacturerQuery->where('business_id', $this->business->id)
             ->latest();
 
         $this->manufacturerCount = $manufacturerQuery->count();

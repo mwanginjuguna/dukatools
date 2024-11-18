@@ -25,7 +25,7 @@ class CreateAddressForm extends Form
     public string $zipCode = '';
 
     #[Validate('required')]
-    public string $country = '';
+    public string $country = 'Kenya';
 
     #[Validate('required')]
     public string $phoneNumber = '';
