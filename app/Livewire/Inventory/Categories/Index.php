@@ -5,15 +5,20 @@ namespace App\Livewire\Inventory\Categories;
 use App\Models\Category;
 use App\Models\SubCategory;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Index extends Component
 {
+    use WithPagination;
+
     public int $perPage = 15;
     public int $categoriesCount = 0;
     public int $subCategoriesCount = 0;
 
     public string $categoryName = '';
     public string $subCategoryName = '';
+    public string $categorySearch = '';
+    public string $subCategorySearch = '';
 
     public object $selectedCategory;
     public object $selectedSubcategory;
@@ -62,19 +67,25 @@ class Index extends Component
 
     public function render()
     {
-        $categories = Category::query()
-            ->withCount('products')
-            ->orderBy('products_count', 'desc');
-        $subCategories = SubCategory::query()
-            ->withCount('products')
-            ->orderBy('products_count', 'desc');
+        $categoryQuery = Category::query();
+        $subCategoryQuery = SubCategory::query();
 
-        $this->categoriesCount = $categories->count();
-        $this->subCategoriesCount = $subCategories->count();
+        if ($this->categorySearch !== '') {
+            $categoryQuery->where('name', 'like', '%'. $this->categorySearch. '%');
+        }
+        if ($this->subCategorySearch!== '') {
+            $subCategoryQuery->where('name', 'like', '%'. $this->subCategorySearch. '%');
+        }
+
+        $subCategoryQuery->withCount('products');
+        $categoryQuery->withCount('products');
+
+        $this->categoriesCount = $categoryQuery->count();
+        $this->subCategoriesCount = $subCategoryQuery->count();
 
         return view('livewire.inventory.categories.index', [
-            'categories' => $categories->paginate($this->perPage),
-            'subCategories' => $subCategories->paginate($this->perPage)
+            'categories' => $categoryQuery->paginate($this->perPage),
+            'subCategories' => $subCategoryQuery->orderBy('products_count', 'desc')->paginate($this->perPage)
         ]);
     }
 }

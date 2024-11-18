@@ -4,7 +4,7 @@
     </x-slot:title>
 
     <!-- Table Section -->
-    <div class="max-w-5xl mx-auto px-4 px-6 sm:py-10">
+    <div class="p-4">
         <livewire:inventory.brands.index />
     </div>
 

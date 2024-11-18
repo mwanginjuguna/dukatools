@@ -16,6 +16,7 @@ class Index extends Component
 
     public object $selectedBrand;
     public object $selectedBrandProducts;
+    public object $vendor;
 
     public function submitBrand()
     {
@@ -39,7 +40,12 @@ class Index extends Component
             ->where('brand_id', $brand->id)
             ->get(['name', 'stock_quantity']);
 
-        $this->dispatch('open-modal', 'show-brand-modal');
+        $this->dispatch('open-modal', 'brand-show-modal');
+    }
+
+    public function mount()
+    {
+        $this->vendor = session()->get('vendor');
     }
 
     public function render()

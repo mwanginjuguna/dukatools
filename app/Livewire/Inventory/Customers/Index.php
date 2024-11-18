@@ -20,6 +20,9 @@ class Index extends Component
     public int $averageOrderCount = 0;
     public float $averageOrderValue = 0;
 
+    public object $selectedCustomer;
+    public object $vendor;
+
     public function saveCustomer()
     {
         $this->form->store();
@@ -29,9 +32,20 @@ class Index extends Component
         $this->dispatch('customer-saved');
     }
 
+    public function showCustomer(Customer $customer)
+    {
+        $this->selectedCustomer = $customer;
+        $this->dispatch('open-modal','customer-show-modal');
+    }
+
+    public function mount()
+    {
+        $this->vendor = session()->get('vendor');
+    }
+
     public function render()
     {
-        $vendor = session()->get('vendor');
+        $vendor = $this->vendor;
 
         $customerQuery = Customer::query();
 

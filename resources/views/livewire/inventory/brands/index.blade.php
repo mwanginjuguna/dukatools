@@ -98,7 +98,7 @@
         </div>
     </section>
 
-    <x-modal name="show-brand-modal">
+    <x-modal name="brand-show-modal">
         <div class="p-4 bg-slate-100 dark:bg-slate-800">
             @if(isset($selectedBrand))
                 <div class="flex justify-between items-center">
