@@ -29,7 +29,7 @@ class Index extends Component
             ->simplePaginate(10);
 
         $completedOrders = Order::query()
-            ->whereIn('status', ['delivered', 'shipping'])
+            ->whereIn('status', ['paid', 'delivered', 'shipping'])
             ->latest()
             ->paginate(10);
 

@@ -24,7 +24,9 @@ class OrderSaver
             'payment_method' => $data['payment_method'] ?? 'N/A',
             'subtotal' => $cartTotal,
             'total' => $cartTotal,
-            'status' => 'paid'
+            'status' => 'paid',
+            'paid_at' => now(),
+            'amount_paid' => $cartTotal
         ]);
 //
 //        'customer_id' => $data['customer_id'] ?? null,

@@ -128,9 +128,21 @@
                             </div>
                         </div>
 
+                        <!-- add customer -->
+                        <div class="mt-2 py-3 text-sm border-b border-slate-200 dark:border-slate-800">
+                            <div class="mb-1 flex justify-between items-center">
+                                <h3 class="text-gray-500 dark:text-gray-500">Customer Details <span class="text-xs">(optional)</span> </h3>
+                            </div>
+
+                            <div class="flex flex-col md:flex-row items-center gap-3">
+                                <input wire:model="customerName" type="text" class="w-full px-2 py-1 text-sm placeholder:text-sm rounded-lg border border-gray-200 dark:border-gray-700 focus:ring-emerald-500 focus:border-emerald-500 dark:focus:border-emerald-600" placeholder="Name">
+                                <input wire:model="customerNumber" type="text" class="w-full px-2 py-1 text-sm placeholder:text-sm rounded-lg border border-gray-200 dark:border-gray-700 focus:ring-emerald-500 focus:border-emerald-500 dark:focus:border-emerald-600" placeholder="Phone Number">
+                            </div>
+                        </div>
+
                         @if($cartTotal > 0)
                         <!--Payment methods-->
-                        <div class="space-y-4 mb-3">
+                        <div class="space-y-4 mb-3 mt-4">
                             <h3 class="text-gray-500 dark:text-gray-500">Payment Methods</h3>
 
                             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -287,7 +299,7 @@
                                wire:model="transactionCode"
                                placeholder="RLG6VYMSO7"
                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                               required/>
+                        />
                         <p id="helper-text-transaction-code" class="mt-1 py-1 text-sm text-gray-500 dark:text-gray-400">Enter the mpesa transaction code (optional).</p>
                         @error('transactionCode')<p class="text-red-500 text-xs md:text-sm">{{ $message }}</p>@enderror
                     </div>
@@ -367,7 +379,7 @@
                                wire:model="transactionCode"
                                placeholder="Enter bank transaction code"
                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                               required/>
+                        />
                         @error('transactionCode')<p class="text-red-500 text-xs md:text-sm">{{ $message }}</p>@enderror
                     </div>
                     <button type="submit"

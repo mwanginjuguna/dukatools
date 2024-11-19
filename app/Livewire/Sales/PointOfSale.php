@@ -76,6 +76,7 @@ class PointOfSale extends Component
         $this->cartTotal = Cart::getCartTotal() ?? 0;
         $this->cardAmount = $this->cartTotal;
         $this->mpesaAmount = $this->cartTotal;
+        $this->cashAmount = $this->cartTotal;
     }
 
     /**

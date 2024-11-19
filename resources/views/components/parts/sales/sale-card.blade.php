@@ -63,23 +63,14 @@
 
                 <div class="md:col-span-1 px-3 md:ps-5 md:border-l">
                     <div class="space-y-1 text-sm">
-                        <p class="text-slate-500 dark:text-slate-500">
-                            Payment Details:
-                            @if($order->is_paid)
-                                <span class="text-green-600 dark:text-green-500 uppercase">
-                                Paid {{ isset($order->payment_gateway) ? ' via '. $order->payment_gateway : '' }}
-                            </span>
-                            @else
-                                <span class="text-red-600 dark:text-red-500 uppercase">
-                                Not Paid
-                            </span>
-                            @endif
-                        </p>
-                        <p class="mt-2">
-                            Payment Id:
-                            <span class="text-xs font-medium text-slate-600 dark:text-slate-400">
-                            {{ $order->payment_id ?? 'N/A'}}
-                        </span>
+                        <p class="text-slate-500 dark:text-slate-500">Payment Details:</p>
+                        @if($order->is_paid)
+                            <span class="text-green-600 dark:text-green-500 ">Paid with {{ $order->payment_method ?? '' }}</span>
+                        @else
+                            <span class="text-red-600 dark:text-red-500 uppercase">Not Paid</span>
+                        @endif
+                        <p class="">
+                            Sold at <span class="text-xs font-medium text-slate-600 dark:text-slate-400">{{ $order->channel ?? 'N/A'}}</span>
                         </p>
                     </div>
 
@@ -91,7 +82,7 @@
                     </div>
                 </div>
 
-                <a href="{{ route('orders.show', $order->id) }}" class="hidden md:col-span-3 mt-1 px-5 text-right text-sm underline underline-offset-4 decoration-dotted text-blue-500 hover:text-blue-600 dark:hover:text-blue-400">
+                <a href="{{ route('orders.show', $order->id) }}" class="md:col-span-3 mt-1 px-5 text-right text-sm underline underline-offset-4 decoration-dotted text-blue-500 hover:text-blue-600 dark:hover:text-blue-400">
                     View Sale Details
                 </a>
             </div>

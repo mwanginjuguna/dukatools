@@ -47,7 +47,7 @@
                 :class="tabItem3 ? `border-b-emerald-500 dark:border-b-emerald-500 text-emerald-500 dark:text-emerald-600` : ` dark:border-l-slate-700 dark:border-b-slate-700 text-gray-500 hover:text-gray-700 dark:text-slate-400 `"
                 class="relative min-w-0 flex-1 bg-slate-100 first:border-s-0 border-s border-b-2 py-4 px-4 text-sm font-medium text-center overflow-hidden hover:bg-slate-50 focus:z-10 focus:outline-none focus:text-emerald-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:text-emerald-400"
                 id="tabItem3">
-                Completed
+                Paid
             </button>
         </nav>
 
