@@ -2,10 +2,13 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Inventory;
 use App\Models\InventoryItem;
 use App\Models\Product;
 use App\Models\ProductVariation;
+use App\Models\ReturnPolicy;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Validate;
@@ -24,24 +27,31 @@ class ProductCreateForm extends Form
 
     public mixed $buyingPrice = 1.99;
     public mixed $sellingPrice = 0;
+
+    public int $stockQuantity = 1;
+
     public string $brand = '';
     public int $brandId = 0;
-    public string $returnPolicy = '';
-    public int $returnPolicyId = 0;
-    public int $stockQuantity = 1;
+    public string $subCategory = '';
+    public int $subCategoryId = 0;
     public string $category = '';
     public int $categoryId = 0;
+    public string $returnPolicy = '';
+    public int $returnPolicyId = 0;
+
     public int $manufacturerId = 0;
     public int $supplierId = 0;
     public int $vendorId = 0;
     public int $businessId = 0;
     public int $branchId = 0;
-    public int $subCategoryId = 0;
+    public int $locationId = 0;
+
     public mixed $tax = 0;
     public string $shippedFrom = '';
+    public mixed $shippingFee = 0;
+
     public string $sku = '';
     public string $supplierSku = '';
-    public mixed $shippingFee = 0;
 
     public string $image = '';
     public string $color = '';
@@ -53,6 +63,22 @@ class ProductCreateForm extends Form
     {
         $this->validate();
         $this->sellingPrice = $this->price;
+
+        if ($this->category !== '') {
+            $this->categoryId = Category::firstOrCreate(['name' => $this->category])->id;
+        }
+
+        if ($this->subCategory !== '') {
+            $this->categoryId = Category::firstOrCreate(['name' => $this->category])->id;
+        }
+
+        if ($this->brand !== '') {
+            $this->brandId = Brand::firstOrCreate(['name' => $this->brand])->id;
+        }
+
+        if ($this->returnPolicy!== '') {
+            $this->returnPolicyId = ReturnPolicy::firstOrCreate(['name' => $this->returnPolicy])->id;
+        }
 
         $product = Product::create([
             'name' => $this->name,
@@ -130,9 +156,7 @@ class ProductCreateForm extends Form
     {
         $inventory = Inventory::query()->where('vendor_id', $this->vendorId)->first();
         if (!$inventory) {
-            $inventory = Inventory::create([
-                'vendor_id' => $this->vendorId,
-            ]);
+            $inventory = $this->createInventory();
         }
 
         InventoryItem::create([
@@ -145,5 +169,21 @@ class ProductCreateForm extends Form
             'inventory_id' => $inventory->id,
             'stocked_at' => $product->created_at
         ]);
+    }
+
+    public function createInventory(): Inventory
+    {
+        $inventory = new Inventory();
+        $inventory->vendor_id = $this->vendorId;
+        $inventory->business_id = $this->businessId;
+
+        if ($this->locationId > 0) {
+            $inventory->location_id = $this->locationId;
+        }
+        if ($this->branchId > 0) {
+            $inventory->branch_id = $this->branchId;
+        }
+        $inventory->save();
+        return $inventory;
     }
 }

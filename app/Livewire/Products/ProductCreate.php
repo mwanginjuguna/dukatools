@@ -26,12 +26,15 @@ class ProductCreate extends Component
 
     public $productImage;
     public $vendor;
+    public $business;
 
     public string $imagePath = '';
 
     public function productSave()
     {
-        $this->form->vendorId = $this->vendor->id ?? auth()->id();
+        $this->form->vendorId = $this->vendor->id;
+        $this->form->businessId = $this->business->id;
+        $this->form->locationId = $this->business->location_id ?? 0;
 
         if (isset($this->productImage)) {
             $this->imagePath = Storage::disk('public')
@@ -54,6 +57,7 @@ class ProductCreate extends Component
     public function mount()
     {
         $this->vendor = session()->get('vendor');
+        $this->business = $this->vendor->businesses()->first();
     }
 
     public function render()
@@ -64,8 +68,8 @@ class ProductCreate extends Component
             'tags' => Tag::query()->get(),
             'SubCategories' => SubCategory::query()->get(),
             'returnPolicies' => ReturnPolicy::query()->get(),
-            'suppliers' => Supplier::query()->where('vendor_id', $this->vendor->id)->where('vendor_id', $this->vendor->id)->get(),
-            'manufacturers' => Manufacturer::query()->where('vendor_id', $this->vendor->id)->get()
+            'suppliers' => Supplier::query()->where('business_id', $this->business->id)->get(),
+            'manufacturers' => Manufacturer::query()->where('business_id', $this->business->id)->get()
         ]);
     }
 }

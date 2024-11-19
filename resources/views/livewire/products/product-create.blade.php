@@ -122,32 +122,8 @@
 
                 </div>
 
-                <!-- product brand -->
-                <div class="w-full">
-                    <div>
-                        <label for="brand" class="block mb-2">Brand</label>
-                        <select name="brand"
-                                wire:model="form.brandId"
-                                id="brand" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option>Choose a brand</option>
-                            @foreach($brands as $brand)
-                                <option value="{{$brand->id}}">{{ $brand->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="hidden">
-                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand</label>
-                        <input type="text"
-                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                               placeholder="Product brand">
-                    </div>
-
-                    @error('form.brand')<p class="text-red-600 text-sm font-medium">{{ $message }}</p>@enderror
-                </div>
-
                 <!-- product category -->
-                <div>
+                <div class="">
                     <label for="category" class="block mb-2">Category</label>
                     <select name="category"
                             wire:model="form.categoryId"
@@ -161,17 +137,27 @@
                 </div>
 
                 <!-- product sub-category -->
-                <div>
-                    <label for="sub-category" class="block mb-2">Sub-Category</label>
-                    <select name="sub-category"
-                            wire:model="form.subCategoryId"
-                            id="sub-category" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option>Choose a sub-category</option>
-                        @foreach($SubCategories as $subCategory)
-                            <option value="{{$subCategory->id}}">{{ $subCategory->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('form.subCategoryId')<p class="text-red-600 text-sm font-medium">{{ $message }}</p>@enderror
+                <div class="">
+                    <div class="hidden">
+                        <label for="subCategory" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subcategory</label>
+                        <input type="text"
+                               id="subCategory"
+                               wire:model="form.subCategory"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               placeholder="Product subCategory">
+                    </div>
+                    <div class="">
+                        <label for="sub-category" class="block mb-2">Sub-Category</label>
+                        <select name="sub-category"
+                                wire:model="form.subCategoryId"
+                                id="sub-category" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option>Choose a sub-category</option>
+                            @foreach($SubCategories as $subCategory)
+                                <option value="{{$subCategory->id}}">{{ $subCategory->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('form.subCategory')<p class="text-red-600 text-sm font-medium">{{ $message }}</p>@enderror
+                    </div>
                 </div>
 
                 <!-- product return policy -->
@@ -192,6 +178,32 @@
                         @endforeach
                     </select>
                     @error('form.returnPolicyId')<p class="text-red-600 text-sm font-medium">{{ $message }}</p>@enderror
+                    @error('form.returnPolicy')<p class="text-red-600 text-sm font-medium">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- product brand -->
+                <div class="w-full">
+                    <div class="hidden">
+                        <label for="brand" class="block mb-2">Brand</label>
+                        <select name="brand"
+                                wire:model="form.brandId"
+                                id="brand" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option>Choose a brand</option>
+                            @foreach($brands as $brand)
+                                <option value="{{$brand->id}}">{{ $brand->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand</label>
+                        <input type="text"
+                               wire:model="form.brand"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               placeholder="Product brand">
+                    </div>
+
+                    @error('form.brand')<p class="text-red-600 text-sm font-medium">{{ $message }}</p>@enderror
                 </div>
             </div>
 
