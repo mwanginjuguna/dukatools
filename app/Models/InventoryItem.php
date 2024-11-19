@@ -34,8 +34,8 @@ class InventoryItem extends Model
         return $this->belongsTo(Inventory::class);
     }
 
-    public function product(): HasOne
+    public function product(): BelongsTo
     {
-        return $this->hasOne(Product::class);
+        return $this->belongsTo(Product::class);
     }
 }

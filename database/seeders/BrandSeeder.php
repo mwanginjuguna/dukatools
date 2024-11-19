@@ -9,7 +9,7 @@ use Illuminate\Database\Seeder;
 class BrandSeeder extends Seeder
 {
     private $productBrands = [
-        'Apple','Gameplan', 'Sony', 'Oppo', 'Infinix', 'Tecno', 'Safaricom', 'Samsung', 'Huawei', 'Xiaomi', 'Hp'];
+        'General', 'Apple',  'Gameplan', 'Sony', 'Oppo', 'Infinix', 'Tecno', 'Safaricom', 'Samsung', 'Huawei', 'Xiaomi', 'Hp', 'Other'];
 
     /**
      * Run the database seeds.

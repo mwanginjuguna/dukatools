@@ -11,6 +11,8 @@ use App\Models\ContactMessage;
 use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\Discount;
+use App\Models\Inventory;
+use App\Models\InventoryItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Post;
@@ -92,20 +94,20 @@ class DatabaseSeeder extends Seeder
             $vendorUser->save();
             \Laravel\Prompts\info('Vendor seeded.');
 
-            \Laravel\Prompts\info('Creating Posts');
-            $postTags = ['Marketing', 'Sales', 'Inventory', 'Shopping', 'Docs', 'Tips'];
-            $categories = ['Technology', 'Lifestyle', 'Sports', 'Food', 'Travel', 'Business', 'Health'];
-            Arr::map($postTags, fn($tag) => Tag::factory(6)->create([
-                'name' => $tag
-            ]));
-            // seed categories with goods
-            Arr::map($categories, fn($category) => Category::factory(6)
-                ->has(Post::factory(2, ['user_id' => $admin->id]))
-                ->create([
-                    'name' => $category
-                ])
-            );
-            \Laravel\Prompts\info('Posts seeded');
+//            \Laravel\Prompts\info('Creating Posts');
+//            $postTags = ['Marketing', 'Sales', 'Inventory', 'Shopping', 'Docs', 'Tips'];
+//            $categories = ['Technology', 'Lifestyle', 'Sports', 'Food', 'Travel', 'Business', 'Health'];
+//            Arr::map($postTags, fn($tag) => Tag::factory(6)->create([
+//                'name' => $tag
+//            ]));
+//            // seed categories with goods
+//            Arr::map($categories, fn($category) => Category::factory(6)
+//                ->has(Post::factory(2, ['user_id' => $admin->id]))
+//                ->create([
+//                    'name' => $category
+//                ])
+//            );
+//            \Laravel\Prompts\info('Posts seeded');
 
             \Laravel\Prompts\info("Seeding a business.");
             // seed A business
@@ -135,25 +137,35 @@ class DatabaseSeeder extends Seeder
             \Laravel\Prompts\info("Discount seeded. \n Seeding suppliers.");
 
             // seed users who will be used to seed orders
-            $suppliers = Supplier::factory(6)->create([
+            $supplier = Supplier::factory()->create([
                 'created_at' => now()->subYear()->addMonths(rand(1,6))->subHours(rand(34,120)),
                 'business_id' => $business->id,
-                'location_id' => $business->location_id
+                'location_id' => $business->location_id,
+                'email' => 'xfdist@gmail.com',
+                'first_name' => 'XF Supplies & Dist',
             ]);
             \Laravel\Prompts\info("Seeding Products.");
 
             // seed product categories
-            $productCategories = Category::query()->whereNotIn('name', $categories)->get(['id']);
+            $productCategories = Category::query()->get(['id']);
             $productSubcategories = SubCategory::query()->get(['id']);
             $productBrands = Brand::query()->get(['id']);
             $returnPolicies = ReturnPolicy::query()->get(['id']);
 
+            $inventory = Inventory::factory()->create([
+                'vendor_id' => $vendor->id,
+                'business_id' => $business->id,
+                'location_id' => $business->location_id,
+                'name' => $business->name . ' Inventory'
+            ]);
+
             // seed products that will be used to create orders
-            $products = Product::factory(21)
+            $products = Product::factory(14)
+                ->has(InventoryItem::factory()->state(['inventory_id' => $inventory->id]))
                 ->has(ProductFeature::factory(1))
                 ->has(ProductVariation::factory(2))
                 ->create([
-                    'supplier_id' => $suppliers->random()->id,
+                    'supplier_id' => $supplier->id,
                     'user_id' => $vendorUser->id,
                     'vendor_id' => $vendor->id,
                     'business_id' => $business->id,
@@ -164,7 +176,7 @@ class DatabaseSeeder extends Seeder
                     'return_policy_id' => $returnPolicies->random()->id,
                 ]);
             \Laravel\Prompts\info("Products seeded. Seeding orders.");
-            for ($i__ = 1; $i__ <= 27; $i__++)
+            for ($i__ = 1; $i__ <= 7; $i__++)
             {
                 $customer = Customer::factory()->create([
                     'vendor_id' => $vendor->id
