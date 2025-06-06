@@ -22,6 +22,13 @@ Route::view('/terms-and-conditions', 'pages.terms-and-conditions')->name('terms-
 Route::view('/gallery/videos', 'pages.videos')->name('videos');
 Route::get('/blog', [PostController::class, 'index'])->name('blog');
 Route::view('/contact', 'pages.contact')->name('contact-me');
+Route::view('/construction', 'pages.businesses.construction')->name('construction');
+
+// Business directory routes
+Route::get('/businesses', [VendorController::class, 'businesses'])->name('businesses.index');
+Route::get('/businesses/create', [VendorController::class, 'createBusiness'])->name('businesses.create');
+Route::post('/businesses', [VendorController::class, 'storeBusiness'])->name('businesses.store');
+Route::get('/businesses/{business:slug}', [VendorController::class, 'showBusiness'])->name('businesses.show');
 
 Route::get('/cart', [ActionsController::class, 'cart'])->name('cart');
 
