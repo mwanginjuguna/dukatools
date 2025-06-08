@@ -17,10 +17,9 @@ class IsVendor
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user() && Auth::user()->userable_type === Vendor::class)
+        if (Auth::user() && Auth::user()->isVendor())
         {
-            session()->put('vendor', Vendor::query()->whereKey(Auth::user()->userable_id)->first());
-
+            // Cache the vendor for improved performance
             return $next($request);
         }
 

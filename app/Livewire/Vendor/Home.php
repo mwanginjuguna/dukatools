@@ -9,6 +9,8 @@ use App\Models\Business;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Tag;
+use App\Services\BusinessService;
+use App\Services\VendorService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -53,49 +55,31 @@ class Home extends Component
         $this->dispatch('show-business-create-form');
     }
 
-    public function editBusiness($businessId)
-    {
-        $this->editForm->name = $this->myShop->name;
-        $this->editForm->email = $this->myShop->email;
-        $this->editForm->address = $this->myShop->address ?? 'N/A';
-        $this->editForm->phone = $this->myShop->phone_number ?? 'N/A';
-        $this->editForm->description = $this->myShop->description;
-        $this->editForm->website = $this->myShop->website ?? 'N/A';
-        $this->editForm->country = $this->myShop->location->country ?? 'Kenya';
-        $this->editForm->town = $this->myShop->location->town ?? 'N/A';
-        $this->editForm->zipCode = $this->myShop->location->code ?? 'N/A';
-        $this->editForm->county = $this->myShop->location->county ?? 'N/A';
-
-        $this->dispatch('open-modal','show-business-edit-form');
-    }
-
-    public function saveEdit()
-    {
-        $this->editForm->vendorId = $this->vendor->id;
-        $this->editForm->locationId = $this->myShop->location->id;
-        $this->editForm->save();
-
-        $this->editForm->reset();
-
-        $this->redirectRoute('vendor.home');
-    }
-
     public function mount()
     {
-        $this->myShop = Business::query()->where('user_id', Auth::id())->first();
-        $this->vendor = session()->get('vendor');
+        $this->vendor = VendorService::getStaticVendor();
     }
 
     public function render()
     {
-        $businessQuery = Business::query()->where('vendor_id', $this->vendor->id);
+        $businesses = $this->vendor->businesses;
+
+        $this->myShop = $businesses->first();
+        session()->flash('success', 'Welcome home!');
 
         return view('livewire.vendor.home',[
-            'brands' => Brand::query()->get(),
-            'categories' => Category::query()->get(),
-            'tags' => Tag::query()->get(),
-            'SubCategories' => SubCategory::query()->get(),
-            'businesses' => $businessQuery->latest()->get()
+            'brands' => cache()->remember('brands', now()->addDay(), fn () => Brand::query()->get()),
+            'categories' => cache()->remember('categories', now()->addDay(), function () {
+                return Category::query()->get();
+            }),
+            'tags' => cache()->remember('tags', now()->addDay(), function () {
+                return Tag::query()->get();
+            }),
+            'SubCategories' => cache()->remember('categories', now()->addDay(), function () {
+                return SubCategory::query()->get();
+            }),
+            'businesses' => $businesses,
+            'user' => Auth::user()
         ]);
     }
 }

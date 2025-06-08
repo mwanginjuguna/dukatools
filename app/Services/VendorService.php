@@ -13,46 +13,39 @@ use Illuminate\Database\Eloquent\Model;
 class VendorService
 {
     public Model|null $business;
-    private Model $user;
     private Model|null $vendor;
     protected Builder|null $businessQuery;
     protected Builder|null $vendorQuery;
 
     public function __construct()
     {
-        $this->user = User::query()
-            ->whereKey(auth()->id())
-            ->first();
-
-        // get the vendor id from business associated with the current user
-        $this->business = $this->setBusiness();
-
-        if ($this->business !== null) {
-            $this->businessQuery = $this->business->newQuery();
-            $this->vendor = $this->business->vendor;
-            $this->vendorQuery = $this->vendor->newQuery();
-        } else {$this->vendor = null;}
+        // set vendor and business
+        $this->setVendor();
     }
 
     public function getVendor(): Model|null
     {
-        return $this->vendor;
+        return cache('vendor', $this->vendor);
     }
 
-    public function getBusiness(): Model|null
+    public function setVendor(): static
     {
-        return $this->business;
+        $this->vendor = cache()->remember('vendor', now()->addDay(), function () {
+            return Vendor::query()->where('username', config('app.vendor.username'))->first();
+        });
+        session()->put('vendor', $this->vendor);
+        return $this;
     }
 
-    /**
-     * @return HigherOrderBuilderProxy|Model|mixed|object|null
-     */
-    public function setBusiness(): mixed
+    public static function getStaticVendor(): Model|null
     {
-        if ($this->user->isEmployee()) {
-            return Employee::query()->with(['business'])->whereKey($this->user->userable_id)->first()->business;
-        } else {
-            return $this->user->businesses->first();
-        }
+        $service = new static();
+        return $service->getVendor();
+    }
+
+    public static function getId(): ?int
+    {
+        $vendor = static::getStaticVendor();
+        return $vendor?->id;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Vendor;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,11 +17,13 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user() && Auth::user()->role !== 'A')
-            {
-                return redirect('/dashboard');
-            }
-
-            return $next($request);
+        if (Auth::user() && Auth::user()->isAdmin())
+        {
+            // Redirect to dashboard if not admin
+            return redirect('/dashboard');
         }
+
+        return $next($request);
+    }
 }
+
