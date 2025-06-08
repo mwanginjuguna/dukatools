@@ -26,10 +26,118 @@
                                 {{ $business->location->name }}
                             </p>
                         @endif
+                        @if($business->details && $business->details->price_range)
+                            <p class="mt-1 text-lg text-gray-300">
+                                Price Range: {{ $business->details->price_range }}
+                            </p>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Structured Data -->
+        @if($business->details)
+            <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "LocalBusiness",
+                "name": "{{ $business->name }}",
+                @if($business->details->legal_name)
+                    "legalName": "{{ $business->details->legal_name }}",
+                @endif
+                @if($business->details->alternate_name)
+                    "alternateName": "{{ $business->details->alternate_name }}",
+                @endif
+                @if($business->details->address)
+                    "address": {
+                        "@type": "PostalAddress",
+                        @if($business->details->address['streetAddress'])
+                            "streetAddress": "{{ $business->details->address['streetAddress'] }}",
+                        @endif
+                        @if($business->details->address['addressLocality'])
+                            "addressLocality": "{{ $business->details->address['addressLocality'] }}",
+                        @endif
+                        @if($business->details->address['addressRegion'])
+                            "addressRegion": "{{ $business->details->address['addressRegion'] }}",
+                        @endif
+                        @if($business->details->address['postalCode'])
+                            "postalCode": "{{ $business->details->address['postalCode'] }}",
+                        @endif
+                        "addressCountry": "KE"
+                    },
+                @endif
+                @if($business->details->latitude && $business->details->longitude)
+                    "geo": {
+                        "@type": "GeoCoordinates",
+                        "latitude": {{ $business->details->latitude }},
+                        "longitude": {{ $business->details->longitude }}
+                    },
+                @endif
+                @if($business->email)
+                    "email": "{{ $business->email }}",
+                @endif
+                @if($business->phone_number)
+                    "telephone": "{{ $business->phone_number }}",
+                @endif
+                @if($business->website)
+                    "url": "{{ $business->website }}",
+                @endif
+                @if($business->details->opening_hours)
+                    "openingHours": {{ json_encode($business->details->opening_hours) }},
+                @endif
+                @if($business->details->price_range)
+                    "priceRange": "{{ $business->details->price_range }}",
+                @endif
+                @if($business->details->payment_accepted)
+                    "paymentAccepted": "{{ $business->details->payment_accepted }}",
+                @endif
+                @if($business->details->aggregate_rating && $business->details->rating_count > 0)
+                    "aggregateRating": {
+                        "@type": "AggregateRating",
+                        "ratingValue": {{ $business->details->aggregate_rating }},
+                        "ratingCount": {{ $business->details->rating_count }}
+                    },
+                @endif
+                @if($business->description)
+                    "description": "{{ $business->description }}",
+                @endif
+                @if($business->details->slogan)
+                    "slogan": "{{ $business->details->slogan }}",
+                @endif
+                @if($business->details->founding_date)
+                    "foundingDate": "{{ $business->details->founding_date }}",
+                @endif
+                @if($business->details->duns)
+                    "duns": "{{ $business->details->duns }}",
+                @endif
+                @if($business->details->tax_id)
+                    "taxID": "{{ $business->details->tax_id }}",
+                @endif
+                @if($business->details->currencies_accepted)
+                    "currenciesAccepted": {{ json_encode($business->details->currencies_accepted) }},
+                @endif
+                @if($business->details->serves_cuisine)
+                    "servesCuisine": {{ json_encode($business->details->serves_cuisine) }},
+                @endif
+                @if($business->details->business_type)
+                    "additionalType": "{{ $business->details->business_type }}",
+                @endif
+                @if($business->details->awards)
+                    "awards": "{{ $business->details->awards }}",
+                @endif
+                @if($business->logo)
+                    "logo": "{{ str_replace('via.placeholder.com', 'placehold.co', $business->logo) }}",
+                @endif
+                @if($business->details->photos)
+                    "photo": {{ json_encode($business->details->photos) }},
+                @endif
+                @if($business->details->social_media)
+                    "sameAs": {{ json_encode($business->details->social_media) }}
+                @endif
+            }
+            </script>
+        @endif
 
         <!-- Main Content -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -43,6 +151,11 @@
                             <p class="text-gray-600">
                                 {{ $business->description ?? 'No description available.' }}
                             </p>
+                            @if($business->details && $business->details->slogan)
+                                <p class="text-gray-600 italic mt-2">
+                                    "{{ $business->details->slogan }}"
+                                </p>
+                            @endif
                         </div>
                     </div>
 
@@ -87,7 +200,7 @@
                                 </div>
                             @endif
 
-                            @if($business->address)
+                            @if($business->details && $business->details->address)
                                 <div class="flex items-center space-x-3">
                                     <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -95,11 +208,37 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     </svg>
-                                    <span class="text-gray-600">{{ $business->address }}</span>
+                                    <span class="text-gray-600">
+                                        {{ $business->details->address['streetAddress'] ?? '' }}
+                                        {{ $business->details->address['addressLocality'] ? ', ' . $business->details->address['addressLocality'] : '' }}
+                                        {{ $business->details->address['addressRegion'] ? ', ' . $business->details->address['addressRegion'] : '' }}
+                                        {{ $business->details->address['postalCode'] ? ', ' . $business->details->address['postalCode'] : '' }}
+                                    </span>
+                                </div>
+                            @endif
+                            @if($business->details && $business->details->payment_accepted)
+                                <div class="flex items-center space-x-3">
+                                    <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                    </svg>
+                                    <span class="text-gray-600">{{ $business->details->payment_accepted }}</span>
                                 </div>
                             @endif
                         </div>
                     </div>
+
+                    <!-- Opening Hours -->
+                    @if($business->details && $business->details->opening_hours)
+                        <div class="bg-white shadow rounded-lg p-6 mb-8">
+                            <h2 class="text-2xl font-bold text-gray-900 mb-4">Opening Hours</h2>
+                            <ul class="text-gray-600">
+                                @foreach($business->details->opening_hours as $hours)
+                                    <li>{{ $hours }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     <!-- Branches Section -->
                     @if($business->branches->count() > 0)
@@ -144,18 +283,50 @@
                                     <dd class="mt-1 text-sm text-gray-900">{{ $business->user->name }}</dd>
                                 </div>
                             @endif
+                            @if($business->details && $business->details->business_type)
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500">Business Type</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $business->details->business_type }}</dd>
+                                </div>
+                            @endif
+                            @if($business->details && $business->details->founding_date)
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500">Founded</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $business->details->founding_date }}</dd>
+                                </div>
+                            @endif
                         </dl>
                     </div>
 
                     <!-- Location Card -->
-                    @if($business->location)
+                    @if($business->location || ($business->details && ($business->details->latitude && $business->details->longitude)))
                         <div class="bg-white shadow rounded-lg p-6">
                             <h3 class="text-lg font-medium text-gray-900 mb-4">Location</h3>
                             <div class="aspect-w-16 aspect-h-9">
-                                <!-- Add a map component here if you have one -->
-                                <div class="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center">
-                                    <span class="text-gray-500">{{ $business->location->name }}</span>
-                                </div>
+                                @if($business->details && $business->details->latitude && $business->details->longitude)
+                                    <!-- Placeholder for map integration -->
+                                    <div class="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-gray-500">Map: {{ $business->location->name ?? 'Location' }}</span>
+                                    </div>
+                                @else
+                                    <div class="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-gray-500">{{ $business->location->name ?? 'No location specified' }}</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Social Media -->
+                    @if($business->details && $business->details->social_media)
+                        <div class="bg-white shadow rounded-lg p-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Follow Us</h3>
+                            <div class="flex space-x-4">
+                                @foreach($business->details->social_media as $platform => $url)
+                                    <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">
+                                        {{ ucfirst($platform) }}
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                     @endif

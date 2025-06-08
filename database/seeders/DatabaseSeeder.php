@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Branch;
 use App\Models\Brand;
 use App\Models\Business;
+use App\Models\BusinessDetails;
 use App\Models\Category;
 use App\Models\ContactMessage;
 use App\Models\Currency;
@@ -94,28 +95,76 @@ class DatabaseSeeder extends Seeder
             $vendorUser->save();
             \Laravel\Prompts\info('Vendor seeded.');
 
-//            \Laravel\Prompts\info('Creating Posts');
-//            $postTags = ['Marketing', 'Sales', 'Inventory', 'Shopping', 'Docs', 'Tips'];
-//            $categories = ['Technology', 'Lifestyle', 'Sports', 'Food', 'Travel', 'Business', 'Health'];
-//            Arr::map($postTags, fn($tag) => Tag::factory(6)->create([
-//                'name' => $tag
-//            ]));
-//            // seed categories with goods
-//            Arr::map($categories, fn($category) => Category::factory(6)
-//                ->has(Post::factory(2, ['user_id' => $admin->id]))
-//                ->create([
-//                    'name' => $category
-//                ])
-//            );
-//            \Laravel\Prompts\info('Posts seeded');
+           \Laravel\Prompts\info('Creating Posts');
+           $postTags = ['Marketing', 'Sales', 'Inventory', 'Shopping', 'Docs', 'Tips'];
+           $categories = ['Technology', 'Lifestyle', 'Sports', 'Food', 'Travel', 'Business', 'Health'];
+           Arr::map($postTags, fn($tag) => Tag::factory(6)->create([
+               'name' => $tag
+           ]));
+           // seed categories with goods
+           Arr::map($categories, fn($category) => Category::factory(6)
+               ->has(Post::factory(2, ['user_id' => $admin->id]))
+               ->create([
+                   'name' => $category
+               ])
+           );
+           \Laravel\Prompts\info('Posts seeded');
 
             \Laravel\Prompts\info("Seeding a business.");
             // seed A business
             $business = Business::factory()->create([
                 'user_id' => $vendorUser->id,
                 'vendor_id' => $vendor->id,
-                'name' => 'Top-G Shoes'
+                'name' => 'GamePlan Labs'
             ]);
+
+            // Create business details
+            BusinessDetails::factory()->create([
+                'business_id' => $business->id,
+                'legal_name' => 'GamePlan Labs Limited',
+                'alternate_name' => 'GamePlan Labs',
+                'address' => [
+                    'streetAddress' => '123 Main Street',
+                    'addressLocality' => 'Eldoret',
+                    'addressRegion' => 'Uasin Gishu',
+                    'postalCode' => '30100',
+                ],
+                'latitude' => 0.5143,
+                'longitude' => 35.2698,
+                'price_range' => '$$',
+                'opening_hours' => [
+                    'Monday' => '8:00 AM - 6:00 PM',
+                    'Tuesday' => '8:00 AM - 6:00 PM',
+                    'Wednesday' => '8:00 AM - 6:00 PM',
+                    'Thursday' => '8:00 AM - 6:00 PM',
+                    'Friday' => '8:00 AM - 6:00 PM',
+                    'Saturday' => '9:00 AM - 5:00 PM',
+                    'Sunday' => 'Closed',
+                ],
+                'payment_accepted' => 'All Payment Methods',
+                'aggregate_rating' => 4.5,
+                'rating_count' => 150,
+                'slogan' => 'Step into Style, Walk in Comfort',
+                'founding_date' => '2020-01-01',
+                'duns' => '12345678',
+                'tax_id' => 'TAX-2020-1234',
+                'currencies_accepted' => ['KES', 'USD'],
+                'serves_cuisine' => ['Retail'],
+                'business_type' => 'Retail',
+                'awards' => 'Best Shoe Store 2023',
+                'photos' => [
+                    'https://placehold.co/800x600?text=Top-G+Shoes+1',
+                    'https://placehold.co/800x600?text=Top-G+Shoes+2',
+                    'https://placehold.co/800x600?text=Top-G+Shoes+3',
+                ],
+                'social_media' => [
+                    'facebook' => 'https://facebook.com/topgshoes',
+                    'twitter' => 'https://twitter.com/topgshoes',
+                    'instagram' => 'https://instagram.com/topgshoes',
+                    'linkedin' => 'https://linkedin.com/company/topgshoes',
+                ],
+            ]);
+
             $branch = Branch::factory()->create([
                 'business_id' => $business->id,
                 'location_id' => $business->location_id,
@@ -176,7 +225,7 @@ class DatabaseSeeder extends Seeder
                     'return_policy_id' => $returnPolicies->random()->id,
                 ]);
             \Laravel\Prompts\info("Products seeded. Seeding orders.");
-            for ($i__ = 1; $i__ <= 7; $i__++)
+            for ($i__ = 1; $i__ <= 17; $i__++)
             {
                 $customer = Customer::factory()->create([
                     'vendor_id' => $vendor->id
@@ -210,7 +259,7 @@ class DatabaseSeeder extends Seeder
                     $product = $products->random();
 
                     // add extra images
-                    ProductImages::factory(2)->create([
+                    ProductImages::factory(3)->create([
                         'product_id' => $product->id
                     ]);
 

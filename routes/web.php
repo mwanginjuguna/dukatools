@@ -14,7 +14,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [VendorController::class, 'home'])->name('home')->middleware('vendor');
+Route::view('/', 'welcome')->name('home');
 Route::view('/about', 'pages.about')->name('about');
 Route::view('/services', 'pages.about')->name('services');
 Route::view('/privacy-policy', 'pages.privacy-policy')->name('privacy-policy');

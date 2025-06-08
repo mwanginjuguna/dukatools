@@ -39,7 +39,7 @@ class VendorController extends Controller
 
     public function showBusiness(Business $business): View
     {
-        $business->load(['location', 'vendor', 'user', 'branches']);
+        $business->load(['location', 'vendor', 'user', 'branches', 'details']);
 
         return view('pages.businesses.show', [
             'business' => $business

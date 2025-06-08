@@ -88,16 +88,14 @@ class Home extends Component
 
     public function render()
     {
-//        $user = Auth::user();
-//        dd($user);
-        $businessQuery = Business::query()->where('user_id', Auth::id());
-        $businessQuery->latest()->get();
+        $businessQuery = Business::query()->where('vendor_id', $this->vendor->id);
+
         return view('livewire.vendor.home',[
             'brands' => Brand::query()->get(),
             'categories' => Category::query()->get(),
             'tags' => Tag::query()->get(),
             'SubCategories' => SubCategory::query()->get(),
-            'businesses' => $businessQuery
+            'businesses' => $businessQuery->latest()->get()
         ]);
     }
 }

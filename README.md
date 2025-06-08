@@ -1,14 +1,18 @@
-<h1 align="center">Templates Project</h1>
+<h1 align="center">Dukatools</h1>
 
 <div align="center">
-    <p>UI Components</p>
-    <p>UI Placeholders</p>
-    <p>Admin panel</p>
+    <p>Kenya Business Directory</p>
+    <p>Sales & Inventory</p>
+    <p>Point of sale</p>
+    <p>E-commerce & Payments</p>
     <p>Blog</p>
+    <p>Admin/Vendor/User Dashboards</p>
 </div>
 
-## About Templates Project
-This project holds components that can be generalized and applied to multiple projects. Although the initial project will be private, the components will be published in open-source later.
+## About Dukatools Project
+Dukatools is an application to help business owners and entrepreneurs to digitize the selling process by recording sales, monitoring inventory,digitizing records and showcasing their business in the business directory.
+
+Although the initial project will be private, the components will be published in open-source later.
 
 ## License
 

@@ -274,9 +274,10 @@
             </p>
 
             <div class="flex flex-col md:flex-row md:justify-between items-center gap-6">
-                @if($businesses->count() > 1)
+                @if($businesses->count() > 0)
                     <button
                         type="button"
+                        @click="$dispatch('open-modal', 'show-business-edit-form')"
                         class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white hover:text-slate-800 dark:text-slate-800 dark:hover:text-slate-200 bg-emerald-600 dark:bg-emerald-500 rounded-lg hover:bg-emerald-500 dark:hover:bg-emerald-600 transition-all ease-in-out duration-300">
                         Add New Shop
                     </button>
@@ -289,7 +290,7 @@
                         <div class="max-w-xs flex flex-col bg-white border border-t-4 border-t-emerald-600 shadow-sm shadow-emerald-200/70 rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:border-t-emerald-500 dark:shadow-emerald-700/70">
                             <div class="p-4 md:p-5">
                                 <h3 class="text-lg font-bold text-gray-800 dark:text-white">
-                                    {{ $business->name }}
+                                    {{ $business->name }} yoo
                                 </h3>
                                 <p class="mt-2 text-gray-500 dark:text-neutral-400">
                                     {{ \Illuminate\Support\Str::words($business->description, 10) }}
