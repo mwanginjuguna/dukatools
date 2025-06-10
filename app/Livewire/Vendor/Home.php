@@ -47,6 +47,8 @@ class Home extends Component
 
         $this->form->reset();
 
+        session()->flash();
+
         $this->redirectRoute('dashboard');
     }
 

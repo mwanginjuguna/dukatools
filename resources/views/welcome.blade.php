@@ -39,6 +39,8 @@
         </div>
     </div>
 
+    <x-cards.featured-products />
+
     <!-- Features Section -->
     <div class="py-12 bg-white dark:bg-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -118,27 +120,7 @@
         </div>
     </div>
 
-    <!-- CTA Section -->
-    <div class="bg-emerald-50 dark:bg-emerald-900">
-        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
-            <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                <span class="block">Ready to get started?</span>
-                <span class="block text-emerald-600 dark:text-emerald-400">List your business today.</span>
-            </h2>
-            <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
-                <div class="inline-flex rounded-md shadow">
-                    <a href="{{ route('businesses.create') }}" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700">
-                        Get started
-                    </a>
-                </div>
-                <div class="ml-3 inline-flex rounded-md shadow">
-                    <a href="{{ route('contact-me') }}" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-emerald-600 bg-white hover:bg-emerald-50 dark:bg-slate-800 dark:text-emerald-400 dark:hover:bg-slate-700">
-                        Contact us
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-cards.sliding-featured-products />
 
     <!-- Stats Section -->
     <div class="bg-white dark:bg-slate-900 pt-12 sm:pt-16">
@@ -188,4 +170,27 @@
             </div>
         </div>
     </div>
+    
+    <!-- CTA Section -->
+    <div class="bg-emerald-50 dark:bg-emerald-900">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
+            <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+                <span class="block">Ready to get started?</span>
+                <span class="block text-emerald-600 dark:text-emerald-400">List your business today.</span>
+            </h2>
+            <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
+                <div class="inline-flex rounded-md shadow">
+                    <a href="{{ route('businesses.create') }}" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700">
+                        Get started
+                    </a>
+                </div>
+                <div class="ml-3 inline-flex rounded-md shadow">
+                    <a href="{{ route('contact-me') }}" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-emerald-600 bg-white hover:bg-emerald-50 dark:bg-slate-800 dark:text-emerald-400 dark:hover:bg-slate-700">
+                        Contact us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </x-guest-layout>
