@@ -3,7 +3,7 @@
         My Shop Home
     </x-slot:title>
 
-    <div class="max-w-7xl mx-auto">
+    <div class="container mx-auto">
         <livewire:vendor.home />
     </div>
 </x-app-layout>

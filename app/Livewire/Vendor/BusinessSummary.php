@@ -16,6 +16,8 @@ class BusinessSummary extends Component
 
     public function editBusiness($businessId)
     {
+        $this->business = Business::with(['location'])->findOrFail($businessId);
+
         $this->editForm->name = $this->business->name;
         $this->editForm->email = $this->business->email;
         $this->editForm->address = $this->business->address ?? 'N/A';
