@@ -19,6 +19,7 @@ class BusinessEditForm extends Form
     public string $email = '';
     public string $phone = '';
     public string $description = '';
+    public string $category = 'Retail';
     public string $website = '';
     public string $logo = '';
     public string $address = '';
@@ -74,6 +75,7 @@ class BusinessEditForm extends Form
             'location_id' => $location->id,
             'user_id' => auth()->id(),
             'vendor_id' => $this->vendorId,
+            'category' => $this->category
         ]);
     }
 }

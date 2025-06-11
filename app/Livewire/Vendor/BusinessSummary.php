@@ -44,10 +44,11 @@ class BusinessSummary extends Component
         // Basic business info
         $this->editForm->name = $this->business->name;
         $this->editForm->email = $this->business->email;
-        $this->editForm->phone_number = $this->business->phone_number;
+        $this->editForm->phone = $this->business->phone_number;
         $this->editForm->description = $this->business->description;
         $this->editForm->website = $this->business->website;
         $this->editForm->category = $this->business->category;
+        $this->editForm->locationId = $this->business->location->id;
 
         // Location data
         if ($this->business->location) {
@@ -119,7 +120,7 @@ class BusinessSummary extends Component
         $this->editForm->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phone_number' => 'required|string|max:20',
+            'phone' => 'required|string|max:20',
             'description' => 'nullable|string',
             'website' => 'nullable|url|max:255',
             'category' => 'nullable|string|max:100',
@@ -128,7 +129,7 @@ class BusinessSummary extends Component
         $this->business->update([
             'name' => $this->editForm->name,
             'email' => $this->editForm->email,
-            'phone_number' => $this->editForm->phone_number,
+            'phone_number' => $this->editForm->phone,
             'description' => $this->editForm->description,
             'website' => $this->editForm->website,
             'category' => $this->editForm->category,

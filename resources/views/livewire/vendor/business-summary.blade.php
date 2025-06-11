@@ -274,7 +274,7 @@
 
                     <div>
                         <label for="business-phone" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Phone Number</label>
-                        <input wire:model="editForm.phone_number" type="tel" id="business-phone"
+                        <input wire:model="editForm.phone" type="tel" id="business-phone"
                                class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
                     </div>
 
