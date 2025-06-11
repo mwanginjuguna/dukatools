@@ -47,7 +47,7 @@ class BusinessSummary extends Component
         $this->editForm->phone = $this->business->phone_number;
         $this->editForm->description = $this->business->description;
         $this->editForm->website = $this->business->website;
-        $this->editForm->category = $this->business->category;
+        $this->editForm->category = $this->business->category ?? '';
         $this->editForm->locationId = $this->business->location->id;
 
         // Location data
