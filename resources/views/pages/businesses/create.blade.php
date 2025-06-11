@@ -10,7 +10,7 @@
             branches: [],
             progress: {{ auth()->check() ? 25 : 25 }},
             isAuthenticated: {{ auth()->check() ? 'true' : 'false' }},
-            totalTabs: {{ auth()->check() ? 3 : 4 }},
+            totalTabs: {{ auth()->check() ? 4 : 5 }},
             nextTab() {
                 if (this.currentTab < this.totalTabs) {
                     this.currentTab++;
@@ -55,7 +55,8 @@
                             </template>
                             <div class="text-center" :class="{ 'text-blue-600 font-bold': currentTab >= (isAuthenticated ? 1 : 2) }">Basic Info</div>
                             <div class="text-center" :class="{ 'text-blue-600 font-bold': currentTab >= (isAuthenticated ? 2 : 3) }">Contact</div>
-                            <div class="text-center" :class="{ 'text-blue-600 font-bold': currentTab >= (isAuthenticated ? 3 : 4) }">Branches</div>
+                            <div class="text-center" :class="{ 'text-blue-600 font-bold': currentTab >= (isAuthenticated ? 3 : 4) }">Details</div>
+                            <div class="text-center" :class="{ 'text-blue-600 font-bold': currentTab >= (isAuthenticated ? 4 : 5) }">Branches</div>
                         </div>
                     </div>
                 </div>
@@ -228,8 +229,144 @@
                         </div>
                     </div>
 
-                    <!-- Branches Tab -->
+                    <!-- Business Details Tab -->
                     <div x-show="currentTab === (isAuthenticated ? 3 : 4)" class="space-y-6">
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <div>
+                                <label for="legal_name" class="block text-sm font-medium text-gray-700">Legal Business Name</label>
+                                <input type="text" name="legal_name" id="legal_name"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                       value="{{ old('legal_name') }}">
+                            </div>
+
+                            <div>
+                                <label for="alternate_name" class="block text-sm font-medium text-gray-700">Alternate Name</label>
+                                <input type="text" name="alternate_name" id="alternate_name"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                       value="{{ old('alternate_name') }}">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <div>
+                                <label for="business_type" class="block text-sm font-medium text-gray-700">Business Type</label>
+                                <select name="business_type" id="business_type"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="">Select Type</option>
+                                    <option value="sole_proprietorship">Sole Proprietorship</option>
+                                    <option value="partnership">Partnership</option>
+                                    <option value="corporation">Corporation</option>
+                                    <option value="llc">LLC</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="founding_date" class="block text-sm font-medium text-gray-700">Founding Date</label>
+                                <input type="date" name="founding_date" id="founding_date"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                       value="{{ old('founding_date') }}">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <div>
+                                <label for="tax_id" class="block text-sm font-medium text-gray-700">Tax ID</label>
+                                <input type="text" name="tax_id" id="tax_id"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                       value="{{ old('tax_id') }}">
+                            </div>
+
+                            <div>
+                                <label for="duns" class="block text-sm font-medium text-gray-700">DUNS Number</label>
+                                <input type="text" name="duns" id="duns"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                       value="{{ old('duns') }}">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="price_range" class="block text-sm font-medium text-gray-700">Price Range</label>
+                            <select name="price_range" id="price_range"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">Select Price Range</option>
+                                <option value="$">$ (Budget)</option>
+                                <option value="$$">$$ (Moderate)</option>
+                                <option value="$$$">$$$ (Expensive)</option>
+                                <option value="$$$$">$$$$ (Luxury)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="payment_accepted" class="block text-sm font-medium text-gray-700">Payment Methods Accepted</label>
+                            <div class="mt-2 space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="payment_methods[]" value="cash" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <label class="ml-2 text-sm text-gray-700">Cash</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="payment_methods[]" value="credit_card" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <label class="ml-2 text-sm text-gray-700">Credit Card</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="payment_methods[]" value="mobile_payment" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <label class="ml-2 text-sm text-gray-700">Mobile Payment</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="payment_methods[]" value="bank_transfer" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <label class="ml-2 text-sm text-gray-700">Bank Transfer</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="currencies_accepted" class="block text-sm font-medium text-gray-700">Currencies Accepted</label>
+                            <div class="mt-2 space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="currencies[]" value="KES" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <label class="ml-2 text-sm text-gray-700">KES (Kenyan Shilling)</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="currencies[]" value="USD" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <label class="ml-2 text-sm text-gray-700">USD (US Dollar)</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="currencies[]" value="EUR" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <label class="ml-2 text-sm text-gray-700">EUR (Euro)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="slogan" class="block text-sm font-medium text-gray-700">Business Slogan</label>
+                            <input type="text" name="slogan" id="slogan"
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                   value="{{ old('slogan') }}">
+                        </div>
+
+                        <div>
+                            <label for="awards" class="block text-sm font-medium text-gray-700">Awards & Recognition</label>
+                            <textarea name="awards" id="awards" rows="3"
+                                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                      placeholder="List any awards or recognition your business has received">{{ old('awards') }}</textarea>
+                        </div>
+
+                        <div>
+                            <label for="social_media" class="block text-sm font-medium text-gray-700">Social Media Links</label>
+                            <div class="mt-2 space-y-2">
+                                <input type="url" name="social_media[facebook]" placeholder="Facebook URL"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <input type="url" name="social_media[twitter]" placeholder="Twitter URL"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <input type="url" name="social_media[instagram]" placeholder="Instagram URL"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <input type="url" name="social_media[linkedin]" placeholder="LinkedIn URL"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Branches Tab -->
+                    <div x-show="currentTab === (isAuthenticated ? 4 : 5)" class="space-y-6">
                         <div class="space-y-4" x-ref="branchesContainer">
                             <template x-for="(branch, index) in branches" :key="index">
                                 <div class="p-4 border rounded-lg space-y-4">

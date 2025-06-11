@@ -5,29 +5,45 @@
 
     <div class="bg-white">
         <!-- Hero Section -->
-        <div class="relative bg-gray-800">
+        <div class="relative bg-white">
             <div class="absolute inset-0">
-                @if($business->logo)
-                    <img class="w-full h-full object-cover opacity-20" src="{{ str_replace('via.placeholder.com', 'placehold.co', $business->logo) }}" alt="{{ $business->name }}">
-                @endif
-                <div class="absolute inset-0 bg-gray-800 mix-blend-multiply"></div>
+                <svg class="w-full h-full animate-pulse" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <defs>
+                        <pattern id="zigzag" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 0 10 L 5 0 L 10 10 L 15 0 L 20 10"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="0.5"
+                                  class="text-primary-100 animate-ping"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100" height="100" fill="url(#zigzag)" />
+                </svg>
+                <div class="absolute inset-0 bg-gradient-to-br from-primary-50/50 via-accent-50/30 to-accent-100/40 animate-pulse"></div>
             </div>
             <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
                 <div class="flex items-center space-x-6">
                     @if($business->logo)
-                        <img class="h-24 w-24 rounded-lg shadow-lg" src="{{ str_replace('via.placeholder.com', 'placehold.co', $business->logo) }}" alt="{{ $business->name }}">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg blur-sm"></div>
+                            <img class="relative h-24 w-24 rounded-lg shadow-lg ring-2 ring-white"
+                                src="{{ str_contains($business->logo, 'placehold.co')
+                                    ? str_replace('via.placeholder.com', 'placehold.co', $business->logo)
+                                    : Illuminate\Support\Facades\Storage::disk('public')->url($business->logo) }}"
+                                alt="{{ $business->name }}">
+                        </div>
                     @endif
                     <div>
-                        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+                        <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
                             {{ $business->name }}
                         </h1>
                         @if($business->location)
-                            <p class="mt-2 text-xl text-gray-300">
-                                {{ $business->location->name }}
+                            <p class="mt-2 text-xl text-gray-600">
+                                {{ $business->location->name }}, {{ $business->location->town }}
                             </p>
                         @endif
                         @if($business->details && $business->details->price_range)
-                            <p class="mt-1 text-lg text-gray-300">
+                            <p class="mt-1 text-lg text-gray-600">
                                 Price Range: {{ $business->details->price_range }}
                             </p>
                         @endif

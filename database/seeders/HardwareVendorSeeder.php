@@ -7,6 +7,7 @@ use App\Models\Business;
 use App\Models\BusinessDetails;
 use App\Models\Category;
 use App\Models\Currency;
+use App\Models\Customer;
 use App\Models\Discount;
 use App\Models\Inventory;
 use App\Models\InventoryItem;
@@ -23,8 +24,9 @@ use App\Models\Supplier;
 use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class HardwareVendorSeeder extends Seeder
 {
@@ -124,6 +126,8 @@ class HardwareVendorSeeder extends Seeder
 
     public function run(): void
     {
+        $productImages = Storage::disk('public')->files('hardware');
+
         // Create vendor and user
         $vendor = Vendor::factory()->create([
             'first_name' => 'John',
@@ -147,14 +151,19 @@ class HardwareVendorSeeder extends Seeder
         $business = Business::factory()->create([
             'user_id' => $vendorUser->id,
             'vendor_id' => $vendor->id,
-            'name' => 'Eldoret Hardware & Building Supplies'
+            'name' => 'GameLabs Hardware & Building Supplies',
+            'description' => 'Right at the heart of Eldoret, we\'ve been the trusted source for quality building materials since 2015. Our extensive inventory spans from premium power tools to specialized plumbing fixtures, all backed by expert advice from our seasoned staff. Whether you\'re a professional contractor or a DIY enthusiast, we take pride in helping bring your construction visions to life with top-tier products and personalized service.',
+            'logo' => 'business-logos/gameplan.png',
+            'phone_number' => '+254715219991',
+            'website' => 'https://gameplanlabs.org',
+            'address' => '123 Oloo Street, Eldoret 30100'
         ]);
 
         // Create business details
         BusinessDetails::factory()->create([
             'business_id' => $business->id,
-            'legal_name' => 'Eldoret Hardware & Building Supplies Limited',
-            'alternate_name' => 'Eldoret Hardware',
+            'legal_name' => 'GameLabs Hardware & Building Supplies Limited',
+            'alternate_name' => 'GameLabs Hardware',
             'address' => [
                 'streetAddress' => '123 Oloo Street',
                 'addressLocality' => 'Eldoret',
@@ -235,7 +244,6 @@ class HardwareVendorSeeder extends Seeder
             'name' => $business->name . ' Inventory'
         ]);
 
-        $productImages = Storage::disk('public')->files('hardware');
         // Create products
         foreach ($this->products as $categoryName => $subcategories) {
             $category = Category::where('name', $categoryName)->first();
@@ -257,6 +265,7 @@ class HardwareVendorSeeder extends Seeder
                         'sub_category_id' => $subcategory->id,
                         'brand_id' => $brand->id,
                         'return_policy_id' => $returnPolicy->id,
+                        'user_id' => $vendorUser->id,
                         'vendor_id' => $vendor->id,
                         'business_id' => $business->id,
                         'image' => (string)(Arr::random($productImages) ?? 'products/hardware.png')
@@ -295,15 +304,18 @@ class HardwareVendorSeeder extends Seeder
 
                     // Add some reviews and ratings
                     for ($i = 0; $i < rand(3, 8); $i++) {
+                        $customer = Customer::factory()->create([
+                            'vendor_id' => $vendor->id
+                        ]);
                         ProductReview::create([
                             'product_id' => $product->id,
-                            'customer_id' => 1, // You might want to create actual customers
+                            'customer_id' => $customer->id, // You might want to create actual customers
                             'review' => $this->getRandomReview(),
                         ]);
 
                         ProductRating::create([
                             'product_id' => $product->id,
-                            'customer_id' => 1,
+                            'customer_id' => $customer->id,
                             'rating' => rand(4, 5) + (rand(0, 10) / 10),
                         ]);
                     }

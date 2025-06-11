@@ -79,6 +79,8 @@ class VendorController extends Controller
             ]);
 
             Auth::login($user);
+        } else {
+            $user = Auth::user();
         }
 
         // Validate business data
@@ -91,6 +93,19 @@ class VendorController extends Controller
             'website' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'logo' => 'nullable|image|max:2048',
+            // Business Details validation
+            'legal_name' => 'nullable|string|max:255',
+            'alternate_name' => 'nullable|string|max:255',
+            'business_type' => 'nullable|string|max:50',
+            'founding_date' => 'nullable|date',
+            'tax_id' => 'nullable|string|max:50',
+            'duns' => 'nullable|string|max:50',
+            'price_range' => 'nullable|string|max:10',
+            'payment_methods' => 'nullable|array',
+            'currencies' => 'nullable|array',
+            'slogan' => 'nullable|string|max:255',
+            'awards' => 'nullable|string',
+            'social_media' => 'nullable|array',
         ]);
 
         // Create vendor profile if it doesn't exist
@@ -127,6 +142,22 @@ class VendorController extends Controller
             'logo' => $logoPath ?? null,
             'user_id' => Auth::id(),
             'vendor_id' => $vendor->id,
+        ]);
+
+        // Create business details
+        $business->details()->create([
+            'legal_name' => $request->legal_name,
+            'alternate_name' => $request->alternate_name,
+            'business_type' => $request->business_type,
+            'founding_date' => $request->founding_date,
+            'tax_id' => $request->tax_id,
+            'duns' => $request->duns,
+            'price_range' => $request->price_range,
+            'payment_accepted' => $request->payment_methods ? implode(',', $request->payment_methods) : null,
+            'currencies_accepted' => $request->currencies,
+            'slogan' => $request->slogan,
+            'awards' => $request->awards,
+            'social_media' => $request->social_media,
         ]);
 
         // Create branches if provided

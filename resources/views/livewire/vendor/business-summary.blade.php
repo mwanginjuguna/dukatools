@@ -5,7 +5,10 @@
             <div class="flex items-center gap-4">
                 <div class="size-16 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                     @if($business->logo)
-                        <img src="{{ $business->logo }}" alt="{{ $business->name }}" class="size-12 rounded-lg object-cover">
+                        <img src="{{ str_contains($business->logo, 'placehold')
+                                    ? str_replace('via.placeholder.com', 'placehold.co', $business->logo)
+                                    : Illuminate\Support\Facades\Storage::disk('public')->url($business->logo) }}"
+                                    alt="{{ $business->name }}" class="size-12 rounded-lg object-cover">
                     @else
                         <svg class="size-8 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
@@ -215,130 +218,288 @@
     {{-- Business Edit Modal --}}
     @if(\Illuminate\Support\Facades\Auth::user()->isVendor())
         <x-modal name="show-business-edit-form">
-            <div class="p-4 max-w-md mx-auto">
-                <div class="flex justify-between items-center">
-                    <h3 class="mb-2 text-lg py-2 font-bold">
-                        Edit business
-                    </h3>
-
-                    <button
-                        @click="$dispatch('close')"
-                        type="button"
-                    >
+            <div x-data="{ currentTab: 'basic' }" class="p-4 max-w-4xl mx-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold">Edit Business</h3>
+                    <button @click="$dispatch('close')" type="button">
                         <svg class="w-6 h-6 text-slate-600 dark:text-slate-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
                         </svg>
                     </button>
                 </div>
 
-                <form wire:submit="saveEdit" class="" enctype="multipart/form-data">
-                    <div class="space-y-4">
-                        <div>
-                            <label for="business-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Business Name</label>
-                            <input
-                                wire:model="editForm.name"
-                                type="text"
-                                name="business-name"
-                                id="business-name"
-                                class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm"
-                                required
-                            />
-                        </div>
+                {{-- Tabs Navigation --}}
+                <div class="border-b border-slate-200 dark:border-slate-700 mb-4">
+                    <nav class="flex space-x-4" aria-label="Tabs">
+                        <button wire:click="setTab('basic')"
+                                @click="currentTab = 'basic'"
+                                class="px-3 py-2 text-sm font-medium rounded-md"
+                                :class="{ 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white': currentTab === 'basic', 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300': currentTab !== 'basic' }">
+                            Basic Info
+                        </button>
+                        <button wire:click="setTab('location')"
+                                @click="currentTab = 'location'"
+                                class="px-3 py-2 text-sm font-medium rounded-md"
+                                :class="{ 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white': currentTab === 'location', 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300': currentTab !== 'location' }">
+                            Location
+                        </button>
+                        <button wire:click="setTab('details')"
+                                @click="currentTab = 'details'"
+                                class="px-3 py-2 text-sm font-medium rounded-md"
+                                :class="{ 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white': currentTab === 'details', 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300': currentTab !== 'details' }">
+                            Business Details
+                        </button>
+                        <button wire:click="setTab('branches')"
+                                @click="currentTab = 'branches'"
+                                class="px-3 py-2 text-sm font-medium rounded-md"
+                                :class="{ 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white': currentTab === 'branches', 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300': currentTab !== 'branches' }">
+                            Branches
+                        </button>
+                    </nav>
+                </div>
 
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label for="business-address" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Address</label>
-                                <input
-                                    wire:model="editForm.address"
-                                    type="text"
-                                    name="business-address"
-                                    id="business-address"
-                                    class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label for="country" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Country</label>
-                                <input
-                                    wire:model="editForm.country"
-                                    type="text"
-                                    name="country"
-                                    id="country"
-                                    class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label for="business-town" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Town/Street</label>
-                                <input
-                                    wire:model="editForm.town"
-                                    type="text"
-                                    name="business-town"
-                                    id="business-town"
-                                    class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label for="county" class="block text-sm font-medium text-slate-700 dark:text-slate-300">State/County</label>
-                                <input
-                                    wire:model="editForm.county"
-                                    type="text"
-                                    name="county"
-                                    id="county"
-                                    class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="website" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Website</label>
-                            <input
-                                wire:model="editForm.website"
-                                type="text"
-                                name="website"
-                                id="website"
-                                class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <label for="description" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Description</label>
-                            <textarea
-                                id="description"
-                                rows="4"
-                                wire:model="editForm.description"
-                                class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm"
-                                placeholder="Give your business a short description."
-                            ></textarea>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="businessLogo">
-                                Business Logo
-                                <span class="text-xs font-light text-slate-500">(optional)</span>
-                            </label>
-                            <input
-                                class="mt-1 block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-white dark:text-slate-400 focus:outline-none dark:bg-slate-800 dark:border-slate-700"
-                                wire:model="businessLogo"
-                                id="businessLogo"
-                                type="file"
-                            >
-                            <p class="mt-1 text-xs text-slate-500">Logo or Profile Image</p>
-                        </div>
+                {{-- Basic Info Tab --}}
+                <div x-show="currentTab === 'basic'" x-cloak class="space-y-4">
+                    <div>
+                        <label for="business-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Business Name</label>
+                        <input wire:model="editForm.name" type="text" id="business-name"
+                               class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
                     </div>
 
-                    <div class="mt-6">
-                        <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Save Changes
+                    <div>
+                        <label for="business-email" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
+                        <input wire:model="editForm.email" type="email" id="business-email"
+                               class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                    </div>
+
+                    <div>
+                        <label for="business-phone" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Phone Number</label>
+                        <input wire:model="editForm.phone_number" type="tel" id="business-phone"
+                               class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                    </div>
+
+                    <div>
+                        <label for="business-category" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Category</label>
+                        <input wire:model="editForm.category" type="text" id="business-category"
+                               class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                    </div>
+
+                    <div>
+                        <label for="business-website" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Website</label>
+                        <input wire:model="editForm.website" type="url" id="business-website"
+                               class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                    </div>
+
+                    <div>
+                        <label for="business-description" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Description</label>
+                        <textarea wire:model="editForm.description" id="business-description" rows="4"
+                                  class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="businessLogo">
+                            Business Logo
+                        </label>
+                        <input wire:model="businessLogo" type="file" id="businessLogo"
+                               class="mt-1 block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-white dark:text-slate-400 focus:outline-none dark:bg-slate-800 dark:border-slate-700">
+                    </div>
+
+                    <div class="mt-4">
+                        <button wire:click="saveBasicInfo" type="button"
+                                class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Save Basic Info
                         </button>
                     </div>
-                </form>
+                </div>
+
+                {{-- Location Tab --}}
+                <div x-show="currentTab === 'location'" x-cloak class="space-y-4">
+                    <div>
+                        <label for="location-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Location Name</label>
+                        <input wire:model="location.name" type="text" id="location-name"
+                               class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                    </div>
+
+                    <div>
+                        <label for="location-address" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Address</label>
+                        <input wire:model="location.address" type="text" id="location-address"
+                               class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="location-city" class="block text-sm font-medium text-slate-700 dark:text-slate-300">City</label>
+                            <input wire:model="location.city" type="text" id="location-city"
+                                   class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="location-county" class="block text-sm font-medium text-slate-700 dark:text-slate-300">County</label>
+                            <input wire:model="location.county" type="text" id="location-county"
+                                   class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="location-country" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Country</label>
+                        <input wire:model="location.country" type="text" id="location-country"
+                               class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                    </div>
+
+                    <div class="mt-4">
+                        <button wire:click="saveLocation" type="button"
+                                class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Save Location
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Business Details Tab --}}
+                <div x-show="currentTab === 'details'" x-cloak class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="legal-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Legal Business Name</label>
+                            <input wire:model="businessDetails.legal_name" type="text" id="legal-name"
+                                   class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="alternate-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Alternate Name</label>
+                            <input wire:model="businessDetails.alternate_name" type="text" id="alternate-name"
+                                   class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="business-type" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Business Type</label>
+                            <select wire:model="businessDetails.business_type" id="business-type"
+                                    class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                                <option value="">Select Type</option>
+                                <option value="sole_proprietorship">Sole Proprietorship</option>
+                                <option value="partnership">Partnership</option>
+                                <option value="corporation">Corporation</option>
+                                <option value="llc">LLC</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="founding-date" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Founding Date</label>
+                            <input wire:model="businessDetails.founding_date" type="date" id="founding-date"
+                                   class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="tax-id" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Tax ID</label>
+                            <input wire:model="businessDetails.tax_id" type="text" id="tax-id"
+                                   class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="duns" class="block text-sm font-medium text-slate-700 dark:text-slate-300">DUNS Number</label>
+                            <input wire:model="businessDetails.duns" type="text" id="duns"
+                                   class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="price-range" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Price Range</label>
+                        <select wire:model="businessDetails.price_range" id="price-range"
+                                class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                            <option value="">Select Price Range</option>
+                            <option value="$">$ (Budget)</option>
+                            <option value="$$">$$ (Moderate)</option>
+                            <option value="$$$">$$$ (Expensive)</option>
+                            <option value="$$$$">$$$$ (Luxury)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Payment Methods Accepted</label>
+                        <div class="mt-2 space-y-2">
+                            <div class="flex items-center">
+                                <input wire:model="businessDetails.payment_accepted" type="checkbox" value="cash"
+                                       class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded">
+                                <label class="ml-2 text-sm text-slate-700 dark:text-slate-300">Cash</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input wire:model="businessDetails.payment_accepted" type="checkbox" value="credit_card"
+                                       class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded">
+                                <label class="ml-2 text-sm text-slate-700 dark:text-slate-300">Credit Card</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input wire:model="businessDetails.payment_accepted" type="checkbox" value="mobile_payment"
+                                       class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded">
+                                <label class="ml-2 text-sm text-slate-700 dark:text-slate-300">Mobile Payment</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="slogan" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Business Slogan</label>
+                        <input wire:model="businessDetails.slogan" type="text" id="slogan"
+                               class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                    </div>
+
+                    <div>
+                        <label for="awards" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Awards & Recognition</label>
+                        <textarea wire:model="businessDetails.awards" id="awards" rows="3"
+                                  class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm"></textarea>
+                    </div>
+
+                    <div class="mt-4">
+                        <button wire:click="saveBusinessDetails" type="button"
+                                class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Save Business Details
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Branches Tab --}}
+                <div x-show="currentTab === 'branches'" x-cloak class="space-y-4">
+                    <div class="space-y-4">
+                        @foreach($branches as $index => $branch)
+                            <div class="p-4 border rounded-lg space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="text-lg font-medium">Branch {{ $index + 1 }}</h4>
+                                    <button wire:click="removeBranch({{ $index }})" type="button"
+                                            class="text-red-600 hover:text-red-800">
+                                        Remove
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="branch-name-{{ $index }}" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Branch Name</label>
+                                        <input wire:model="branches.{{ $index }}.name" type="text" id="branch-name-{{ $index }}"
+                                               class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="branch-phone-{{ $index }}" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Phone Number</label>
+                                        <input wire:model="branches.{{ $index }}.phone_number" type="tel" id="branch-phone-{{ $index }}"
+                                               class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="branch-address-{{ $index }}" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Address</label>
+                                    <input wire:model="branches.{{ $index }}.address" type="text" id="branch-address-{{ $index }}"
+                                           class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white sm:text-sm">
+                                </div>
+
+                                <div class="mt-2">
+                                    <button wire:click="saveBranch({{ $index }})" type="button"
+                                            class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Save Branch
+                                    </button>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <button wire:click="addBranch" type="button"
+                            class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Add Branch
+                    </button>
+                </div>
             </div>
         </x-modal>
     @endif
