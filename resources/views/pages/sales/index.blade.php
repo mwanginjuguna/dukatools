@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot:title>Sales dashboard.</x-slot:title>
 
-    <div class="p-4 max-w-7xl mx-auto">
+    <div class="p-4 container mx-auto">
         <h1 class="py-2 text-lg font-semibold text-gray-900 dark:text-white">
             <span>Sales dashboard</span>.
         </h1>
